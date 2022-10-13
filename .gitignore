@@ -5,3 +5,7 @@ node_modules
 /*/*/dist
 .env
 /*/.env
+/*/*/.env
+note.txt
+test.ts
+test.js
