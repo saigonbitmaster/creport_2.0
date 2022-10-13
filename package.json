@@ -1,0 +1,25 @@
+{
+  "name": "creport",
+  "version": "2.0.0",
+  "private": true,
+  "workspaces": [
+    "api",
+    "cms",
+    "web",
+    "packages/*"
+  ],
+  "main": "index.js",
+  "scripts": {
+    "api": "cd api && yarn start",
+    "cms": "cd cms && yarn start",
+    "web": "cd web && yarn start",
+    "build-lib": "cd packages/ra-nest-rest && yarn build",
+    "build-cms": "cd cms && yarn build",
+    "build-web": "cd web && yarn build",
+    "build-api": "cd api && yarn build"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "cross-env": "^5.2.0"
+  }
+}
