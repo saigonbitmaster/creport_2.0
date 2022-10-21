@@ -8,6 +8,7 @@ import { FundModule } from './fund/module';
 import { ChallengeModule } from './challenge/module';
 import { ConfigModule } from '@nestjs/config';
 import { ToolModule } from './tool/module';
+import { GitCommitModule } from './commit/module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { ToolModule } from './tool/module';
     ChallengeModule,
     ProposalModule,
     ToolModule,
+    GitCommitModule,
   ],
 })
 export class AppModule {}

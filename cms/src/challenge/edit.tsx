@@ -1,23 +1,26 @@
 import * as React from "react";
-import { SimpleForm, TextInput, Edit, DateInput } from "react-admin";
+import { SimpleForm, TextInput, Edit, DateInput, ReferenceInput, SelectInput, NumberInput } from "react-admin";
 
 import Grid from "@mui/material/Grid";
 import { RichTextInput } from "ra-input-rich-text";
 
 const EditScreen = () => (
   <Edit>
-   <SimpleForm>
+    <SimpleForm>
       <Grid container spacing={1}>
-        <Grid item xs={12} md={4} lg={3} xl={2}>
+        <Grid item xs={12} md={8} lg={6} xl={4}>
           <TextInput source="name" fullWidth required />
         </Grid>
         <Grid item md={12} />
         <Grid item xs={12} md={4} lg={3} xl={2}>
-          <TextInput source="currency" fullWidth required />
+          
+          <ReferenceInput source="fundId" reference="funds"  required >
+            <SelectInput optionText="name" fullWidth/>
+          </ReferenceInput>
         </Grid>
 
         <Grid item xs={12} md={4} lg={3} xl={2}>
-          <DateInput source="date" fullWidth />
+          <NumberInput source="budget" fullWidth />
         </Grid>
         <Grid item md={12} />
        

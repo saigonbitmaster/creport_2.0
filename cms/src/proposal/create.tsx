@@ -13,12 +13,7 @@ import {
 } from "react-admin";
 import Grid from "@mui/material/Grid";
 import { RichTextInput } from "ra-input-rich-text";
-
-const choices = [
-  { id: "pending", name: "Pending" },
-  { id: "complete", name: "Complete" },
-  { id: "stopped", name: "Stopped" },
-];
+import {choices} from '../data/data';
 
 const CreateScreen = () => (
   <Create redirect="list">

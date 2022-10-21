@@ -8,7 +8,7 @@ async function bootstrap() {
 
   //setup api explorer: http://localhost:3000/api
   const config = new DocumentBuilder()
-    .setTitle('nestjs backend rest API')
+    .setTitle('nestjs based creport APIs')
     .setDescription('The rest API description')
     .setVersion('1.0')
     .addTag('restMongo')

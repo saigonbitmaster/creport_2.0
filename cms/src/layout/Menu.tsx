@@ -13,8 +13,8 @@ import RateReviewOutlinedIcon from "@mui/icons-material/RateReviewOutlined";
 import NotesIcon from "@mui/icons-material/Notes";
 import FileCopyOutlinedIcon from "@mui/icons-material/FileCopyOutlined";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
-import QrCodeOutlinedIcon from '@mui/icons-material/QrCodeOutlined';
-import LibraryBooksOutlinedIcon from '@mui/icons-material/LibraryBooksOutlined';
+import QrCodeOutlinedIcon from "@mui/icons-material/QrCodeOutlined";
+import LibraryBooksOutlinedIcon from "@mui/icons-material/LibraryBooksOutlined";
 
 import {
   useTranslate,
@@ -64,7 +64,7 @@ const Menu = ({ dense = false }: MenuProps) => {
         dense={dense}
       >
         <MenuItemLink
-          to="/members"
+          to="/kpis"
           state={{ _scrollToTop: true }}
           primaryText={translate(`resources.proposalKpis.name`, {
             smart_count: 2,
@@ -73,7 +73,7 @@ const Menu = ({ dense = false }: MenuProps) => {
           dense={dense}
         />
         <MenuItemLink
-          to="/segments"
+          to="/funddeliveries"
           state={{ _scrollToTop: true }}
           primaryText={translate(`resources.fundDeliveries.name`, {
             smart_count: 2,
@@ -81,8 +81,8 @@ const Menu = ({ dense = false }: MenuProps) => {
           leftIcon={<FormatListNumberedOutlinedIcon />}
           dense={dense}
         />
-           <MenuItemLink
-          to="/quizSets"
+        <MenuItemLink
+          to="/commits"
           state={{ _scrollToTop: true }}
           primaryText={translate(`resources.gits.reportName`, {
             smart_count: 2,
@@ -100,7 +100,7 @@ const Menu = ({ dense = false }: MenuProps) => {
         dense={dense}
       >
         <MenuItemLink
-          to="/fetchCardano"
+          to="/fetchcardano"
           state={{ _scrollToTop: true }}
           primaryText={translate(`resources.cardanos.name`, {
             smart_count: 2,
@@ -109,7 +109,7 @@ const Menu = ({ dense = false }: MenuProps) => {
           dense={dense}
         />
         <MenuItemLink
-          to="/fetchGithub"
+          to="/fetchgithub"
           state={{ _scrollToTop: true }}
           primaryText={translate(`resources.gits.name`, {
             smart_count: 2,
@@ -117,8 +117,8 @@ const Menu = ({ dense = false }: MenuProps) => {
           leftIcon={<FormatListBulletedIcon />}
           dense={dense}
         />
-         <MenuItemLink
-          to="/importExcels"
+        <MenuItemLink
+          to="/importexcels"
           state={{ _scrollToTop: true }}
           primaryText={translate(`resources.reports.import`, {
             smart_count: 2,

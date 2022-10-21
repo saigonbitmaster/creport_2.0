@@ -8,9 +8,10 @@ import {
   SearchInput,
   ReferenceInput,
   SelectInput,
+  SelectField,
 } from "react-admin";
-
-import ColoredNumberField from '../components/currencyNumberField'
+import { choices } from "../data/data";
+import ColoredNumberField from "../components/currencyNumberField";
 
 const ListScreen = () => {
   const Filters = [
@@ -45,7 +46,8 @@ const ListScreen = () => {
           <TextField source="fullName" />
         </ReferenceField>
         <ColoredNumberField source="requestedBudget" threshold={50000} />
-       
+        <SelectField source="projectStatus" choices={choices} />
+
         <EditButton />
       </Datagrid>
     </List>

@@ -6,7 +6,7 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
-
+import Typography from "@mui/material/Typography";
 import MuiTextField from "@mui/material/TextField";
 import {
   List,
@@ -46,10 +46,9 @@ const FetchCardano = (props) => {
 
   const [textFieldValue, setTextFieldValue] = React.useState("");
 
-  const [filter, setFilter] = React.useState({ queryType: null, value: null });
+  const [filter, setFilter] = React.useState({ queryType: null, value: null, started: false });
 
-
-/*  
+  /*  
   //dont use query button, auto fetch
   React.useEffect(() => {
     setFilter({ queryType: state.choice, value: textFieldValue });
@@ -63,9 +62,9 @@ const FetchCardano = (props) => {
         .textLabel,
     });
   };
-//use query button, dont use auto fetch
+  //use query button, dont use auto fetch
   const onClick = () => {
-    setFilter({ queryType: state.choice, value: textFieldValue });
+    setFilter({ queryType: state.choice, value: textFieldValue, started: true });
   };
 
   const handleTextFieldChange = (event) => {
@@ -119,8 +118,17 @@ const FetchCardano = (props) => {
             justifyContent: "flex-start",
           }}
         >
-          <Button onClick={onClick} sx={{ alignSelf: "flex-end" }}>Query</Button>
+          <Button onClick={onClick} sx={{ alignSelf: "flex-end" }}>
+            Query
+          </Button>
         </Grid>
+        {(!filter.queryType || !filter.value) && filter.started? (
+          <Grid item xs={12}>
+            <Typography variant="subtitle1" gutterBottom sx={{ color: "red" }}>
+              Invalid form data
+            </Typography>
+          </Grid>
+        ) : null}
       </Grid>
 
       <List
@@ -132,7 +140,7 @@ const FetchCardano = (props) => {
         filter={filter}
         empty={<></>}
       >
-        {state.choice === "utx" ? (
+        {filter.queryType === "utx" ? (
           <Grid container spacing={0}>
             <Grid item xs={12}>
               <Datagrid bulkActionButtons={false}>
