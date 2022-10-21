@@ -7,7 +7,7 @@ node_modules
 note.txt
 test.ts
 test.js
-cms/src/components
+#cms/src/components
 cms/src/kpi
 cms/src/commit
 api/src/proposal
