@@ -10,5 +10,5 @@ test.js
 #cms/src/components
 #cms/src/kpi
 #cms/src/commit
-api/src/proposal
+#api/src/proposal
 #api/src/flatworks
