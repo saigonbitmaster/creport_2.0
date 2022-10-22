@@ -30,24 +30,23 @@ const ConfigurationMenu = React.forwardRef((props, ref) => {
     </MenuItem>
   );
 });
-const CustomUserMenu = () => (
+/* const CustomUserMenu = () => (
   <UserMenu>
     <ConfigurationMenu />
     <Logout />
   </UserMenu>
-);
+); */
 
 const CustomAppBar = (props: any) => {
   const isLargeEnough = useMediaQuery<Theme>((theme) =>
     theme.breakpoints.up("sm")
   );
-  console.log("props", props)
   return (
     <AppBar
       {...props}
       color="secondary"
       elevation={1}
-     
+     /*  userMenu={<CustomUserMenu />} */
     >
       {isLargeEnough && <Logo />}
       {isLargeEnough && <Box component="span" sx={{ flex: 1 }} />}
