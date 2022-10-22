@@ -10,8 +10,12 @@ import {
 
 const ListScreen = () => {
   return (
-    <List perPage={25} sort={{ field: "date", order: "desc" }} hasCreate>
-      <Datagrid>
+    <List
+      perPage={25}
+      sort={{ field: "date", order: "desc" }}
+      hasCreate={false}
+    >
+      <Datagrid bulkActionButtons={false}>
         <TextField source="name" />
         <ReferenceField source="fundId" reference="funds">
           <TextField source="name" />
@@ -21,7 +25,6 @@ const ListScreen = () => {
         <ReferenceField source="fundId" reference="funds" label="Currency">
           <TextField source="currency" />
         </ReferenceField>
-        <EditButton />
       </Datagrid>
     </List>
   );

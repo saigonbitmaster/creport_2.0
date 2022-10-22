@@ -33,7 +33,7 @@ const ListScreen = () => {
       hasCreate
       filters={Filters}
     >
-      <Datagrid>
+      <Datagrid bulkActionButtons={false}>
         <TextField source="name" />
         <TextField source="projectId" />
         <ReferenceField source="fundId" reference="funds">
