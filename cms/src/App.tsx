@@ -20,19 +20,21 @@ import FetchCardano from "./tools/fetchCardano";
 import proposals from "./proposal";
 import commits from "./commit";
 
-const loginUrl = "http://localhost:3000/auth/login";
-const apiUrl = "http://localhost:3000";
 
-const restProvider = dataProvider(apiUrl);
+
+const loginUrl = process.env.REACT_APP_LOGIN_URL;
+const apiUrl = process.env.REACT_APP_API_URL;
+const token = localStorage.getItem("access_token");
+const restProvider = dataProvider(apiUrl, token);
+const _authProvider = authProvider(loginUrl);
+
 const i18nProvider = polyglotI18nProvider((locale) => {
   if (locale === "fr") {
     return import("./i18n/fr").then((messages) => messages.default);
   }
-  // Always fallback on english
   return englishMessages;
 }, "en");
 
-const _authProvider = authProvider(loginUrl);
 const App = () => {
   return (
     <Admin

@@ -4,6 +4,7 @@
 git clone https://github.com/saigonbitmaster/creport_2.0
 add local host dns record /etc/hosts: 127.0.0.1  creport.bworks.app
 cd creport_2.0
+update .env files
 yarn 
 yarn build-lib
 yarn api
@@ -25,9 +26,22 @@ frontend app after build can be run by any http server e.g nginx server
 backend app after build can be run by: node main.js or pm2
 ```
 
-## change the API urls for frontend
+## .env file for frontend
 ```
-frontend/App.tsx -> change the loginUrl and  apiUrl to meet your deployment before build apps e.g:
-const loginUrl = "http://creport.bworks.app:3000/auth/login";
-const apiUrl = "http://creport.bworks.app:3000";
+REACT_APP_LOGIN_URL=http://localhost:3000/auth/login
+REACT_APP_API_URL=http://localhost:3000
+```
+
+## .env file for api 
+```
+#Mongo
+DATABASE_HOST=localhost
+DATABASE_PORT=27017
+DATABASE_ACCOUNT=admin
+DATABASE_PASSWORD=***
+#Blockfrost
+BLOCKFROST_PROJECT_ID=***
+BLOCKFROST_URL=https://cardano-testnet.blockfrost.io/api/v0
+#GitHub
+GITHUB_TOKEN=***
 ```
