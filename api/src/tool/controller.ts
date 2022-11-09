@@ -1,10 +1,23 @@
-import { Controller, Get, Response, Query } from '@nestjs/common';
+import { Controller, Get, Response, Query, Body, Post } from '@nestjs/common';
 import { ToolService } from './service';
 import { queryTransform, formatRaList } from '../flatworks/utils/getlist';
-
+import { ImportBody } from '../flatworks/types/types';
+import { getSheetData } from '../flatworks/utils/googleSheet';
 @Controller('tools')
 export class ToolController {
   constructor(private readonly service: ToolService) {}
+
+  //import data from google sheets
+
+  @Post('import')
+  async create(@Body() importBody: ImportBody) {
+    const result = await getSheetData(
+      '1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms',
+      'A2:E',
+    );
+    console.log(result);
+  }
+
   @Get('utxos')
   async getUtxos(@Response() res: any, @Query() query) {
     const _query = queryTransform(query);

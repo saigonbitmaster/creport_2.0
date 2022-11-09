@@ -7,16 +7,24 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-import { useTranslate } from "react-admin";
+import { useTranslate, useCreate } from "react-admin";
 import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
 import TextField from "@mui/material/TextField";
-import {sheets} from "../data/data";
+import { sheets } from "../data/data";
 
 //sample sheets: https://drive.google.com/drive/u/1/folders/15hO1IrdqWsTLXfZdWVvuZyuk7pok5UUC
 const ImportSheets = () => {
   const translate = useTranslate();
   const [state, setState] = React.useState(sheets);
+
+  const [create, { isLoading, error }] = useCreate();
+  const onClick = (id) => {
+    const data = state.find((item) => item.id === id);
+    create("tools/import", {
+      data,
+    });
+  };
 
   const onChangeCheckbox = (id) => (event) => {
     const newState = state.map((item) => {
@@ -37,11 +45,6 @@ const ImportSheets = () => {
     });
 
     setState(newState);
-  };
-
-  const onClick = (id) => {
-    //fetch API
-    console.log(id);
   };
 
   return (

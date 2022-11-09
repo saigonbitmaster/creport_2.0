@@ -8,6 +8,9 @@ node_modules
 note.txt
 test.ts
 test.js
+api/src/flatworks/utils/credentials.json
+api/src/flatworks/utils/token.json
+
 #cms/src/components
 #cms/src/kpi
 #cms/src/commit
