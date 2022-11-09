@@ -12,6 +12,7 @@ import {
 import { CreateChallengeDto } from './dto/create.dto';
 import { UpdateChallengeDto } from './dto/update.dto';
 import { ChallengeService } from './service';
+import { queryTransform, formatRaList } from '../flatworks/utils/getlist';
 
 @Controller('challenges')
 export class ChallengeController {
@@ -19,24 +20,9 @@ export class ChallengeController {
 
   @Get()
   async index(@Response() res: any, @Query() query) {
-    const sort = {};
-
-    query.sort
-      ? (sort[JSON.parse(query.sort)[0]] =
-          JSON.parse(query.sort)[1] === 'ASC' ? 1 : -1)
-      : null;
-    const range = query.range ? JSON.parse(query.range) : [0, 10];
-    const [rangeStart, rangeEnd] = [...range];
-    const limit = rangeEnd - rangeStart + 1;
-    const skip = rangeStart;
-    const filter = query.filter ? JSON.parse(query.filter) : {};
-    const result = await this.service.findAll(filter, sort, skip, limit);
-    return res
-      .set({
-        'Content-Range': result.count,
-        'Access-Control-Expose-Headers': 'Content-Range',
-      })
-      .json(result.data);
+    const mongooseQuery = queryTransform(query);
+    const result = await this.service.findAll(mongooseQuery);
+    return formatRaList(res, result);
   }
 
   @Get(':id')

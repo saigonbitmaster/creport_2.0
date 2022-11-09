@@ -6,6 +6,7 @@ import { UpdateProposalDto } from './dto/update.dto';
 import { Proposal, ProposalDocument } from './schemas/schema';
 import { RaList, MongooseQuery } from '../flatworks/types/types';
 import { kpiQuery } from '../flatworks/scripts/kpi';
+
 @Injectable()
 export class ProposalService {
   constructor(
@@ -25,7 +26,6 @@ export class ProposalService {
 
   async findAllKpi(query: MongooseQuery): Promise<RaList> {
     const aggregateQuery = kpiQuery(query);
-    console.log(aggregateQuery);
 
     const _data = await this.model.aggregate(aggregateQuery).exec();
     const data = _data.map((item) => {
@@ -41,11 +41,6 @@ export class ProposalService {
     return { count: 10, data: data };
   }
 
-  async customMethod(title: string, description: string): Promise<Proposal[]> {
-    return await this.model
-      .aggregate([{ $match: { title: title, description: description } }])
-      .exec();
-  }
   async findOne(id: string): Promise<Proposal> {
     return await this.model.findById(id).exec();
   }

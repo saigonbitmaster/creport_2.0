@@ -12,9 +12,11 @@ import { GitCommitModule } from './commit/module';
 
 @Module({
   imports: [
-    MongooseModule.forRoot(
-      'mongodb://admin:123456@localhost:27017/creport2?authSource=admin&readPreference=primary',
-    ),
+    MongooseModule.forRootAsync({
+      useFactory: () => ({
+        uri: process.env.CONNECTION_STRING,
+      }),
+    }),
     ConfigModule.forRoot({
       isGlobal: true,
     }),

@@ -3,7 +3,6 @@ import { MongooseQuery } from '../types/types';
 const kpiQuery = (query: MongooseQuery) => {
   return [
     { $match: query.filter },
-    { $match: {} },
     { $addFields: { id: { $toString: '$_id' } } },
     {
       $lookup: {

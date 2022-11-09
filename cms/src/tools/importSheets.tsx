@@ -11,12 +11,12 @@ import { useTranslate } from "react-admin";
 import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
 import TextField from "@mui/material/TextField";
-import data from "./data";
+import {sheets} from "../data/data";
 
 //sample sheets: https://drive.google.com/drive/u/1/folders/15hO1IrdqWsTLXfZdWVvuZyuk7pok5UUC
 const ImportSheets = () => {
   const translate = useTranslate();
-  const [state, setState] = React.useState(data);
+  const [state, setState] = React.useState(sheets);
 
   const onChangeCheckbox = (id) => (event) => {
     const newState = state.map((item) => {

@@ -4,6 +4,7 @@ import { Model } from 'mongoose';
 import { CreateChallengeDto } from './dto/create.dto';
 import { UpdateChallengeDto } from './dto/update.dto';
 import { Challenge, ChallengeDocument } from './schemas/schema';
+import { RaList, MongooseQuery } from '../flatworks/types/types';
 
 @Injectable()
 export class ChallengeService {
@@ -12,13 +13,13 @@ export class ChallengeService {
     private readonly model: Model<ChallengeDocument>,
   ) {}
 
-  async findAll(filter, sort, skip, limit): Promise<any> {
-    const count = await this.model.find(filter).count().exec();
+  async findAll(query: MongooseQuery): Promise<RaList> {
+    const count = await this.model.find(query.filter).count().exec();
     const data = await this.model
-      .find(filter)
-      .sort(sort)
-      .skip(skip)
-      .limit(limit)
+      .find(query.filter)
+      .sort(query.sort)
+      .skip(query.skip)
+      .limit(query.limit)
       .exec();
     const result = { count: count, data: data };
     return result;

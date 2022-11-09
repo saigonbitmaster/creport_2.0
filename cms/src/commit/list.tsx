@@ -25,7 +25,6 @@ const ListScreen = () => {
     >
       <Datagrid bulkActionButtons={false}>
         <TextField source="sha" />
-        <TextField source="rate" />
         <TextField source="message" />
         <TextField source="author" />
         <DateField source="date" />

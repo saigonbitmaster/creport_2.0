@@ -4,7 +4,7 @@ import { Model } from 'mongoose';
 import { CreateFundDto } from './dto/create.dto';
 import { UpdateFundDto } from './dto/update.dto';
 import { Fund, FundDocument } from './schemas/schema';
-import { raList } from '../types';
+import { RaList, MongooseQuery } from '../flatworks/types/types';
 
 @Injectable()
 export class FundService {
@@ -12,13 +12,13 @@ export class FundService {
     @InjectModel(Fund.name) private readonly model: Model<FundDocument>,
   ) {}
 
-  async findAll(filter, sort, skip, limit): Promise<raList> {
-    const count = await this.model.find(filter).count().exec();
+  async findAll(query: MongooseQuery): Promise<RaList> {
+    const count = await this.model.find(query.filter).count().exec();
     const data = await this.model
-      .find(filter)
-      .sort(sort)
-      .skip(skip)
-      .limit(limit)
+      .find(query.filter)
+      .sort(query.sort)
+      .skip(query.skip)
+      .limit(query.limit)
       .exec();
     const result = { count: count, data: data };
     return result;
