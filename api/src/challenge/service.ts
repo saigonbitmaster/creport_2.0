@@ -5,12 +5,14 @@ import { CreateChallengeDto } from './dto/create.dto';
 import { UpdateChallengeDto } from './dto/update.dto';
 import { Challenge, ChallengeDocument } from './schemas/schema';
 import { RaList, MongooseQuery } from '../flatworks/types/types';
+import { FundService } from '../fund/service';
 
 @Injectable()
 export class ChallengeService {
   constructor(
     @InjectModel(Challenge.name)
     private readonly model: Model<ChallengeDocument>,
+    private readonly fundService: FundService,
   ) {}
 
   async findAll(query: MongooseQuery): Promise<RaList> {
@@ -25,13 +27,17 @@ export class ChallengeService {
     return result;
   }
 
-  async customMethod(title: string, description: string): Promise<Challenge[]> {
-    return await this.model
-      .aggregate([{ $match: { title: title, description: description } }])
-      .exec();
-  }
   async findOne(id: string): Promise<Challenge> {
     return await this.model.findById(id).exec();
+  }
+
+  async import(challenges: CreateChallengeDto[]): Promise<any> {
+    return challenges.forEach(async (challenge) => {
+      await this.model.findOneAndUpdate({ name: challenge.name }, challenge, {
+        new: true,
+        upsert: true,
+      });
+    });
   }
 
   async create(createChallengeDto: CreateChallengeDto): Promise<Challenge> {

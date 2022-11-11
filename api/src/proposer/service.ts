@@ -35,6 +35,15 @@ export class ProposerService {
     }).save();
   }
 
+  async import(proposers: CreateProposerDto[]): Promise<any> {
+    return proposers.forEach(async (proposer) => {
+      await this.model.findOneAndUpdate({ email: proposer.email }, proposer, {
+        new: true,
+        upsert: true,
+      });
+    });
+  }
+
   async update(
     id: string,
     updateProposerDto: UpdateProposerDto,

@@ -7,7 +7,7 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-import { useTranslate, useCreate } from "react-admin";
+import { useTranslate, useCreate, useNotify } from "react-admin";
 import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
 import TextField from "@mui/material/TextField";
@@ -17,11 +17,12 @@ import { sheets } from "../data/data";
 const ImportSheets = () => {
   const translate = useTranslate();
   const [state, setState] = React.useState(sheets);
+  const notify = useNotify();
 
   const [create, { isLoading, error }] = useCreate();
   const onClick = (id) => {
     const data = state.find((item) => item.id === id);
-    create("tools/import", {
+    create(`${id}/import`, {
       data,
     });
   };

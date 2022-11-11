@@ -13,10 +13,19 @@ import { CreateChallengeDto } from './dto/create.dto';
 import { UpdateChallengeDto } from './dto/update.dto';
 import { ChallengeService } from './service';
 import { queryTransform, formatRaList } from '../flatworks/utils/getlist';
+import { ImportBody } from '../flatworks/types/types';
+import {
+  getSheetData,
+  challengeTransform,
+} from '../flatworks/utils/googleSheet';
+import { FundService } from '../fund/service';
 
 @Controller('challenges')
 export class ChallengeController {
-  constructor(private readonly service: ChallengeService) {}
+  constructor(
+    private readonly service: ChallengeService,
+    private readonly fundService: FundService,
+  ) {}
 
   @Get()
   async index(@Response() res: any, @Query() query) {
@@ -33,6 +42,13 @@ export class ChallengeController {
   @Post()
   async create(@Body() createChallengeDto: CreateChallengeDto) {
     return await this.service.create(createChallengeDto);
+  }
+
+  @Post('import')
+  async import(@Body() importBody: ImportBody) {
+    const data = await getSheetData(importBody.sheet, importBody.id, 'A2:E');
+    const _data = await challengeTransform(data, this.fundService);
+    return this.service.import(_data)
   }
 
   @Put(':id')

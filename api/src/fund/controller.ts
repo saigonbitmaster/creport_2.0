@@ -13,6 +13,8 @@ import { CreateFundDto } from './dto/create.dto';
 import { UpdateFundDto } from './dto/update.dto';
 import { FundService } from './service';
 import { queryTransform, formatRaList } from '../flatworks/utils/getlist';
+import { ImportBody } from '../flatworks/types/types';
+import { getSheetData, fundTransform } from '../flatworks/utils/googleSheet';
 
 @Controller('funds')
 export class FundController {
@@ -26,8 +28,14 @@ export class FundController {
   }
 
   @Get(':id')
-  async find(@Param('id') id: string) {
-    return await this.service.findOne(id);
+  async findById(@Param('id') id: string) {
+    return await this.service.findById(id);
+  }
+
+  @Post('import')
+  async import(@Body() importBody: ImportBody) {
+    const data = await getSheetData(importBody.sheet, importBody.id, 'A2:E');
+    return await this.service.import(fundTransform(data));
   }
 
   @Post()

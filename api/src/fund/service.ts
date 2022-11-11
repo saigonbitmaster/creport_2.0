@@ -24,8 +24,12 @@ export class FundService {
     return result;
   }
 
-  async findOne(id: string): Promise<Fund> {
+  async findById(id: string): Promise<Fund> {
     return await this.model.findById(id).exec();
+  }
+
+  async findByName(name: string): Promise<Fund> {
+    return await this.model.findOne({ name }).exec();
   }
 
   async create(createFundDto: CreateFundDto): Promise<Fund> {
@@ -33,6 +37,15 @@ export class FundService {
       ...createFundDto,
       createdAt: new Date(),
     }).save();
+  }
+
+  async import(funds: CreateFundDto[]): Promise<any> {
+    return funds.forEach(async (fund) => {
+      await this.model.findOneAndUpdate({ name: fund.name }, fund, {
+        new: true,
+        upsert: true,
+      });
+    });
   }
 
   async update(id: string, updateFundDto: UpdateFundDto): Promise<Fund> {

@@ -1,4 +1,3 @@
-
 const choices = [
   { id: "inProgress", name: "In progress" },
   { id: "complete", name: "Completed" },
@@ -8,33 +7,33 @@ const choices = [
 
 const sheets = [
   {
-    id: "fund",
+    id: "funds",
     name: "Fund",
     forceReplace: false,
     sheet:
-      "https://docs.google.com/spreadsheets/d/1MjFttx4SDvULRLDEJf1JFA-ZhehMyIfDhVm0NyR6ZkU/edit#gid=0",
+      "https://docs.google.com/spreadsheets/d/1WJi1odv0vGT3ylz01flNpqErmCr-G6Kb37yxaVZOzVM/edit#gid=1508013900",
   },
   {
-    id: "challenge",
+    id: "challenges",
     name: "Challenge",
     forceReplace: false,
     sheet:
-      "https://docs.google.com/spreadsheets/d/18i76uPTi3zTBkGMlxUDeSoW21tVyzuRwUJzyl2dMD0g/edit#gid=0",
+      "https://docs.google.com/spreadsheets/d/1WJi1odv0vGT3ylz01flNpqErmCr-G6Kb37yxaVZOzVM/edit#gid=1508013900",
   },
   {
-    id: "proposer",
+    id: "proposers",
     name: "Proposer",
     forceReplace: false,
     sheet:
-      "https://docs.google.com/spreadsheets/d/1kTlafv3squMj5FGcObTBUzjTTXoa9bM-0uv02spVkvo/edit#gid=0",
+      "https://docs.google.com/spreadsheets/d/1WJi1odv0vGT3ylz01flNpqErmCr-G6Kb37yxaVZOzVM/edit#gid=1508013900",
   },
   {
-    id: "proposal",
+    id: "proposals",
     name: "Proposal",
     forceReplace: false,
     sheet:
-      "https://docs.google.com/spreadsheets/d/10Dv68dFmOVsbSzQIlu3vFsRpBDLcwpIb_ZnuF5uvA94/edit#gid=0",
+      "https://docs.google.com/spreadsheets/d/1WJi1odv0vGT3ylz01flNpqErmCr-G6Kb37yxaVZOzVM/edit#gid=1508013900",
   },
 ];
 
-export {choices, sheets};
+export { choices, sheets };

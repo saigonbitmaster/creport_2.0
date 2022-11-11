@@ -1,4 +1,13 @@
-import { Controller, Get, Response, Query, Body, Post } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Response,
+  Query,
+  Body,
+  Post,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
 import { ToolService } from './service';
 import { queryTransform, formatRaList } from '../flatworks/utils/getlist';
 import { ImportBody } from '../flatworks/types/types';
@@ -8,11 +17,12 @@ export class ToolController {
   constructor(private readonly service: ToolService) {}
 
   //import data from google sheets
-
+  //use findAndUpdate with upsert = true to insert record
   @Post('import')
   async create(@Body() importBody: ImportBody) {
     const result = await getSheetData(
-      '1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms',
+      'https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit#gid=0',
+      'funds',
       'A2:E',
     );
     console.log(result);

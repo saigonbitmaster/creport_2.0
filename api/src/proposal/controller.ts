@@ -13,7 +13,8 @@ import { CreateProposalDto } from './dto/create.dto';
 import { UpdateProposalDto } from './dto/update.dto';
 import { ProposalService } from './service';
 import { queryTransform, formatRaList } from '../flatworks/utils/getlist';
-
+import { ImportBody } from '../flatworks/types/types';
+import { getSheetData } from '../flatworks/utils/googleSheet';
 @Controller('proposals')
 export class ProposalController {
   constructor(private readonly service: ProposalService) {}
@@ -28,6 +29,14 @@ export class ProposalController {
   @Get(':id')
   async find(@Param('id') id: string) {
     return await this.service.findOne(id);
+  }
+
+
+  @Post('import')
+  async import(@Body() importBody: ImportBody) {
+    console.log(importBody)
+    const result = await getSheetData(importBody.sheet, importBody.id, 'A2:E');
+    console.log(result);
   }
 
   @Post()
