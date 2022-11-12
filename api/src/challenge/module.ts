@@ -1,18 +1,17 @@
-import { Module } from '@nestjs/common';
+import { Module, Global } from '@nestjs/common';
 import { ChallengeService } from './service';
 import { ChallengeController } from './controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Challenge, ChallengeSchema } from './schemas/schema';
-import { FundModule } from '../fund/module';
-
+@Global()
 @Module({
   providers: [ChallengeService],
   controllers: [ChallengeController],
   imports: [
-    FundModule,
     MongooseModule.forFeature([
       { name: Challenge.name, schema: ChallengeSchema },
     ]),
   ],
+  exports: [ChallengeService],
 })
 export class ChallengeModule {}

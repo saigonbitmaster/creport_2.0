@@ -28,6 +28,10 @@ export class ProposerService {
     return await this.model.findById(id).exec();
   }
 
+  async findByName(name: string): Promise<Proposer> {
+    return await this.model.findOne({ fullName: name }).exec();
+  }
+
   async create(createProposerDto: CreateProposerDto): Promise<Proposer> {
     return await new this.model({
       ...createProposerDto,

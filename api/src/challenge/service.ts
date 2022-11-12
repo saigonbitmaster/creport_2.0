@@ -31,6 +31,10 @@ export class ChallengeService {
     return await this.model.findById(id).exec();
   }
 
+  async findByName(fundId: string, name: string): Promise<Challenge> {
+    return await this.model.findOne({ fundId: fundId, name: name }).exec();
+  }
+
   async import(challenges: CreateChallengeDto[]): Promise<any> {
     return challenges.forEach(async (challenge) => {
       await this.model.findOneAndUpdate({ name: challenge.name }, challenge, {

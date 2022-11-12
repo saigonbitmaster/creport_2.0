@@ -45,3 +45,9 @@ BLOCKFROST_URL=https://cardano-testnet.blockfrost.io/api/v0
 #GitHub
 GITHUB_TOKEN=***
 ```
+
+## googleSheets url to import data
+```
+https://docs.google.com/spreadsheets/d/1WJi1odv0vGT3ylz01flNpqErmCr-G6Kb37yxaVZOzVM/edit#gid=165710495
+
+```

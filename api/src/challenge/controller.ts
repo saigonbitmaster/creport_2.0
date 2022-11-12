@@ -46,9 +46,9 @@ export class ChallengeController {
 
   @Post('import')
   async import(@Body() importBody: ImportBody) {
-    const data = await getSheetData(importBody.sheet, importBody.id, 'A2:E');
-    const _data = await challengeTransform(data, this.fundService);
-    return this.service.import(_data)
+    const _data = await getSheetData(importBody.sheet, importBody.id, 'A2:E');
+    const data = await challengeTransform(_data, this.fundService);
+    return this.service.import(data);
   }
 
   @Put(':id')

@@ -45,6 +45,15 @@ export class ProposalService {
     return await this.model.findById(id).exec();
   }
 
+  async import(proposals: CreateProposalDto[]): Promise<any> {
+    return proposals.forEach(async (proposal) => {
+      await this.model.findOneAndUpdate({ name: proposal.name }, proposal, {
+        new: true,
+        upsert: true,
+      });
+    });
+  }
+
   async create(createProposalDto: CreateProposalDto): Promise<Proposal> {
     return await new this.model({
       ...createProposalDto,

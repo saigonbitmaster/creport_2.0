@@ -29,7 +29,7 @@ export class FundService {
   }
 
   async findByName(name: string): Promise<Fund> {
-    return await this.model.findOne({ name }).exec();
+    return await this.model.findOne({ name: name }).exec();
   }
 
   async create(createFundDto: CreateFundDto): Promise<Fund> {

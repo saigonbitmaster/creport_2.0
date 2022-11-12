@@ -18,6 +18,7 @@ import {
   getSheetData,
   proposerTransform,
 } from '../flatworks/utils/googleSheet';
+
 @Controller('proposers')
 export class ProposerController {
   constructor(private readonly service: ProposerService) {}
