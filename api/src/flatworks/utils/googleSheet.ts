@@ -7,6 +7,10 @@ import * as moment from 'moment';
 import * as lodash from 'lodash';
 import { Types } from 'mongoose';
 import { validateEmail } from './validateEmail';
+import { BaseProposalDto } from '../../proposal/dto/base.dto';
+import { BaseFundDto } from '../../fund/dto/base.dto';
+import { BaseChallengeDto } from '../../challenge/dto/base.dto';
+import { BaseProposerDto } from '../../proposer/dto/base.dto';
 
 /*
 https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit#gid=0
@@ -78,55 +82,60 @@ const getSheetData = async (sheetUrl, sheetName, range) => {
 };
 
 const fundTransform = (data: any[]) => {
-  const filteredData = data.filter((item) => item[0]);
+  const filteredData = data
+    .filter((item) => item[0])
+    .map((item) => item.map((item) => item.trim()));
   return filteredData.map((item) => {
-    const name = item[0].trim();
-    const description = item[4];
-    const currency =
+    const record = {} as BaseFundDto;
+    record.name = item[0];
+    record.description = item[4];
+    record.currency =
       item[2] && ['usd', 'ada'].includes(item[2]) ? item[2] : 'usd';
-    const budget =
+    record.budget =
       item[1] && parseInt(item[1] as string) ? parseInt(item[1] as string) : 0;
-    const date = moment(item[3], 'MM-DD-YYYY').isValid()
+    record.date = moment(item[3], 'MM-DD-YYYY').isValid()
       ? moment(item[3], 'MM-DD-YYYY').toDate()
       : moment().toDate();
-
-    const record = { name, currency, budget, date, description };
     return lodash.omitBy(record, lodash.isNil);
   });
 };
 
 const proposerTransform = (data: any[]) => {
-  const filteredData = data.filter(
-    (item) => item[0] && item[1] && validateEmail(item[1]),
-  );
+  const filteredData = data
+    .filter((item) => item[0] && item[1] && validateEmail(item[1]))
+    .map((item) => item.map((item) => item.trim()));
   return filteredData.map((item) => {
-    const fullName = item[0].trim();
-    const email = item[1].trim();
-    const telegram = item[2];
-    const walletAddress = item[3];
-    const description = item[4];
-
-    const record = { fullName, email, telegram, walletAddress, description };
+    const record = {} as BaseProposerDto;
+    [
+      record.fullName,
+      record.email,
+      record.telegram,
+      record.walletAddress,
+      record.description,
+    ] = item;
     return lodash.omitBy(record, lodash.isNil);
   });
 };
 
 const challengeTransform = async (data: any[], fundService) => {
-  const filteredData = data.filter((item) => item[0] && item[1]);
+  const filteredData = data
+    .filter((item) => item[0] && item[1])
+    .map((item) => item.map((item) => item.trim()));
   return await Promise.all(
     filteredData.map(async (item) => {
-      const name = item[0].trim();
-      const fund = item[1].trim();
-      const fundRecord = await fundService.findByName(fund);
+      const record = {} as BaseChallengeDto;
       const nullFundId = new Types.ObjectId().toString();
-      const fundId = lodash.get(fundRecord, '_id', nullFundId);
-      const description = item[3];
-      const budget =
+      record.name = item[0];
+      record.fundId = lodash.get(
+        await fundService.findByName(item[1]),
+        '_id',
+        nullFundId,
+      );
+      record.description = item[3];
+      record.budget =
         item[2] && parseInt(item[2] as string)
           ? parseInt(item[2] as string)
           : 0;
-
-      const record = { name, fundId, budget, description };
       return lodash.omitBy(record, lodash.isNil);
     }),
   );
@@ -138,60 +147,64 @@ const proposalTransform = async (
   challengeService,
   proposerService,
 ) => {
-  const filteredData = data.filter(
-    (item) => item[0] && item[1] && item[2] && item[3] && item[4],
-  );
+  const filteredData = data
+    .filter((item) => item[0] && item[1] && item[2] && item[3] && item[4])
+    .map((item) => item.map((item) => item.trim()));
   return await Promise.all(
     filteredData.map(async (item) => {
+      const record = {} as BaseProposalDto;
       const nullId = new Types.ObjectId().toString();
-      const projectId = item[0].trim();
-      const name = item[1].trim();
-      const fund = item[2].trim();
-      const challenge = item[3].trim();
-      const proposer = item[4].trim();
-      const fundRecord = await fundService.findByName(fund);
-      const fundId = lodash.get(fundRecord, '_id', nullId);
-      const challengeRecord = await challengeService.findByName(
-        fundId,
-        challenge,
+      let fundName,
+        proposerName,
+        challengeName,
+        requestedBudgetStr: string,
+        startDateStr,
+        completeDateStr;
+
+      [
+        record.projectId,
+        record.name,
+        fundName,
+        challengeName,
+        proposerName,
+        requestedBudgetStr,
+        record.projectStatus,
+        record.proposalUrl,
+        record.gitLink,
+        record.walletAddress,
+        record.smartContract,
+        record.previousProposals,
+        startDateStr,
+        completeDateStr,
+        record.description,
+      ] = item;
+
+      record.fundId = lodash.get(
+        await fundService.findByName(fundName),
+        '_id',
+        nullId,
       );
-      const challengeId = lodash.get(challengeRecord, '_id', nullId);
-      const proposerRecord = await proposerService.findByName(proposer);
-      const proposerId = lodash.get(proposerRecord, '_id', nullId);
-      const requestedBudget =
-        item[5] && parseInt(item[5] as string)
-          ? parseInt(item[5] as string)
+      record.challengeId = lodash.get(
+        await challengeService.findByName(record.fundId, challengeName),
+        '_id',
+        nullId,
+      );
+      record.proposerId = lodash.get(
+        await proposerService.findByName(proposerName),
+        '_id',
+        nullId,
+      );
+      record.requestedBudget =
+        requestedBudgetStr && parseInt(requestedBudgetStr)
+          ? parseInt(requestedBudgetStr)
           : 0;
-      const projectStatus = item[6];
-      const proposalUrl = item[7];
-      const gitLink = item[8];
-      const walletAddress = item[9];
-      const smartContract = item[10];
-      const previousProposals = item[11];
-      const startDate = moment(item[12], 'MM-DD-YYYY').isValid()
-        ? moment(item[12], 'MM-DD-YYYY').toDate()
+
+      record.startDate = moment(startDateStr, 'MM-DD-YYYY').isValid()
+        ? moment(startDateStr, 'MM-DD-YYYY').toDate()
         : moment().toDate();
-      const completeDate = moment(item[13], 'MM-DD-YYYY').isValid()
-        ? moment(item[13], 'MM-DD-YYYY').toDate()
+      record.completeDate = moment(completeDateStr, 'MM-DD-YYYY').isValid()
+        ? moment(completeDateStr, 'MM-DD-YYYY').toDate()
         : moment().toDate();
-      const description = item[14];
-      const record = {
-        projectId,
-        name,
-        fundId,
-        challengeId,
-        proposerId,
-        requestedBudget,
-        projectStatus,
-        proposalUrl,
-        gitLink,
-        walletAddress,
-        smartContract,
-        previousProposals,
-        startDate,
-        completeDate,
-        description,
-      };
 
       return lodash.omitBy(record, lodash.isNil);
     }),
