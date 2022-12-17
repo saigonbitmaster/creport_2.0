@@ -1,11 +1,11 @@
 import React, { CSSProperties } from "react";
 import { useMediaQuery, Theme } from "@mui/material";
 
-import MonthlyPayout from "./MonthlyPayout";
-import NewQuizzes from "./NewQuizzes";
+import MonthlyPayout from "./funds";
+import NewQuizzes from "./fundedProject";
 import QuizPostHistory from "./QuizPostHistory";
-import PendingReviews from "./PendingReviews";
-import NewMembers from "./NewMembers";
+import PendingReviews from "./completeProject";
+import NewMembers from "./pendingProject";
 import PayoutHistory from "./PayoutHistory";
 import { quizPostData, payoutData, monthlyRevenue, newQuiz } from "./data";
 
