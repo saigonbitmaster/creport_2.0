@@ -11,8 +11,9 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
+import { useTranslate, useGetList } from "react-admin";
 
-
+/* 
 const data = [
   {
     name: "Fund 1",
@@ -60,11 +61,48 @@ const data = [
     inProgress: 4300,
   },
 ];
+ */
 
+const ProjectStatus = (props) => {
+  const {
+    isLoading: proposalsLoading,
+    data: proposals,
+    total: totalProposals,
+  } = useGetList<any>("proposals", {
+    filter: {},
+    sort: { field: "name", order: "ASC" },
+    pagination: { page: 1, perPage: 2000 },
+  });
 
-const ProjectStatus = (props: { orders?: any[] }) => {
-  const { orders } = props;
-  if (!orders) return null;
+  const {
+    isLoading: fundLoading,
+    data: funds,
+    total: totalFunds,
+  } = useGetList<any>("funds", {
+    filter: {},
+    sort: { field: "name", order: "ASC" },
+    pagination: { page: 1, perPage: 2000 },
+  });
+
+  let data = [];
+  if (funds && proposals) {
+    data = proposals.reduce(function (r, a) {
+      let record = r.find((item) => item.fundId === a.fundId) || {};
+      record.fundId = a.fundId;
+      let fundName = funds.find((item) => item.id === a.fundId)?.name || null;
+      console.log(funds);
+      record.name = fundName;
+      record[a.projectStatus] = record[a.projectStatus]
+        ? record[a.projectStatus] + 1
+        : 1;
+
+      r.filter((item) => item.fundId === a.fundId).length === 0
+        ? r.push(record)
+        : r.map((item) => (item.fundId === a.fundId ? record : null));
+
+      return r;
+    }, []);
+  }
 
   return (
     <Card>
@@ -97,6 +135,5 @@ const ProjectStatus = (props: { orders?: any[] }) => {
     </Card>
   );
 };
-
 
 export default ProjectStatus;

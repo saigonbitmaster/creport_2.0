@@ -18,7 +18,7 @@ const Funds = (props: Props) => {
     },
     pagination: { page: 1, perPage: 100 },
   });
-  console.log(funds)
+
   const nf = funds? total : 0;
   const totalBudget = funds?  funds.reduce(
     (accumulator, record) => accumulator + record.budget,

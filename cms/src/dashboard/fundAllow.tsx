@@ -12,7 +12,7 @@ import {
 } from "recharts";
 import { useTranslate, useGetList } from "react-admin";
 
-
+/* 
 const data = [
   {
     name: "Fund 1",
@@ -60,7 +60,7 @@ const data = [
     Distributed: 4300,
   },
 ];
-
+ */
 const FundAllow = (props: { orders?: any[] }) => {
 
 const {
@@ -73,7 +73,7 @@ const {
   pagination: { page: 1, perPage: 20 },
 });
 
-const _data = funds? funds.map(item => ({...item, Allocated: item.budget/1000000})) : []
+const data = funds? funds.map(item => ({...item, Allocated: item.budget/1000000})) : []
   return (
     <Card>
       <CardHeader title="Fund allocation history (m$)" />
@@ -83,7 +83,7 @@ const _data = funds? funds.map(item => ({...item, Allocated: item.budget/1000000
             <AreaChart
               width={500}
               height={200}
-              data={_data}
+              data={data}
               syncId="anyId"
               margin={{
                 top: 10,
