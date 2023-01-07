@@ -1,25 +1,6 @@
 import { MongooseQuery } from '../types/types';
-import { fullTextSearchTransform } from '../utils/getlist';
 
 const kpiQuery = (query: MongooseQuery) => {
-  const { keyword } = query.filter;
-  if (keyword) {
-    query.filter = fullTextSearchTransform(
-      query.filter,
-      [
-        'name',
-        'proposalUrl',
-        'walletAddress',
-        'gitLink',
-        'smartContract',
-        'projectStatus',
-        'gitCommits',
-        'fundTransactions',
-        'description',
-      ],
-      keyword,
-    );
-  }
   return [
     { $match: query.filter },
     { $addFields: { id: { $toString: '$_id' } } },

@@ -6,6 +6,7 @@ import { UpdateChallengeDto } from './dto/update.dto';
 import { Challenge, ChallengeDocument } from './schemas/schema';
 import { RaList, MongooseQuery } from '../flatworks/types/types';
 import { FundService } from '../fund/service';
+import { fullTextSearchTransform } from '../flatworks/utils/getlist';
 
 @Injectable()
 export class ChallengeService {
@@ -60,5 +61,21 @@ export class ChallengeService {
 
   async delete(id: string): Promise<Challenge> {
     return await this.model.findByIdAndDelete(id).exec();
+  }
+
+  /**
+   * Search on page
+   * @param keyword search keyword
+   * @param searchFields search fields
+   */
+  async pageFullTextSearch(
+    searchFields: string[],
+    keyword: string,
+  ): Promise<string[]> {
+    let filters = {};
+    filters = fullTextSearchTransform(filters, searchFields, keyword);
+    const challenges = await this.model.find(filters);
+    if (!challenges || challenges.length === 0) return [];
+    return challenges.map((fund) => fund._id.toString());
   }
 }

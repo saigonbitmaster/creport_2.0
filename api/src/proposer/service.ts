@@ -18,7 +18,7 @@ export class ProposerService {
     if (keyword) {
       query.filter = fullTextSearchTransform(
         query.filter,
-        ['fullName', 'email', 'walletAddress', 'telegram', 'description'],
+        ['fullName', 'email', 'walletAddress', 'telegram'],
         keyword,
       );
     }
@@ -70,5 +70,21 @@ export class ProposerService {
 
   async delete(id: string): Promise<Proposer> {
     return await this.model.findByIdAndDelete(id).exec();
+  }
+
+  /**
+   * Search on page
+   * @param keyword search keyword
+   * @param searchFields search fields
+   */
+  async pageFullTextSearch(
+    searchFields: string[],
+    keyword: string,
+  ): Promise<string[]> {
+    let filters = {};
+    filters = fullTextSearchTransform(filters, searchFields, keyword);
+    const proposers = await this.model.find(filters);
+    if (!proposers || proposers.length === 0) return [];
+    return proposers.map((fund) => fund._id.toString());
   }
 }
