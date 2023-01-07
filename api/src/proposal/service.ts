@@ -6,6 +6,7 @@ import { UpdateProposalDto } from './dto/update.dto';
 import { Proposal, ProposalDocument } from './schemas/schema';
 import { RaList, MongooseQuery } from '../flatworks/types/types';
 import { kpiQuery } from '../flatworks/scripts/kpi';
+import { fullTextSearchTransform } from '../flatworks/utils/getlist';
 
 @Injectable()
 export class ProposalService {
@@ -14,10 +15,25 @@ export class ProposalService {
   ) {}
 
   async findAll(query: MongooseQuery): Promise<RaList> {
-    const { name } = query.filter;
-    if (name) {
-      query.filter.name = { $regex: name, $options: 'i' };
+    const { keyword } = query.filter;
+    if (keyword) {
+      query.filter = fullTextSearchTransform(
+        query.filter,
+        [
+          'name',
+          'proposalUrl',
+          'walletAddress',
+          'gitLink',
+          'smartContract',
+          'projectStatus',
+          'gitCommits',
+          'fundTransactions',
+          'description',
+        ],
+        keyword,
+      );
     }
+
     const count = await this.model.find(query.filter).count().exec();
     const data = await this.model
       .find(query.filter)

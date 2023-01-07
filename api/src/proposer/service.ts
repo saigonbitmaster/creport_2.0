@@ -5,6 +5,7 @@ import { CreateProposerDto } from './dto/create.dto';
 import { UpdateProposerDto } from './dto/update.dto';
 import { Proposer, ProposerDocument } from './schemas/schema';
 import { RaList, MongooseQuery } from '../flatworks/types/types';
+import { fullTextSearchTransform } from '../flatworks/utils/getlist';
 
 @Injectable()
 export class ProposerService {
@@ -13,10 +14,15 @@ export class ProposerService {
   ) {}
 
   async findAll(query: MongooseQuery): Promise<RaList> {
-    const { fullName } = query.filter;
-    if (fullName) {
-      query.filter.fullName = { $regex: fullName, $options: 'i' };
+    const { keyword } = query.filter;
+    if (keyword) {
+      query.filter = fullTextSearchTransform(
+        query.filter,
+        ['fullName', 'email', 'walletAddress', 'telegram', 'description'],
+        keyword,
+      );
     }
+
     const isPagination = query.limit > 0;
     const count = await this.model.find(query.filter).count().exec();
     const data = isPagination

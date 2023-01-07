@@ -17,7 +17,7 @@ import { choices } from "../data/data";
 
 const ListScreen = () => {
   const Filters = [
-    <SearchInput source="name" alwaysOn />,
+    <SearchInput source="keyword" alwaysOn />,
     <ReferenceInput
       source="fundId"
       reference="funds"
