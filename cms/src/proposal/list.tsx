@@ -1,4 +1,3 @@
-import * as React from "react";
 import {
   List,
   Datagrid,
@@ -17,11 +16,27 @@ const ListScreen = () => {
   const Filters = [
     <SearchInput source="name" alwaysOn />,
 
-    <ReferenceInput source="fundId" reference="funds" required alwaysOn>
+    <ReferenceInput
+      source="fundId"
+      reference="funds"
+      required
+      alwaysOn
+      // mean no pagination
+      perPage={-1}
+      sort={{ field: "name", order: "ASC" }}
+    >
       <SelectInput optionText="name" fullWidth />
     </ReferenceInput>,
 
-    <ReferenceInput source="proposerId" reference="proposers" required alwaysOn>
+    <ReferenceInput
+      source="proposerId"
+      reference="proposers"
+      required
+      alwaysOn
+      // mean no pagination
+      perPage={-1}
+      sort={{ field: "fullName", order: "ASC" }}
+    >
       <SelectInput optionText="fullName" fullWidth />
     </ReferenceInput>,
   ];

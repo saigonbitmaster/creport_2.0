@@ -14,6 +14,10 @@ export class ProposalService {
   ) {}
 
   async findAll(query: MongooseQuery): Promise<RaList> {
+    const { name } = query.filter;
+    if (name) {
+      query.filter.name = { $regex: name, $options: 'i' };
+    }
     const count = await this.model.find(query.filter).count().exec();
     const data = await this.model
       .find(query.filter)

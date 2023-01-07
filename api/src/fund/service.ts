@@ -13,13 +13,16 @@ export class FundService {
   ) {}
 
   async findAll(query: MongooseQuery): Promise<RaList> {
+    const isPagination = query.limit > 0;
     const count = await this.model.find(query.filter).count().exec();
-    const data = await this.model
-      .find(query.filter)
-      .sort(query.sort)
-      .skip(query.skip)
-      .limit(query.limit)
-      .exec();
+    const data = isPagination
+      ? await this.model
+          .find(query.filter)
+          .sort(query.sort)
+          .skip(query.skip)
+          .limit(query.limit)
+          .exec()
+      : await this.model.find(query.filter).sort(query.sort).exec();
     const result = { count: count, data: data };
     return result;
   }

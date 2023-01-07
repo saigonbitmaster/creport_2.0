@@ -1,6 +1,10 @@
 import { MongooseQuery } from '../types/types';
 
 const kpiQuery = (query: MongooseQuery) => {
+  const { name } = query.filter;
+  if (name) {
+    query.filter.name = { $regex: name, $options: 'i' };
+  }
   return [
     { $match: query.filter },
     { $addFields: { id: { $toString: '$_id' } } },
