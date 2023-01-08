@@ -12,6 +12,9 @@ import {
 import { CreateFundDto } from './dto/create.dto';
 import { UpdateFundDto } from './dto/update.dto';
 import { FundService } from './service';
+import { queryTransform, formatRaList } from '../flatworks/utils/getlist';
+import { ImportBody } from '../flatworks/types/types';
+import { getSheetData, fundTransform } from '../flatworks/utils/googleSheet';
 
 @Controller('funds')
 export class FundController {
@@ -19,29 +22,20 @@ export class FundController {
 
   @Get()
   async index(@Response() res: any, @Query() query) {
-    const sort = {};
-
-    query.sort
-      ? (sort[JSON.parse(query.sort)[0]] =
-          JSON.parse(query.sort)[1] === 'ASC' ? 1 : -1)
-      : null;
-    const range = query.range ? JSON.parse(query.range) : [0, 10];
-    const [rangeStart, rangeEnd] = [...range];
-    const limit = rangeEnd - rangeStart + 1;
-    const skip = rangeStart;
-    const filter = query.filter ? JSON.parse(query.filter) : {};
-    const result = await this.service.findAll(filter, sort, skip, limit);
-    return res
-      .set({
-        'Content-Range': result.count,
-        'Access-Control-Expose-Headers': 'Content-Range',
-      })
-      .json(result.data);
+    const mongooseQuery = queryTransform(query);
+    const result = await this.service.findAll(mongooseQuery);
+    return formatRaList(res, result);
   }
 
   @Get(':id')
-  async find(@Param('id') id: string) {
-    return await this.service.findOne(id);
+  async findById(@Param('id') id: string) {
+    return await this.service.findById(id);
+  }
+
+  @Post('import')
+  async import(@Body() importBody: ImportBody) {
+    const data = await getSheetData(importBody.sheet, importBody.id, 'A2:E');
+    return await this.service.import(fundTransform(data));
   }
 
   @Post()

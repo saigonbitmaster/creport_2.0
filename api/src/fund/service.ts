@@ -4,7 +4,8 @@ import { Model } from 'mongoose';
 import { CreateFundDto } from './dto/create.dto';
 import { UpdateFundDto } from './dto/update.dto';
 import { Fund, FundDocument } from './schemas/schema';
-import { raList } from '../types';
+import { RaList, MongooseQuery } from '../flatworks/types/types';
+import { fullTextSearchTransform } from '../flatworks/utils/getlist';
 
 @Injectable()
 export class FundService {
@@ -12,20 +13,27 @@ export class FundService {
     @InjectModel(Fund.name) private readonly model: Model<FundDocument>,
   ) {}
 
-  async findAll(filter, sort, skip, limit): Promise<raList> {
-    const count = await this.model.find(filter).count().exec();
-    const data = await this.model
-      .find(filter)
-      .sort(sort)
-      .skip(skip)
-      .limit(limit)
-      .exec();
+  async findAll(query: MongooseQuery): Promise<RaList> {
+    const isPagination = query.limit > 0;
+    const count = await this.model.find(query.filter).count().exec();
+    const data = isPagination
+      ? await this.model
+          .find(query.filter)
+          .sort(query.sort)
+          .skip(query.skip)
+          .limit(query.limit)
+          .exec()
+      : await this.model.find(query.filter).sort(query.sort).exec();
     const result = { count: count, data: data };
     return result;
   }
 
-  async findOne(id: string): Promise<Fund> {
+  async findById(id: string): Promise<Fund> {
     return await this.model.findById(id).exec();
+  }
+
+  async findByName(name: string): Promise<Fund> {
+    return await this.model.findOne({ name: name }).exec();
   }
 
   async create(createFundDto: CreateFundDto): Promise<Fund> {
@@ -35,11 +43,36 @@ export class FundService {
     }).save();
   }
 
+  async import(funds: CreateFundDto[]): Promise<any> {
+    return funds.forEach(async (fund) => {
+      await this.model.findOneAndUpdate({ name: fund.name }, fund, {
+        new: true,
+        upsert: true,
+      });
+    });
+  }
+
   async update(id: string, updateFundDto: UpdateFundDto): Promise<Fund> {
     return await this.model.findByIdAndUpdate(id, updateFundDto).exec();
   }
 
   async delete(id: string): Promise<Fund> {
     return await this.model.findByIdAndDelete(id).exec();
+  }
+
+  /**
+   * Search on page
+   * @param keyword search keyword
+   * @param searchFields search fields
+   */
+  async pageFullTextSearch(
+    searchFields: string[],
+    keyword: string,
+  ): Promise<string[]> {
+    let filters = {};
+    filters = fullTextSearchTransform(filters, searchFields, keyword);
+    const funds = await this.model.find(filters).exec();
+    if (!funds || funds.length === 0) return [];
+    return funds.map((fund) => fund._id.toString());
   }
 }

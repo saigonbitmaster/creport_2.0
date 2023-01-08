@@ -48,13 +48,6 @@ const FetchCardano = (props) => {
 
   const [filter, setFilter] = React.useState({ queryType: null, value: null, started: false });
 
-  /*  
-  //dont use query button, auto fetch
-  React.useEffect(() => {
-    setFilter({ queryType: state.choice, value: textFieldValue });
-  }, [state, textFieldValue]);
-
- */
   const handleChange = (event) => {
     setState({
       choice: event.target.value,
@@ -62,7 +55,6 @@ const FetchCardano = (props) => {
         .textLabel,
     });
   };
-  //use query button, dont use auto fetch
   const onClick = () => {
     setFilter({ queryType: state.choice, value: textFieldValue, started: true });
   };

@@ -1,5 +1,4 @@
 export class BaseProposerDto {
-  username: string;
   fullName: string;
   email: string;
   telegram: string;

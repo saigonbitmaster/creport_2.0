@@ -1,14 +1,15 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import * as uniqueValidator from 'mongoose-unique-validator';
 
 export type ProposalDocument = Proposal & Document;
 
 @Schema()
 export class Proposal {
-  @Prop()
+  @Prop({ required: true })
   name: string;
 
-  @Prop()
+  @Prop({ required: true, unique: true })
   projectId: string;
 
   @Prop()
@@ -44,13 +45,13 @@ export class Proposal {
   @Prop()
   fundTransactions: string[];
 
-  @Prop()
+  @Prop({ required: true })
   fundId: string;
 
-  @Prop()
+  @Prop({ required: true })
   challengeId: string;
 
-  @Prop()
+  @Prop({ required: true })
   proposerId: string;
 
   @Prop()
@@ -66,4 +67,7 @@ export class Proposal {
   createdDate?: Date;
 }
 
-export const ProposalSchema = SchemaFactory.createForClass(Proposal);
+const ProposalSchema = SchemaFactory.createForClass(Proposal);
+ProposalSchema.plugin(uniqueValidator);
+
+export { ProposalSchema };

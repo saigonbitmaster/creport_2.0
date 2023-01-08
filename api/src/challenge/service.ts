@@ -4,33 +4,45 @@ import { Model } from 'mongoose';
 import { CreateChallengeDto } from './dto/create.dto';
 import { UpdateChallengeDto } from './dto/update.dto';
 import { Challenge, ChallengeDocument } from './schemas/schema';
+import { RaList, MongooseQuery } from '../flatworks/types/types';
+import { FundService } from '../fund/service';
+import { fullTextSearchTransform } from '../flatworks/utils/getlist';
 
 @Injectable()
 export class ChallengeService {
   constructor(
     @InjectModel(Challenge.name)
     private readonly model: Model<ChallengeDocument>,
+    private readonly fundService: FundService,
   ) {}
 
-  async findAll(filter, sort, skip, limit): Promise<any> {
-    const count = await this.model.find(filter).count().exec();
+  async findAll(query: MongooseQuery): Promise<RaList> {
+    const count = await this.model.find(query.filter).count().exec();
     const data = await this.model
-      .find(filter)
-      .sort(sort)
-      .skip(skip)
-      .limit(limit)
+      .find(query.filter)
+      .sort(query.sort)
+      .skip(query.skip)
+      .limit(query.limit)
       .exec();
     const result = { count: count, data: data };
     return result;
   }
 
-  async customMethod(title: string, description: string): Promise<Challenge[]> {
-    return await this.model
-      .aggregate([{ $match: { title: title, description: description } }])
-      .exec();
-  }
   async findOne(id: string): Promise<Challenge> {
     return await this.model.findById(id).exec();
+  }
+
+  async findByName(fundId: string, name: string): Promise<Challenge> {
+    return await this.model.findOne({ fundId: fundId, name: name }).exec();
+  }
+
+  async import(challenges: CreateChallengeDto[]): Promise<any> {
+    return challenges.forEach(async (challenge) => {
+      await this.model.findOneAndUpdate({ name: challenge.name }, challenge, {
+        new: true,
+        upsert: true,
+      });
+    });
   }
 
   async create(createChallengeDto: CreateChallengeDto): Promise<Challenge> {
@@ -49,5 +61,21 @@ export class ChallengeService {
 
   async delete(id: string): Promise<Challenge> {
     return await this.model.findByIdAndDelete(id).exec();
+  }
+
+  /**
+   * Search on page
+   * @param keyword search keyword
+   * @param searchFields search fields
+   */
+  async pageFullTextSearch(
+    searchFields: string[],
+    keyword: string,
+  ): Promise<string[]> {
+    let filters = {};
+    filters = fullTextSearchTransform(filters, searchFields, keyword);
+    const challenges = await this.model.find(filters);
+    if (!challenges || challenges.length === 0) return [];
+    return challenges.map((fund) => fund._id.toString());
   }
 }
