@@ -39,4 +39,12 @@ const formatRaList = (res, result: RaList) => {
     .json(result.data);
 };
 
-export { queryTransform, formatRaList };
+const fullTextSearchTransform = (filters: object, searchKeyword: string) => {
+  delete filters['keyword'];
+  return {
+    ...filters,
+    $text: { $search: searchKeyword },
+  };
+};
+
+export { queryTransform, formatRaList, fullTextSearchTransform };

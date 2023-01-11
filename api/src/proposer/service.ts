@@ -5,6 +5,7 @@ import { CreateProposerDto } from './dto/create.dto';
 import { UpdateProposerDto } from './dto/update.dto';
 import { Proposer, ProposerDocument } from './schemas/schema';
 import { RaList, MongooseQuery } from '../flatworks/types/types';
+import { fullTextSearchTransform } from '../flatworks/utils/getlist';
 
 @Injectable()
 export class ProposerService {
@@ -13,13 +14,21 @@ export class ProposerService {
   ) {}
 
   async findAll(query: MongooseQuery): Promise<RaList> {
+    const { keyword } = query.filter;
+    if (keyword) {
+      query.filter = fullTextSearchTransform(query.filter, keyword);
+    }
+
+    const isPagination = query.limit > 0;
     const count = await this.model.find(query.filter).count().exec();
-    const data = await this.model
-      .find(query.filter)
-      .sort(query.sort)
-      .skip(query.skip)
-      .limit(query.limit)
-      .exec();
+    const data = isPagination
+      ? await this.model
+          .find(query.filter)
+          .sort(query.sort)
+          .skip(query.skip)
+          .limit(query.limit)
+          .exec()
+      : await this.model.find(query.filter).sort(query.sort).exec();
     const result = { count: count, data: data };
     return result;
   }
@@ -57,5 +66,30 @@ export class ProposerService {
 
   async delete(id: string): Promise<Proposer> {
     return await this.model.findByIdAndDelete(id).exec();
+  }
+
+  /**
+   * Search on page
+   * @param keyword search keyword
+   */
+  async pageFullTextSearch(keyword: string): Promise<any[]> {
+    let filters = {};
+    filters = fullTextSearchTransform(filters, keyword);
+    return await this.model.find(filters);
+  }
+
+  /**
+   * Search on page and get ids only
+   * @param keyword search keyword
+   */
+  async pageFullTextSearchGetIdsOnly(
+    keyword: string,
+    convertIdToString = true,
+  ): Promise<string[]> {
+    const proposers = await this.pageFullTextSearch(keyword);
+    if (!proposers || proposers.length === 0) return [];
+    return proposers.map((fund) =>
+      convertIdToString ? fund._id.toString() : fund._id,
+    );
   }
 }

@@ -13,9 +13,17 @@ import {
 
 const ListScreen = () => {
   const Filters = [
-    <SearchInput source="name" alwaysOn />,
+    <SearchInput source="keyword" alwaysOn />,
 
-    <ReferenceInput source="fundId" reference="funds" required alwaysOn>
+    <ReferenceInput
+      source="fundId"
+      reference="funds"
+      required
+      alwaysOn
+      // mean no pagination
+      perPage={-1}
+      sort={{ field: "name", order: "ASC" }}
+    >
       <SelectInput optionText="name" fullWidth />
     </ReferenceInput>,
   ];

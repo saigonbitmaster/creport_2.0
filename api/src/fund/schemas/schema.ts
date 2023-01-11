@@ -33,5 +33,9 @@ export class Fund {
 
 const FundSchema = SchemaFactory.createForClass(Fund);
 FundSchema.plugin(uniqueValidator);
+// Create index for mongo full text search
+FundSchema.index({
+  name: 'text',
+});
 
 export { FundSchema };

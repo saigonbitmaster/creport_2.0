@@ -12,7 +12,7 @@ api/src/flatworks/utils/credentials.json
 api/src/flatworks/utils/token.json
 mongo
 docker-compose.yml
-
+.DS_Store
 #cms/src/components
 #cms/src/kpi
 #cms/src/commit
