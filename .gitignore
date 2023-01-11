@@ -10,6 +10,8 @@ test.ts
 test.js
 api/src/flatworks/utils/credentials.json
 api/src/flatworks/utils/token.json
+mongo
+docker-compose.yml
 
 #cms/src/components
 #cms/src/kpi
