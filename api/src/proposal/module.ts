@@ -19,5 +19,6 @@ import { ProposerModule } from '../proposer/module';
       { name: Proposal.name, schema: ProposalSchema },
     ]),
   ],
+  exports: [ProposalService],
 })
 export class ProposalModule {}

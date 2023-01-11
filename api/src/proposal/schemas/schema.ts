@@ -27,6 +27,10 @@ export class Proposal {
   @Prop()
   gitLink: string;
 
+  // There are multiple github repo in 1 proposal
+  @Prop()
+  gitLinks: string[];
+
   @Prop()
   smartContract: string;
 

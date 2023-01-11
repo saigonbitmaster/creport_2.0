@@ -91,6 +91,13 @@ export class ProposalService {
     return await this.model.findByIdAndDelete(id).exec();
   }
 
+  async getAllGithubRepos() {
+    return await this.model.find(
+      { gitLinks: { $exists: true, $ne: [] } },
+      { gitLinks: 1 },
+    );
+  }
+
   async _pageFullTextSearchTransform(
     query: MongooseQuery,
   ): Promise<MongooseQuery> {
