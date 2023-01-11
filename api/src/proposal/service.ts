@@ -25,13 +25,16 @@ export class ProposalService {
       query = await this._pageFullTextSearchTransform(query);
     }
 
+    const isPagination = query.limit > 0;
     const count = await this.model.find(query.filter).count().exec();
-    const data = await this.model
-      .find(query.filter)
-      .sort(query.sort)
-      .skip(query.skip)
-      .limit(query.limit)
-      .exec();
+    const data = isPagination
+      ? await this.model
+          .find(query.filter)
+          .sort(query.sort)
+          .skip(query.skip)
+          .limit(query.limit)
+          .exec()
+      : await this.model.find(query.filter).sort(query.sort).exec();
     return { count: count, data: data };
   }
 
