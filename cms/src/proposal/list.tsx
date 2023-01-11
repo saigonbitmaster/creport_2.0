@@ -24,6 +24,7 @@ const ListScreen = () => {
     <ReferenceInput source="proposerId" reference="proposers" required alwaysOn>
       <SelectInput optionText="fullName" fullWidth />
     </ReferenceInput>,
+     <SelectInput source="projectStatus" choices={choices} fullWidth alwaysOn/>
   ];
 
   return (

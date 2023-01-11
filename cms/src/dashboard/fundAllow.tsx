@@ -78,7 +78,7 @@ const data = funds? funds.map(item => ({...item, Allocated: item.budget/1000000}
     <Card>
       <CardHeader title="Fund allocation history (m$)" />
       <CardContent>
-        <div style={{ width: "100%", height: 300 }}>
+        <div style={{ width: "100%", height: 280 }}>
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart
               width={500}
