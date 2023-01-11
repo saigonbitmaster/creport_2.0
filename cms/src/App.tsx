@@ -19,8 +19,7 @@ import FetchGithub from "./tools/fetchGithub";
 import FetchCardano from "./tools/fetchCardano";
 import proposals from "./proposal";
 import commits from "./commit";
-
-
+import ImportSheets from "./tools/importSheets";
 
 const loginUrl = process.env.REACT_APP_LOGIN_URL;
 const apiUrl = process.env.REACT_APP_API_URL;
@@ -52,6 +51,7 @@ const App = () => {
         <Route path="/configuration" element={<Configuration />} />
         <Route path="/fetchCardano" element={<FetchCardano />} />
         <Route path="/fetchGithub" element={<FetchGithub />} />
+        <Route path="/importExcels" element={<ImportSheets />} />
       </CustomRoutes>
       <Resource name="proposers" {...proposers} />
       <Resource name="funds" {...funds} />

@@ -1,5 +1,12 @@
 import * as React from "react";
-import { List, Datagrid, TextField, EditButton, DateField, NumberField } from "react-admin";
+import {
+  List,
+  Datagrid,
+  TextField,
+  EditButton,
+  DateField,
+  NumberField,
+} from "react-admin";
 
 const ListScreen = () => {
   return (
@@ -9,7 +16,6 @@ const ListScreen = () => {
         <NumberField source="budget" />
         <TextField source="currency" />
         <DateField source="date" />
-      
         <EditButton />
       </Datagrid>
     </List>

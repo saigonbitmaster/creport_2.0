@@ -42,3 +42,9 @@ export interface CheckWalletType {
 export interface GitLink {
   gitUrl: string;
 }
+
+export interface ImportBody {
+  sheet: string;
+  id: string;
+  forceReplace: boolean;
+}

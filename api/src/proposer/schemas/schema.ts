@@ -1,24 +1,25 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import * as uniqueValidator from 'mongoose-unique-validator';
 
 export type ProposerDocument = Proposer & Document;
 
 @Schema()
 export class Proposer {
-  @Prop()
+  @Prop({ required: true })
   fullName: string;
 
-  @Prop()
+  @Prop({ required: true, unique: true })
   email: string;
 
   @Prop()
-  walletAddress: string;
+  walletAddress?: string;
 
   @Prop()
-  telegram: string;
+  telegram?: string;
 
   @Prop()
-  description: string;
+  description?: string;
 
   @Prop()
   completedAt?: Date;
@@ -30,4 +31,14 @@ export class Proposer {
   createdDate?: Date;
 }
 
-export const ProposerSchema = SchemaFactory.createForClass(Proposer);
+const ProposerSchema = SchemaFactory.createForClass(Proposer);
+ProposerSchema.plugin(uniqueValidator);
+// Create index for mongo full text search
+ProposerSchema.index({
+  fullName: 'text',
+  email: 'text',
+  telegram: 'text',
+  walletAddress: 'text',
+});
+
+export { ProposerSchema };

@@ -1,13 +1,13 @@
 import React, { CSSProperties } from "react";
 import { useMediaQuery, Theme } from "@mui/material";
 
-import MonthlyPayout from "./MonthlyPayout";
-import NewQuizzes from "./NewQuizzes";
-import QuizPostHistory from "./QuizPostHistory";
-import PendingReviews from "./PendingReviews";
-import NewMembers from "./NewMembers";
-import PayoutHistory from "./PayoutHistory";
+import MonthlyPayout from "./funds";
+import NewQuizzes from "./fundedProject";
+import PendingReviews from "./completeProject";
+import NewMembers from "./pendingProject";
 import { quizPostData, payoutData, monthlyRevenue, newQuiz } from "./data";
+import ProjectStatus from './projectStatus';
+import FundAlow from './fundAllow';
 
 const styles = {
   flex: { display: "flex" },
@@ -33,7 +33,7 @@ const Dashboard = () => {
         <VerticalSpacer />
         <NewQuizzes value={newQuiz} />
         <VerticalSpacer />
-        <QuizPostHistory orders={quizPostData} />
+        <FundAlow orders={quizPostData} />
       </div>
     </div>
   ) : isSmall ? (
@@ -45,10 +45,11 @@ const Dashboard = () => {
         <NewQuizzes value={newQuiz} />
       </div>
       <div style={styles.singleCol}>
-        <PayoutHistory orders={payoutData} />
+      <FundAlow orders={quizPostData} />
+       
       </div>
       <div style={styles.singleCol}>
-        <QuizPostHistory orders={quizPostData} />
+      <ProjectStatus orders={payoutData} />
       </div>
     </div>
   ) : (
@@ -61,10 +62,11 @@ const Dashboard = () => {
             <NewQuizzes value={newQuiz} />
           </div>
           <div style={styles.singleCol}>
-            <PayoutHistory orders={payoutData} />
+          <FundAlow orders={quizPostData} />
+          
           </div>
           <div style={styles.singleCol}>
-            <QuizPostHistory orders={quizPostData} />
+          <ProjectStatus orders={payoutData} />
           </div>
         </div>
         <div style={styles.rightCol}>

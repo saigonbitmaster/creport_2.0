@@ -109,7 +109,7 @@ const AccountLanguagesForUser = async (gitLink: GitLink, userId: string) => {
   const languages = [];
   if (!gitLink || !gitLink.gitUrl || !gitLink.gitUrl.includes('github.com'))
     return new Error('git error');
-  
+
   const gitUrl = gitLink.gitUrl;
   const [owner] =
     gitUrl.split('github.com/').length > 1
