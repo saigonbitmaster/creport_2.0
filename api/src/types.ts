@@ -23,3 +23,6 @@ export interface addressUtxo {
 }
 
 export type projectStatus = 'pending' | 'complete' | 'stopped';
+
+export const gitCommitQueueName = 'git_commit_queue_name';
+export const gitCommitJobName = 'git_commit_job_name';
