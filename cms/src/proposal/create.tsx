@@ -35,21 +35,39 @@ const CreateScreen = () => (
         </Grid>
         <Grid item md={12} />
         <Grid item xs={12} md={4} lg={3} xl={2}>
-          <ReferenceInput source="fundId" reference="funds" >
+          <ReferenceInput
+            source="fundId"
+            reference="funds"
+            // mean no pagination
+            perPage={-1}
+            sort={{ field: "name", order: "DESC" }}
+          >
             <SelectInput optionText="name" fullWidth required />
           </ReferenceInput>
         </Grid>
         <Grid item xs={12} md={4} lg={3} xl={2}>
-          <ReferenceInput source="challengeId" reference="challenges" >
-            <SelectInput optionText="name" fullWidth required/>
+          <ReferenceInput
+            source="challengeId"
+            reference="challenges"
+            // mean no pagination
+            perPage={-1}
+            sort={{ field: "name", order: "DESC" }}
+          >
+            <SelectInput optionText="name" fullWidth required />
           </ReferenceInput>
         </Grid>
         <Grid item xs={12} md={4} lg={3} xl={2}>
           <SelectInput source="projectStatus" choices={choices} fullWidth />
         </Grid>
         <Grid item xs={12} md={4} lg={3} xl={2}>
-          <ReferenceInput source="proposerId" reference="proposers" >
-            <SelectInput optionText="fullName" fullWidth required/>
+          <ReferenceInput
+            source="proposerId"
+            reference="proposers"
+            // mean no pagination
+            perPage={-1}
+            sort={{ field: "fullName", order: "ASC" }}
+          >
+            <SelectInput optionText="fullName" fullWidth required />
           </ReferenceInput>
         </Grid>
         <Grid item md={12} />
@@ -60,7 +78,13 @@ const CreateScreen = () => (
         </Grid>
 
         <Grid item xs={12} md={8} lg={6} xl={4}>
-          <ReferenceArrayInput source="coProposers" reference="proposers">
+          <ReferenceArrayInput
+            source="coProposers"
+            reference="proposers"
+            // mean no pagination
+            perPage={-1}
+            sort={{ field: "fullName", order: "ASC" }}
+          >
             <SelectArrayInput optionText="fullName" fullWidth />
           </ReferenceArrayInput>
         </Grid>
