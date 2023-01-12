@@ -9,6 +9,8 @@ import {
   ReferenceArrayInput,
   SelectArrayInput,
   DateInput,
+  ArrayInput,
+  SimpleFormIterator,
 } from "react-admin";
 
 import Grid from "@mui/material/Grid";
@@ -97,13 +99,17 @@ const EditScreen = () => (
         </Grid>
         <Grid item md={12} />
         <Grid item xs={12} md={8} lg={6} xl={4}>
-          <TextInput source="gitLink" fullWidth />
-        </Grid>
-        <Grid item xs={12} md={4} lg={3} xl={2}>
           <DateInput source="startDate" fullWidth />
         </Grid>
-        <Grid item xs={12} md={4} lg={3} xl={2}>
+        <Grid item xs={12} md={8} lg={6} xl={4}>
           <DateInput source="completeDate" fullWidth />
+        </Grid>
+        <Grid item xs={24} md={16} lg={12} xl={8}>
+          <ArrayInput source="gitLinks">
+            <SimpleFormIterator inline>
+              <TextInput source="gitLink" fullWidth />
+            </SimpleFormIterator>
+          </ArrayInput>
         </Grid>
         <Grid item md={12} />
         <Grid item xs={12} md={12} lg={12} xl={8}>

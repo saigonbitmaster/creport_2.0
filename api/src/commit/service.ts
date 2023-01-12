@@ -33,8 +33,8 @@ export class GitCommitService {
 
         // Loop all git repo of 1 proposal
         const promises = [];
-        for (const gitLink of gitLinks) {
-          promises.push(RepoCommits(gitLink));
+        for (const gitLinkItem of gitLinks) {
+          promises.push(RepoCommits(gitLinkItem['gitLink']));
         }
         // Get all git commit and flat map array data
         let gitCommits = await Promise.all(promises);

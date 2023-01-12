@@ -24,8 +24,8 @@ export class Proposal {
   @Prop()
   walletAddress: string;
 
-  @Prop()
-  gitLink: string;
+  // @Prop()
+  // gitLink: string;
 
   // There are multiple github repo in 1 proposal
   @Prop()
