@@ -22,7 +22,7 @@ const queryTransform = (query): MongooseQuery => {
     ? (sort[JSON.parse(query.sort)[0]] =
         JSON.parse(query.sort)[1] === 'ASC' ? 1 : -1)
     : null;
-  const range = query.range ? JSON.parse(query.range) : [0, 10];
+  const range = query.range ? JSON.parse(query.range) : [0, 20];
   const [rangeStart, rangeEnd] = [...range];
   const limit = rangeEnd - rangeStart + 1;
   const skip = rangeStart;
@@ -39,16 +39,11 @@ const formatRaList = (res, result: RaList) => {
     .json(result.data);
 };
 
-const fullTextSearchTransform = (
-  filters: object,
-  searchFields: string[],
-  searchKeyword: string,
-) => {
-  const searchPattern = { $regex: searchKeyword, $options: 'i' };
+const fullTextSearchTransform = (filters: object, searchKeyword: string) => {
   delete filters['keyword'];
   return {
     ...filters,
-    $or: searchFields.map((field: string) => ({ [field]: searchPattern })),
+    $text: { $search: searchKeyword },
   };
 };
 

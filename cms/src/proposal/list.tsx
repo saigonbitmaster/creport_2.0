@@ -39,6 +39,7 @@ const ListScreen = () => {
     >
       <SelectInput optionText="fullName" fullWidth />
     </ReferenceInput>,
+    <SelectInput source="projectStatus" choices={choices} fullWidth alwaysOn />,
   ];
 
   return (

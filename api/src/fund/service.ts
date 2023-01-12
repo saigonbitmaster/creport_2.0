@@ -14,6 +14,11 @@ export class FundService {
   ) {}
 
   async findAll(query: MongooseQuery): Promise<RaList> {
+    const { keyword } = query.filter;
+    if (keyword) {
+      query.filter = fullTextSearchTransform(query.filter, keyword);
+    }
+
     const isPagination = query.limit > 0;
     const count = await this.model.find(query.filter).count().exec();
     const data = isPagination
@@ -63,16 +68,25 @@ export class FundService {
   /**
    * Search on page
    * @param keyword search keyword
-   * @param searchFields search fields
    */
-  async pageFullTextSearch(
-    searchFields: string[],
-    keyword: string,
-  ): Promise<string[]> {
+  async pageFullTextSearch(keyword: string): Promise<any[]> {
     let filters = {};
-    filters = fullTextSearchTransform(filters, searchFields, keyword);
-    const funds = await this.model.find(filters).exec();
-    if (!funds || funds.length === 0) return [];
-    return funds.map((fund) => fund._id.toString());
+    filters = fullTextSearchTransform(filters, keyword);
+    return await this.model.find(filters);
+  }
+
+  /**
+   * Search on page and get ids only
+   * @param keyword search keyword
+   */
+  async pageFullTextSearchGetIdsOnly(
+    keyword: string,
+    convertIdToString = true,
+  ): Promise<string[]> {
+    const challenges = await this.pageFullTextSearch(keyword);
+    if (!challenges || challenges.length === 0) return [];
+    return challenges.map((fund) =>
+      convertIdToString ? fund._id.toString() : fund._id,
+    );
   }
 }

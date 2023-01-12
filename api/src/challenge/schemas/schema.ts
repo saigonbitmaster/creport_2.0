@@ -27,4 +27,10 @@ export class Challenge {
   createdDate?: Date;
 }
 
-export const ChallengeSchema = SchemaFactory.createForClass(Challenge);
+const ChallengeSchema = SchemaFactory.createForClass(Challenge);
+// Create index for mongo full text search
+ChallengeSchema.index({
+  name: 'text',
+});
+
+export { ChallengeSchema };

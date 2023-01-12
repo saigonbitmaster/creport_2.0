@@ -10,8 +10,9 @@ test.ts
 test.js
 api/src/flatworks/utils/credentials.json
 api/src/flatworks/utils/token.json
-docker-compose.yml
 mongo
+docker-compose.yml
+.DS_Store
 #cms/src/components
 #cms/src/kpi
 #cms/src/commit

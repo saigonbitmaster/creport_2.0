@@ -6,6 +6,7 @@ import { UpdateProposalDto } from './dto/update.dto';
 import { Proposal, ProposalDocument } from './schemas/schema';
 import { RaList, MongooseQuery } from '../flatworks/types/types';
 import { kpiQuery } from '../flatworks/scripts/kpi';
+import { fullTextSearchTransform } from '../flatworks/utils/getlist';
 import { FundService } from '../fund/service';
 import { ChallengeService } from '../challenge/service';
 import { ProposerService } from '../proposer/service';
@@ -106,33 +107,15 @@ export class ProposalService {
   ): Promise<MongooseQuery> {
     const { keyword } = query.filter;
     if (keyword) {
-      const [fundIds, challengeIds, proposerIds] = await Promise.all([
-        this.fundService.pageFullTextSearch(['name'], keyword),
-        this.challengeService.pageFullTextSearch(['name'], keyword),
-        this.proposerService.pageFullTextSearch(['fullName'], keyword),
-      ]);
-      delete query.filter.keyword;
-      const searchPattern = { $regex: keyword, $options: 'i' };
-      const conditionOr: any[] = [
-        {
-          name: searchPattern,
-        },
-        {
-          projectId: searchPattern,
-        },
-        {
-          projectStatus: searchPattern,
-        },
-        // requestedBudget is number field so need search like this
-        {
-          $expr: {
-            $regexMatch: {
-              input: { $toString: '$requestedBudget' },
-              regex: new RegExp(keyword),
-            },
-          },
-        },
-      ];
+      const [proposalIds, fundIds, challengeIds, proposerIds] =
+        await Promise.all([
+          this.pageFullTextSearchGetIdsOnly(keyword, false),
+          this.fundService.pageFullTextSearchGetIdsOnly(keyword),
+          this.challengeService.pageFullTextSearchGetIdsOnly(keyword),
+          this.proposerService.pageFullTextSearchGetIdsOnly(keyword),
+        ]);
+
+      const conditionOr: any[] = [];
       if (fundIds && fundIds.length > 0) {
         conditionOr.push({
           fundId: {
@@ -154,11 +137,47 @@ export class ProposalService {
           },
         });
       }
+      if (conditionOr.length === 0) {
+        query.filter = fullTextSearchTransform(query.filter, keyword);
+        return query;
+      }
+
+      if (proposalIds && proposalIds.length > 0) {
+        conditionOr.push({
+          _id: {
+            $in: proposalIds,
+          },
+        });
+      }
       query.filter = {
-        ...query.filter,
         $or: conditionOr,
       };
     }
     return query;
+  }
+
+  /**
+   * Search on page
+   * @param keyword search keyword
+   */
+  async pageFullTextSearch(keyword: string): Promise<any[]> {
+    let filters = {};
+    filters = fullTextSearchTransform(filters, keyword);
+    return await this.model.find(filters);
+  }
+
+  /**
+   * Search on page and get ids only
+   * @param keyword search keyword
+   */
+  async pageFullTextSearchGetIdsOnly(
+    keyword: string,
+    convertIdToString = true,
+  ): Promise<string[]> {
+    const challenges = await this.pageFullTextSearch(keyword);
+    if (!challenges || challenges.length === 0) return [];
+    return challenges.map((fund) =>
+      convertIdToString ? fund._id.toString() : fund._id,
+    );
   }
 }

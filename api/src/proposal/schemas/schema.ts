@@ -73,5 +73,12 @@ export class Proposal {
 
 const ProposalSchema = SchemaFactory.createForClass(Proposal);
 ProposalSchema.plugin(uniqueValidator);
+// Create index for mongo full text search
+ProposalSchema.index({
+  name: 'text',
+  projectId: 'text',
+  requestedBudget: 'text',
+  projectStatus: 'text',
+});
 
 export { ProposalSchema };
