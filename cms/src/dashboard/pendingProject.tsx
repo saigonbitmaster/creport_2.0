@@ -14,7 +14,7 @@ import { useTranslate, useGetList } from "react-admin";
 import { subDays } from "date-fns";
 import { stringify } from "query-string";
 import CardWithIcon from "./CardWithIcon";
-import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
+import AccessTimeOutlinedIcon from "@mui/icons-material/AccessTimeOutlined";
 import { Customer } from "../types";
 
 const PendingProposals = () => {
@@ -27,7 +27,11 @@ const PendingProposals = () => {
   aMonthAgo.setSeconds(0);
   aMonthAgo.setMilliseconds(0);
 
-  const { isLoading, data: proposals, total } = useGetList<any>("proposals", {
+  const {
+    isLoading,
+    data: proposals,
+    total,
+  } = useGetList<any>("proposals", {
     filter: {
       projectStatus: "inProgress",
     },
@@ -59,9 +63,7 @@ const PendingProposals = () => {
                 <ListItemAvatar>
                   <Avatar src={`${record.avatar}?size=32x32`} />
                 </ListItemAvatar>
-                <ListItemText
-                  primary={record.name}
-                />
+                <ListItemText primary={record.name} />
               </ListItem>
             ))
           : null}

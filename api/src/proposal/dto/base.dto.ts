@@ -7,7 +7,8 @@ export class BaseProposalDto {
   requestedBudget: number;
   previousProposals: string[];
   walletAddress: string;
-  gitLink: string;
+  // gitLink: string;
+  gitLinks: string;
   smartContract: string;
   projectStatus: projectStatus;
   startDate: Date;

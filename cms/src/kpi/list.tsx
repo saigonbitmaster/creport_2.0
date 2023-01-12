@@ -25,7 +25,7 @@ const ListScreen = () => {
       alwaysOn
       // mean no pagination
       perPage={-1}
-      sort={{ field: "fullName", order: "ASC" }}
+      sort={{ field: "name", order: "ASC" }}
     >
       <SelectInput optionText="name" fullWidth />
     </ReferenceInput>,

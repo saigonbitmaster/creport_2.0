@@ -62,18 +62,19 @@ const data = [
 ];
  */
 const FundAllow = (props: { orders?: any[] }) => {
+  const {
+    isLoading,
+    data: funds,
+    total,
+  } = useGetList<any>("funds", {
+    filter: {},
+    sort: { field: "name", order: "ASC" },
+    pagination: { page: 1, perPage: 20 },
+  });
 
-const {
-  isLoading,
-  data: funds,
-  total,
-} = useGetList<any>("funds", {
-  filter: {},
-  sort: { field: 'name', order: 'ASC' },
-  pagination: { page: 1, perPage: 20 },
-});
-
-const data = funds? funds.map(item => ({...item, Allocated: item.budget/1000000})) : []
+  const data = funds
+    ? funds.map((item) => ({ ...item, Allocated: item.budget / 1000000 }))
+    : [];
   return (
     <Card>
       <CardHeader title="Fund allocation history (m$)" />

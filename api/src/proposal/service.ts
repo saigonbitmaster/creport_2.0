@@ -27,7 +27,6 @@ export class ProposalService {
     }
 
     const isPagination = query.limit > 0;
-
     const count = await this.model.find(query.filter).count().exec();
     const data = isPagination
       ? await this.model
@@ -94,6 +93,13 @@ export class ProposalService {
 
   async delete(id: string): Promise<Proposal> {
     return await this.model.findByIdAndDelete(id).exec();
+  }
+
+  async getAllGithubRepos() {
+    return await this.model.find(
+      { gitLinks: { $exists: true, $ne: [] } },
+      { gitLinks: 1 },
+    );
   }
 
   async _pageFullTextSearchTransform(
