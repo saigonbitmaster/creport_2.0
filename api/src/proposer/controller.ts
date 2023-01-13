@@ -18,12 +18,16 @@ import {
   getSheetData,
   proposerTransform,
 } from '../flatworks/utils/googleSheet';
+import { Role } from '../types';
+import { Roles } from '../decorators/roles.decorator';
+import { Public } from '../decorators/public.api.decorator';
 
 @Controller('proposers')
 export class ProposerController {
   constructor(private readonly service: ProposerService) {}
 
   @Get()
+  @Public()
   async index(@Response() res: any, @Query() query) {
     const mongooseQuery = queryTransform(query);
     const result = await this.service.findAll(mongooseQuery);
@@ -31,22 +35,26 @@ export class ProposerController {
   }
 
   @Get(':id')
+  @Public()
   async find(@Param('id') id: string) {
     return await this.service.findOne(id);
   }
 
   @Post()
+  @Roles(Role.Admin)
   async create(@Body() createProposerDto: CreateProposerDto) {
     return await this.service.create(createProposerDto);
   }
 
   @Post('import')
+  @Roles(Role.Admin)
   async import(@Body() importBody: ImportBody) {
     const data = await getSheetData(importBody.sheet, importBody.id, 'A2:E');
     return await this.service.import(proposerTransform(data));
   }
 
   @Put(':id')
+  @Roles(Role.Admin)
   async update(
     @Param('id') id: string,
     @Body() updateProposerDto: UpdateProposerDto,
@@ -55,6 +63,7 @@ export class ProposerController {
   }
 
   @Delete(':id')
+  @Roles(Role.Admin)
   async delete(@Param('id') id: string) {
     return await this.service.delete(id);
   }

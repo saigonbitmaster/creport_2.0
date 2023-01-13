@@ -13,12 +13,16 @@ import { CreateGitCommitDto } from './dto/create.dto';
 import { UpdateGitCommitDto } from './dto/update.dto';
 import { GitCommitService } from './service';
 import { queryTransform, formatRaList } from '../flatworks/utils/getlist';
+import { Public } from '../decorators/public.api.decorator';
+import { Roles } from '../decorators/roles.decorator';
+import { Role } from '../types';
 
 @Controller('commits')
 export class GitCommitController {
   constructor(private readonly service: GitCommitService) {}
 
   @Get()
+  @Public()
   async index(@Response() res: any, @Query() query) {
     const mongooseQuery = queryTransform(query);
     if (!mongooseQuery.filter || !mongooseQuery.filter.proposalId) {
@@ -31,11 +35,13 @@ export class GitCommitController {
   }
 
   @Post()
+  @Roles(Role.Admin)
   async create(@Body() createGitCommitDto: CreateGitCommitDto) {
     return await this.service.create(createGitCommitDto);
   }
 
   @Put(':id')
+  @Roles(Role.Admin)
   async update(
     @Param('id') id: string,
     @Body() updateGitCommitDto: UpdateGitCommitDto,
@@ -44,6 +50,7 @@ export class GitCommitController {
   }
 
   @Delete(':id')
+  @Roles(Role.Admin)
   async delete(@Param('id') id: string) {
     return await this.service.delete(id);
   }
