@@ -9,6 +9,9 @@ import { ChallengeModule } from './challenge/module';
 import { ConfigModule } from '@nestjs/config';
 import { ToolModule } from './tool/module';
 import { GitCommitModule } from './commit/module';
+import { APP_GUARD } from '@nestjs/core';
+import { RolesGuard } from './guards/roles.guard';
+import { JwtAuthGuard } from './auth/jwt-auth.guard';
 
 @Module({
   imports: [
@@ -28,6 +31,16 @@ import { GitCommitModule } from './commit/module';
     ProposalModule,
     ToolModule,
     GitCommitModule,
+  ],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
+    },
   ],
 })
 export class AppModule {}

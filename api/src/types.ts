@@ -23,3 +23,8 @@ export interface addressUtxo {
 }
 
 export type projectStatus = 'pending' | 'complete' | 'stopped';
+
+export enum Role {
+  Admin = 'Admin',
+  User = 'User',
+}

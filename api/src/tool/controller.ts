@@ -12,6 +12,9 @@ import { ToolService } from './service';
 import { queryTransform, formatRaList } from '../flatworks/utils/getlist';
 import { ImportBody } from '../flatworks/types/types';
 import { getSheetData } from '../flatworks/utils/googleSheet';
+import { Public } from '../decorators/public.api.decorator';
+import { Roles } from '../decorators/roles.decorator';
+import { Role } from '../types';
 @Controller('tools')
 export class ToolController {
   constructor(private readonly service: ToolService) {}
@@ -19,6 +22,7 @@ export class ToolController {
   //import data from google sheets
   //use findAndUpdate with upsert = true to insert record
   @Post('import')
+  @Roles(Role.Admin)
   async create(@Body() importBody: ImportBody) {
     const result = await getSheetData(
       'https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit#gid=0',
@@ -29,6 +33,7 @@ export class ToolController {
   }
 
   @Get('utxos')
+  @Public()
   async getUtxos(@Response() res: any, @Query() query) {
     const _query = queryTransform(query);
     const filter = _query.filter;
@@ -57,6 +62,7 @@ export class ToolController {
   }
 
   @Get('commits')
+  @Public()
   async getCommits(@Response() res: any, @Query() query) {
     const _query = queryTransform(query);
     const filter = _query.filter;

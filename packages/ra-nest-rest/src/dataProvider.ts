@@ -45,6 +45,8 @@ export default (
     field = field == "id" ? "_id" : field;
     const rangeStart = (page - 1) * perPage;
     const rangeEnd = page * perPage - 1;
+    // Fix issue lost access token when logout + ctr+r (refresh) and login again.
+    if (!token) token = localStorage.getItem("access_token");
 
     const query = {
       sort: JSON.stringify([field, order]),
@@ -80,6 +82,8 @@ export default (
   },
 
   getOne: (resource, params) => {
+    // Fix issue lost access token when logout + ctr+r (refresh) and login again.
+    if (!token) token = localStorage.getItem("access_token");
     const options = {
       headers: new Headers({
         Authorization: `Bearer ${token}`,
@@ -93,6 +97,8 @@ export default (
   },
 
   getMany: (resource, params) => {
+    // Fix issue lost access token when logout + ctr+r (refresh) and login again.
+    if (!token) token = localStorage.getItem("access_token");
     const query = {
       filter: JSON.stringify({ _id: params.ids }),
     };
@@ -113,6 +119,8 @@ export default (
 
     const rangeStart = (page - 1) * perPage;
     const rangeEnd = page * perPage - 1;
+    // Fix issue lost access token when logout + ctr+r (refresh) and login again.
+    if (!token) token = localStorage.getItem("access_token");
 
     const query = {
       sort: JSON.stringify([field, order]),
@@ -155,6 +163,8 @@ export default (
   },
 
   update: (resource, params) => {
+    // Fix issue lost access token when logout + ctr+r (refresh) and login again.
+    if (!token) token = localStorage.getItem("access_token");
     const options = {
       headers: new Headers({
         Authorization: `Bearer ${token}`,
@@ -169,6 +179,8 @@ export default (
 
   // simple-rest doesn't handle provide an updateMany route, so we fallback to calling update n times instead
   updateMany: (resource, params) => {
+    // Fix issue lost access token when logout + ctr+r (refresh) and login again.
+    if (!token) token = localStorage.getItem("access_token");
     const options = {
       headers: new Headers({
         Authorization: `Bearer ${token}`,
@@ -186,6 +198,8 @@ export default (
   },
 
   create: (resource, params) => {
+    // Fix issue lost access token when logout + ctr+r (refresh) and login again.
+    if (!token) token = localStorage.getItem("access_token");
     const options = {
       headers: new Headers({
         Authorization: `Bearer ${token}`,
@@ -199,6 +213,8 @@ export default (
   },
 
   delete: (resource, params) => {
+    // Fix issue lost access token when logout + ctr+r (refresh) and login again.
+    if (!token) token = localStorage.getItem("access_token");
     return httpClient(`${apiUrl}/${resource}/${params.id}`, {
       method: "DELETE",
       headers: new Headers({
@@ -210,6 +226,8 @@ export default (
 
   // simple-rest doesn't handle filters on DELETE route, so we fallback to calling DELETE n times instead
   deleteMany: (resource, params) => {
+    // Fix issue lost access token when logout + ctr+r (refresh) and login again.
+    if (!token) token = localStorage.getItem("access_token");
     return Promise.all(
       params.ids.map((id) =>
         httpClient(`${apiUrl}/${resource}/${id}`, {
