@@ -42,6 +42,7 @@
     "bcrypt": "^5.0.1",
     "bull": "^4.8.5",
     "googleapis": "^109.0.1",
+    "jwt-decode": "^3.1.2",
     "lodash": "^4.17.21",
     "moment": "^2.29.4",
     "mongoose": "^6.5.4",
