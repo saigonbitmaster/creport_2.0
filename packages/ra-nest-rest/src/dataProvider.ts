@@ -1,6 +1,8 @@
 import { stringify } from "query-string";
 import { fetchUtils, DataProvider } from "ra-core";
+import sessionManager from "./sessionManager";
 import { filterTransform } from "./utils";
+import JwtDecode from "jwt-decode";
 /**
  * Maps react-admin queries to a REST API
  *
@@ -35,211 +37,230 @@ import { filterTransform } from "./utils";
  */
 export default (
   apiUrl: string,
-  token: string,
-  httpClient = fetchUtils.fetchJson,
+  refreshTokenUrl: string,
+  isSkipCheckAccessToken: boolean = false,
   countHeader: string = "Content-Range"
-): DataProvider => ({
-  getList: (resource, params) => {
-    const { page, perPage } = params.pagination;
-    let { field, order } = params.sort;
-    field = field == "id" ? "_id" : field;
-    const rangeStart = (page - 1) * perPage;
-    const rangeEnd = page * perPage - 1;
-    // Fix issue lost access token when logout + ctr+r (refresh) and login again.
-    if (!token) token = localStorage.getItem("access_token");
+): DataProvider => {
+  // React-admin optimize rendering so sometimes `Data Provider` is called before check authen
+  // That why we need check refresh token in here
+  const httpClient = async (url, options) => {
+    // Web no need check access token. Only cms need
+    if (isSkipCheckAccessToken) return fetchUtils.fetchJson(url, options);
 
-    const query = {
-      sort: JSON.stringify([field, order]),
-      range: JSON.stringify([rangeStart, rangeEnd]),
-      filter: JSON.stringify(filterTransform(params.filter)),
-    };
-    const url = `${apiUrl}/${resource}?${stringify(query)}`;
-    const options =
-      countHeader === "Content-Range"
-        ? {
-            // Chrome doesn't return `Content-Range` header if no `Range` is provided in the request.
-            headers: new Headers({
-              Range: `${resource}=${rangeStart}-${rangeEnd}`,
-              Authorization: `Bearer ${token}`,
-            }),
-          }
-        : {};
+    const accessToken = sessionManager.getAccessToken();
+    const refreshToken = sessionManager.getRefreshToken();
 
-    return httpClient(url, options).then(({ headers, json }) => {
-      if (!headers.has(countHeader)) {
-        throw new Error(
-          `The ${countHeader} header is missing in the HTTP Response. The simple REST data provider expects responses for lists of resources to contain this header with the total number of results to build the pagination. If you are using CORS, did you declare ${countHeader} in the Access-Control-Expose-Headers header?`
-        );
+    if (!accessToken || !refreshToken) {
+      return Promise.reject();
+    }
+
+    try {
+      const tokenDecoded = JwtDecode(accessToken);
+      if (!tokenDecoded || !tokenDecoded["exp"]) return Promise.reject();
+
+      const currentTimeInSecond = Date.now() / 1000;
+      // If token expired time > 10 second, continues request otherwise get refresh token
+      if (tokenDecoded["exp"] > currentTimeInSecond + 10) {
+        options.headers.set("Authorization", `Bearer ${accessToken}`);
+        return fetchUtils.fetchJson(url, options);
       }
-      return {
-        data: json.map((resource) => ({ ...resource, id: resource._id })),
-        total:
-          countHeader === "Content-Range"
-            ? parseInt(headers.get("content-range").split("/").pop(), 10)
-            : parseInt(headers.get(countHeader.toLowerCase())),
+
+      // Get new refresh token
+      const data = await fetchUtils.fetchJson(refreshTokenUrl, {
+        method: "POST",
+        headers: new Headers({ Authorization: `Bearer ${refreshToken}` }),
+      });
+
+      if (!data) return Promise.reject();
+
+      console.log("GET NEW REFRESH TOKEN SUCCESS AT DATA PROVIDER", data);
+      const newAccessToken = data.json.access_token;
+      sessionManager.saveSession(
+        newAccessToken,
+        data.json.refresh_token,
+        data.json.username,
+        data.json.fullName
+      );
+
+      options.headers.set("Authorization", `Bearer ${newAccessToken}`);
+
+      return fetchUtils.fetchJson(url, options);
+    } catch (error) {
+      console.log("DataProviderJwtDecode:::", error);
+      sessionManager.clearSession();
+      return Promise.reject();
+    }
+  };
+
+  return {
+    getList: (resource, params) => {
+      const { page, perPage } = params.pagination;
+      let { field, order } = params.sort;
+      field = field == "id" ? "_id" : field;
+      const rangeStart = (page - 1) * perPage;
+      const rangeEnd = page * perPage - 1;
+
+      const query = {
+        sort: JSON.stringify([field, order]),
+        range: JSON.stringify([rangeStart, rangeEnd]),
+        filter: JSON.stringify(filterTransform(params.filter)),
       };
-    });
-  },
+      const url = `${apiUrl}/${resource}?${stringify(query)}`;
+      const options =
+        countHeader === "Content-Range"
+          ? {
+              // Chrome doesn't return `Content-Range` header if no `Range` is provided in the request.
+              headers: new Headers({
+                Range: `${resource}=${rangeStart}-${rangeEnd}`,
+              }),
+            }
+          : {};
 
-  getOne: (resource, params) => {
-    // Fix issue lost access token when logout + ctr+r (refresh) and login again.
-    if (!token) token = localStorage.getItem("access_token");
-    const options = {
-      headers: new Headers({
-        Authorization: `Bearer ${token}`,
-      }),
-    };
-    return httpClient(`${apiUrl}/${resource}/${params.id}`, options).then(
-      ({ json }) => ({
-        data: { ...json, id: json._id },
-      })
-    );
-  },
+      return httpClient(url, options).then(({ headers, json }) => {
+        if (!headers.has(countHeader)) {
+          throw new Error(
+            `The ${countHeader} header is missing in the HTTP Response. The simple REST data provider expects responses for lists of resources to contain this header with the total number of results to build the pagination. If you are using CORS, did you declare ${countHeader} in the Access-Control-Expose-Headers header?`
+          );
+        }
+        return {
+          data: json.map((resource) => ({ ...resource, id: resource._id })),
+          total:
+            countHeader === "Content-Range"
+              ? parseInt(headers.get("content-range").split("/").pop(), 10)
+              : parseInt(headers.get(countHeader.toLowerCase())),
+        };
+      });
+    },
 
-  getMany: (resource, params) => {
-    // Fix issue lost access token when logout + ctr+r (refresh) and login again.
-    if (!token) token = localStorage.getItem("access_token");
-    const query = {
-      filter: JSON.stringify({ _id: params.ids }),
-    };
-    const options = {
-      headers: new Headers({
-        Authorization: `Bearer ${token}`,
-      }),
-    };
-    const url = `${apiUrl}/${resource}?${stringify(query)}`;
-    return httpClient(url, options).then(({ json }) => ({
-      data: json.map((resource) => ({ ...resource, id: resource._id })),
-    }));
-  },
-
-  getManyReference: (resource, params) => {
-    const { page, perPage } = params.pagination;
-    const { field, order } = params.sort;
-
-    const rangeStart = (page - 1) * perPage;
-    const rangeEnd = page * perPage - 1;
-    // Fix issue lost access token when logout + ctr+r (refresh) and login again.
-    if (!token) token = localStorage.getItem("access_token");
-
-    const query = {
-      sort: JSON.stringify([field, order]),
-      range: JSON.stringify([(page - 1) * perPage, page * perPage - 1]),
-      filter: JSON.stringify({
-        ...params.filter,
-        [params.target]: params.id,
-      }),
-    };
-    const url = `${apiUrl}/${resource}?${stringify(query)}`;
-    const options =
-      countHeader === "Content-Range"
-        ? {
-            // Chrome doesn't return `Content-Range` header if no `Range` is provided in the request.
-            headers: new Headers({
-              Range: `${resource}=${rangeStart}-${rangeEnd}`,
-              Authorization: `Bearer ${token}`,
-            }),
-          }
-        : {
-            headers: new Headers({
-              Authorization: `Bearer ${token}`,
-            }),
-          };
-
-    return httpClient(url, options).then(({ headers, json }) => {
-      if (!headers.has(countHeader)) {
-        throw new Error(
-          `The ${countHeader} header is missing in the HTTP Response. The simple REST data provider expects responses for lists of resources to contain this header with the total number of results to build the pagination. If you are using CORS, did you declare ${countHeader} in the Access-Control-Expose-Headers header?`
-        );
-      }
-      return {
-        data: json.map((resource) => ({ ...resource, id: resource._id })),
-        total:
-          countHeader === "Content-Range"
-            ? parseInt(headers.get("content-range").split("/").pop(), 10)
-            : parseInt(headers.get(countHeader.toLowerCase())),
+    getOne: (resource, params) => {
+      const options = {
+        headers: new Headers({}),
       };
-    });
-  },
-
-  update: (resource, params) => {
-    // Fix issue lost access token when logout + ctr+r (refresh) and login again.
-    if (!token) token = localStorage.getItem("access_token");
-    const options = {
-      headers: new Headers({
-        Authorization: `Bearer ${token}`,
-      }),
-    };
-    return httpClient(`${apiUrl}/${resource}/${params.id}`, {
-      method: "PUT",
-      body: JSON.stringify(params.data),
-      ...options,
-    }).then(({ json }) => ({ data: { ...json, id: json._id } }));
-  },
-
-  // simple-rest doesn't handle provide an updateMany route, so we fallback to calling update n times instead
-  updateMany: (resource, params) => {
-    // Fix issue lost access token when logout + ctr+r (refresh) and login again.
-    if (!token) token = localStorage.getItem("access_token");
-    const options = {
-      headers: new Headers({
-        Authorization: `Bearer ${token}`,
-      }),
-    };
-    return Promise.all(
-      params.ids.map((id) =>
-        httpClient(`${apiUrl}/${resource}/${id}`, {
-          method: "PUT",
-          body: JSON.stringify(params.data),
-          ...options,
+      return httpClient(`${apiUrl}/${resource}/${params.id}`, options).then(
+        ({ json }) => ({
+          data: { ...json, id: json._id },
         })
-      )
-    ).then((responses) => ({ data: responses.map(({ json }) => json.id) }));
-  },
+      );
+    },
 
-  create: (resource, params) => {
-    // Fix issue lost access token when logout + ctr+r (refresh) and login again.
-    if (!token) token = localStorage.getItem("access_token");
-    const options = {
-      headers: new Headers({
-        Authorization: `Bearer ${token}`,
-      }),
-    };
-    return httpClient(`${apiUrl}/${resource}`, {
-      method: "POST",
-      body: JSON.stringify(params.data),
-      ...options,
-    }).then(({ json }) => ({ data: { ...params.data, id: json._id } }));
-  },
+    getMany: (resource, params) => {
+      const query = {
+        filter: JSON.stringify({ _id: params.ids }),
+      };
+      const options = {
+        headers: new Headers({}),
+      };
+      const url = `${apiUrl}/${resource}?${stringify(query)}`;
+      return httpClient(url, options).then(({ json }) => ({
+        data: json.map((resource) => ({ ...resource, id: resource._id })),
+      }));
+    },
 
-  delete: (resource, params) => {
-    // Fix issue lost access token when logout + ctr+r (refresh) and login again.
-    if (!token) token = localStorage.getItem("access_token");
-    return httpClient(`${apiUrl}/${resource}/${params.id}`, {
-      method: "DELETE",
-      headers: new Headers({
-        "Content-Type": "text/plain",
-        Authorization: `Bearer ${token}`,
-      }),
-    }).then(({ json }) => ({ data: { ...json, id: json._id } }));
-  },
+    getManyReference: (resource, params) => {
+      const { page, perPage } = params.pagination;
+      const { field, order } = params.sort;
 
-  // simple-rest doesn't handle filters on DELETE route, so we fallback to calling DELETE n times instead
-  deleteMany: (resource, params) => {
-    // Fix issue lost access token when logout + ctr+r (refresh) and login again.
-    if (!token) token = localStorage.getItem("access_token");
-    return Promise.all(
-      params.ids.map((id) =>
-        httpClient(`${apiUrl}/${resource}/${id}`, {
-          method: "DELETE",
-          headers: new Headers({
-            "Content-Type": "text/plain",
-            Authorization: `Bearer ${token}`,
-          }),
-        })
-      )
-    ).then((responses) => ({
-      data: responses.map(({ json }) => json.id),
-    }));
-  },
-});
+      const rangeStart = (page - 1) * perPage;
+      const rangeEnd = page * perPage - 1;
+
+      const query = {
+        sort: JSON.stringify([field, order]),
+        range: JSON.stringify([(page - 1) * perPage, page * perPage - 1]),
+        filter: JSON.stringify({
+          ...params.filter,
+          [params.target]: params.id,
+        }),
+      };
+      const url = `${apiUrl}/${resource}?${stringify(query)}`;
+      const options =
+        countHeader === "Content-Range"
+          ? {
+              // Chrome doesn't return `Content-Range` header if no `Range` is provided in the request.
+              headers: new Headers({
+                Range: `${resource}=${rangeStart}-${rangeEnd}`,
+              }),
+            }
+          : {
+              headers: new Headers({}),
+            };
+
+      return httpClient(url, options).then(({ headers, json }) => {
+        if (!headers.has(countHeader)) {
+          throw new Error(
+            `The ${countHeader} header is missing in the HTTP Response. The simple REST data provider expects responses for lists of resources to contain this header with the total number of results to build the pagination. If you are using CORS, did you declare ${countHeader} in the Access-Control-Expose-Headers header?`
+          );
+        }
+        return {
+          data: json.map((resource) => ({ ...resource, id: resource._id })),
+          total:
+            countHeader === "Content-Range"
+              ? parseInt(headers.get("content-range").split("/").pop(), 10)
+              : parseInt(headers.get(countHeader.toLowerCase())),
+        };
+      });
+    },
+
+    update: (resource, params) => {
+      const options = {
+        headers: new Headers({}),
+      };
+      return httpClient(`${apiUrl}/${resource}/${params.id}`, {
+        method: "PUT",
+        body: JSON.stringify(params.data),
+        ...options,
+      }).then(({ json }) => ({ data: { ...json, id: json._id } }));
+    },
+
+    // simple-rest doesn't handle provide an updateMany route, so we fallback to calling update n times instead
+    updateMany: (resource, params) => {
+      const options = {
+        headers: new Headers({}),
+      };
+      return Promise.all(
+        params.ids.map((id) =>
+          httpClient(`${apiUrl}/${resource}/${id}`, {
+            method: "PUT",
+            body: JSON.stringify(params.data),
+            ...options,
+          })
+        )
+      ).then((responses) => ({ data: responses.map(({ json }) => json.id) }));
+    },
+
+    create: (resource, params) => {
+      const options = {
+        headers: new Headers({}),
+      };
+      return httpClient(`${apiUrl}/${resource}`, {
+        method: "POST",
+        body: JSON.stringify(params.data),
+        ...options,
+      }).then(({ json }) => ({ data: { ...params.data, id: json._id } }));
+    },
+
+    delete: (resource, params) => {
+      return httpClient(`${apiUrl}/${resource}/${params.id}`, {
+        method: "DELETE",
+        headers: new Headers({
+          "Content-Type": "text/plain",
+        }),
+      }).then(({ json }) => ({ data: { ...json, id: json._id } }));
+    },
+
+    // simple-rest doesn't handle filters on DELETE route, so we fallback to calling DELETE n times instead
+    deleteMany: (resource, params) => {
+      return Promise.all(
+        params.ids.map((id) =>
+          httpClient(`${apiUrl}/${resource}/${id}`, {
+            method: "DELETE",
+            headers: new Headers({
+              "Content-Type": "text/plain",
+            }),
+          })
+        )
+      ).then((responses) => ({
+        data: responses.map(({ json }) => json.id),
+      }));
+    },
+  };
+};
