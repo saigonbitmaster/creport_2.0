@@ -15,7 +15,7 @@ import { subDays } from "date-fns";
 import { stringify } from "query-string";
 import CardWithIcon from "./CardWithIcon";
 import { Customer } from "../types";
-import DoneAllOutlinedIcon from '@mui/icons-material/DoneAllOutlined';
+import DoneAllOutlinedIcon from "@mui/icons-material/DoneAllOutlined";
 
 const NewMembers = () => {
   const translate = useTranslate();
@@ -27,11 +27,15 @@ const NewMembers = () => {
   aMonthAgo.setSeconds(0);
   aMonthAgo.setMilliseconds(0);
 
-  const { isLoading, data: proposals, total } = useGetList<any>("proposals", {
+  const {
+    isLoading,
+    data: proposals,
+    total,
+  } = useGetList<any>("proposals", {
     filter: {
       projectStatus: "complete",
     },
-    pagination: { page: 1, perPage: 10 },
+    pagination: { page: 1, perPage: 13 },
   });
 
   const nb = proposals ? total : 0;
@@ -44,7 +48,7 @@ const NewMembers = () => {
         }),
       }}
       icon={DoneAllOutlinedIcon}
-      title="Pending projects"
+      title="Completed projects"
       subtitle={nb}
     >
       <List sx={{ display: isLoading ? "none" : "block" }}>
@@ -59,9 +63,7 @@ const NewMembers = () => {
                 <ListItemAvatar>
                   <Avatar src={`${record.avatar}?size=32x32`} />
                 </ListItemAvatar>
-                <ListItemText
-                  primary={record.name}
-                />
+                <ListItemText primary={record.name} />
               </ListItem>
             ))
           : null}
@@ -75,7 +77,7 @@ const NewMembers = () => {
         color="primary"
       >
         <Box p={1} sx={{ color: "primary.main" }}>
-        See all projects
+          See all projects
         </Box>
       </Button>
     </CardWithIcon>

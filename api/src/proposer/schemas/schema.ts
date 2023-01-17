@@ -33,5 +33,12 @@ export class Proposer {
 
 const ProposerSchema = SchemaFactory.createForClass(Proposer);
 ProposerSchema.plugin(uniqueValidator);
+// Create index for mongo full text search
+ProposerSchema.index({
+  fullName: 'text',
+  email: 'text',
+  telegram: 'text',
+  walletAddress: 'text',
+});
 
 export { ProposerSchema };

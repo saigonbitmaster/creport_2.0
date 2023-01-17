@@ -16,11 +16,7 @@ export class ProposerService {
   async findAll(query: MongooseQuery): Promise<RaList> {
     const { keyword } = query.filter;
     if (keyword) {
-      query.filter = fullTextSearchTransform(
-        query.filter,
-        ['fullName', 'email', 'walletAddress', 'telegram'],
-        keyword,
-      );
+      query.filter = fullTextSearchTransform(query.filter, keyword);
     }
 
     const isPagination = query.limit > 0;
@@ -75,16 +71,25 @@ export class ProposerService {
   /**
    * Search on page
    * @param keyword search keyword
-   * @param searchFields search fields
    */
-  async pageFullTextSearch(
-    searchFields: string[],
-    keyword: string,
-  ): Promise<string[]> {
+  async pageFullTextSearch(keyword: string): Promise<any[]> {
     let filters = {};
-    filters = fullTextSearchTransform(filters, searchFields, keyword);
-    const proposers = await this.model.find(filters);
+    filters = fullTextSearchTransform(filters, keyword);
+    return await this.model.find(filters);
+  }
+
+  /**
+   * Search on page and get ids only
+   * @param keyword search keyword
+   */
+  async pageFullTextSearchGetIdsOnly(
+    keyword: string,
+    convertIdToString = true,
+  ): Promise<string[]> {
+    const proposers = await this.pageFullTextSearch(keyword);
     if (!proposers || proposers.length === 0) return [];
-    return proposers.map((fund) => fund._id.toString());
+    return proposers.map((fund) =>
+      convertIdToString ? fund._id.toString() : fund._id,
+    );
   }
 }

@@ -18,8 +18,13 @@ import proposals from "./proposal";
 import commits from "./commit";
 
 const apiUrl = process.env.REACT_APP_API_URL;
-const token = localStorage.getItem("access_token");
-const restProvider = dataProvider(apiUrl, token);
+const refreshTokenUrl = process.env.REACT_APP_REFRESH_TOKEN_URL;
+const isSkipCheckAccessToken = true;
+const restProvider = dataProvider(
+  apiUrl,
+  refreshTokenUrl,
+  isSkipCheckAccessToken
+);
 
 const i18nProvider = polyglotI18nProvider((locale) => {
   if (locale === "fr") {

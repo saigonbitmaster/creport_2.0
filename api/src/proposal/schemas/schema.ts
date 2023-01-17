@@ -24,8 +24,12 @@ export class Proposal {
   @Prop()
   walletAddress: string;
 
+  // @Prop()
+  // gitLink: string;
+
+  // There are multiple github repo in 1 proposal
   @Prop()
-  gitLink: string;
+  gitLinks: string[];
 
   @Prop()
   smartContract: string;
@@ -69,5 +73,12 @@ export class Proposal {
 
 const ProposalSchema = SchemaFactory.createForClass(Proposal);
 ProposalSchema.plugin(uniqueValidator);
+// Create index for mongo full text search
+ProposalSchema.index({
+  name: 'text',
+  projectId: 'text',
+  requestedBudget: 'text',
+  projectStatus: 'text',
+});
 
 export { ProposalSchema };

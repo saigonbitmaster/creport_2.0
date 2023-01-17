@@ -11,7 +11,14 @@ import {
 
 const ListScreen = () => {
   const Filters = [
-    <ReferenceInput source="proposalId" reference="proposals" required alwaysOn>
+    <ReferenceInput
+      source="proposalId"
+      reference="proposals"
+      required
+      alwaysOn
+      perPage={-1}
+      sort={{ field: "name", order: "ASC" }}
+    >
       <SelectInput optionText="name" fullWidth />
     </ReferenceInput>,
   ];

@@ -21,6 +21,9 @@ import {
 import { FundService } from '../fund/service';
 import { ChallengeService } from '../challenge/service';
 import { ProposerService } from '../proposer/service';
+import { Public } from '../decorators/public.api.decorator';
+import { Roles } from '../decorators/roles.decorator';
+import { Role } from '../types';
 
 @Controller('proposals')
 export class ProposalController {
@@ -32,6 +35,7 @@ export class ProposalController {
   ) {}
 
   @Get()
+  @Public()
   async index(@Response() res: any, @Query() query) {
     const mongooseQuery = queryTransform(query);
     const result = await this.service.findAll(mongooseQuery);
@@ -39,11 +43,13 @@ export class ProposalController {
   }
 
   @Get(':id')
+  @Public()
   async find(@Param('id') id: string) {
     return await this.service.findOne(id);
   }
 
   @Post('import')
+  @Roles(Role.Admin)
   async import(@Body() importBody: ImportBody) {
     const _data = await getSheetData(importBody.sheet, importBody.id, 'A2:O');
     const data = await proposalTransform(
@@ -56,11 +62,13 @@ export class ProposalController {
   }
 
   @Post()
+  @Roles(Role.Admin)
   async create(@Body() createProposalDto: CreateProposalDto) {
     return await this.service.create(createProposalDto);
   }
 
   @Put(':id')
+  @Roles(Role.Admin)
   async update(
     @Param('id') id: string,
     @Body() updateProposalDto: UpdateProposalDto,
@@ -69,6 +77,7 @@ export class ProposalController {
   }
 
   @Delete(':id')
+  @Roles(Role.Admin)
   async delete(@Param('id') id: string) {
     return await this.service.delete(id);
   }

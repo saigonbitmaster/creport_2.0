@@ -39,16 +39,11 @@ const formatRaList = (res, result: RaList) => {
     .json(result.data);
 };
 
-const fullTextSearchTransform = (
-  filters: object,
-  searchFields: string[],
-  searchKeyword: string,
-) => {
-  const searchPattern = { $regex: searchKeyword, $options: 'i' };
+const fullTextSearchTransform = (filters: object, searchKeyword: string) => {
   delete filters['keyword'];
   return {
     ...filters,
-    $or: searchFields.map((field: string) => ({ [field]: searchPattern })),
+    $text: { $search: searchKeyword },
   };
 };
 

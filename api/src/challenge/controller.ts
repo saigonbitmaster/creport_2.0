@@ -19,6 +19,9 @@ import {
   challengeTransform,
 } from '../flatworks/utils/googleSheet';
 import { FundService } from '../fund/service';
+import { Public } from '../decorators/public.api.decorator';
+import { Roles } from '../decorators/roles.decorator';
+import { Role } from '../types';
 
 @Controller('challenges')
 export class ChallengeController {
@@ -28,6 +31,7 @@ export class ChallengeController {
   ) {}
 
   @Get()
+  @Public()
   async index(@Response() res: any, @Query() query) {
     const mongooseQuery = queryTransform(query);
     const result = await this.service.findAll(mongooseQuery);
@@ -35,16 +39,19 @@ export class ChallengeController {
   }
 
   @Get(':id')
+  @Public()
   async find(@Param('id') id: string) {
     return await this.service.findOne(id);
   }
 
   @Post()
+  @Roles(Role.Admin)
   async create(@Body() createChallengeDto: CreateChallengeDto) {
     return await this.service.create(createChallengeDto);
   }
 
   @Post('import')
+  @Roles(Role.Admin)
   async import(@Body() importBody: ImportBody) {
     const _data = await getSheetData(importBody.sheet, importBody.id, 'A2:E');
     const data = await challengeTransform(_data, this.fundService);
@@ -52,6 +59,7 @@ export class ChallengeController {
   }
 
   @Put(':id')
+  @Roles(Role.Admin)
   async update(
     @Param('id') id: string,
     @Body() updateChallengeDto: UpdateChallengeDto,
@@ -60,6 +68,7 @@ export class ChallengeController {
   }
 
   @Delete(':id')
+  @Roles(Role.Admin)
   async delete(@Param('id') id: string) {
     return await this.service.delete(id);
   }
