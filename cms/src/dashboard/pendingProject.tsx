@@ -31,7 +31,7 @@ const PendingProposals = () => {
     filter: {
       projectStatus: "inProgress",
     },
-    pagination: { page: 1, perPage: 13 },
+    pagination: { page: 1, perPage: 10 },
   });
 
   const nb = proposals ? total : 0;

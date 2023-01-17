@@ -6,14 +6,25 @@ import { UpdateProposalDto } from './dto/update.dto';
 import { Proposal, ProposalDocument } from './schemas/schema';
 import { RaList, MongooseQuery } from '../flatworks/types/types';
 import { kpiQuery } from '../flatworks/scripts/kpi';
+import { FundService } from '../fund/service';
+import { ChallengeService } from '../challenge/service';
+import { ProposerService } from '../proposer/service';
 
 @Injectable()
 export class ProposalService {
   constructor(
     @InjectModel(Proposal.name) private readonly model: Model<ProposalDocument>,
+    private readonly fundService: FundService,
+    private readonly challengeService: ChallengeService,
+    private readonly proposerService: ProposerService,
   ) {}
 
   async findAll(query: MongooseQuery): Promise<RaList> {
+    const { keyword } = query.filter;
+    if (keyword) {
+      query = await this._pageFullTextSearchTransform(query);
+    }
+
     const count = await this.model.find(query.filter).count().exec();
     const data = await this.model
       .find(query.filter)
@@ -25,6 +36,10 @@ export class ProposalService {
   }
 
   async findAllKpi(query: MongooseQuery): Promise<RaList> {
+    const { keyword } = query.filter;
+    if (keyword) {
+      query = await this._pageFullTextSearchTransform(query);
+    }
     const aggregateQuery = kpiQuery(query);
 
     const _data = await this.model.aggregate(aggregateQuery).exec();
@@ -74,5 +89,66 @@ export class ProposalService {
 
   async delete(id: string): Promise<Proposal> {
     return await this.model.findByIdAndDelete(id).exec();
+  }
+
+  async _pageFullTextSearchTransform(
+    query: MongooseQuery,
+  ): Promise<MongooseQuery> {
+    const { keyword } = query.filter;
+    if (keyword) {
+      const [fundIds, challengeIds, proposerIds] = await Promise.all([
+        this.fundService.pageFullTextSearch(['name'], keyword),
+        this.challengeService.pageFullTextSearch(['name'], keyword),
+        this.proposerService.pageFullTextSearch(['fullName'], keyword),
+      ]);
+      delete query.filter.keyword;
+      const searchPattern = { $regex: keyword, $options: 'i' };
+      const conditionOr: any[] = [
+        {
+          name: searchPattern,
+        },
+        {
+          projectId: searchPattern,
+        },
+        {
+          projectStatus: searchPattern,
+        },
+        // requestedBudget is number field so need search like this
+        {
+          $expr: {
+            $regexMatch: {
+              input: { $toString: '$requestedBudget' },
+              regex: new RegExp(keyword),
+            },
+          },
+        },
+      ];
+      if (fundIds && fundIds.length > 0) {
+        conditionOr.push({
+          fundId: {
+            $in: fundIds,
+          },
+        });
+      }
+      if (challengeIds && challengeIds.length > 0) {
+        conditionOr.push({
+          challengeId: {
+            $in: challengeIds,
+          },
+        });
+      }
+      if (proposerIds && proposerIds.length > 0) {
+        conditionOr.push({
+          proposerId: {
+            $in: proposerIds,
+          },
+        });
+      }
+      query.filter = {
+        ...query.filter,
+        $or: conditionOr,
+      };
+    }
+    return query;
   }
 }

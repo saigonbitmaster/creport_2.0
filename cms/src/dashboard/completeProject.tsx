@@ -31,7 +31,7 @@ const NewMembers = () => {
     filter: {
       projectStatus: "complete",
     },
-    pagination: { page: 1, perPage: 13 },
+    pagination: { page: 1, perPage: 10 },
   });
 
   const nb = proposals ? total : 0;
@@ -44,7 +44,7 @@ const NewMembers = () => {
         }),
       }}
       icon={DoneAllOutlinedIcon}
-      title="Completed projects"
+      title="Pending projects"
       subtitle={nb}
     >
       <List sx={{ display: isLoading ? "none" : "block" }}>

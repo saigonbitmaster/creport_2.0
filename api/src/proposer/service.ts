@@ -5,6 +5,7 @@ import { CreateProposerDto } from './dto/create.dto';
 import { UpdateProposerDto } from './dto/update.dto';
 import { Proposer, ProposerDocument } from './schemas/schema';
 import { RaList, MongooseQuery } from '../flatworks/types/types';
+import { fullTextSearchTransform } from '../flatworks/utils/getlist';
 
 @Injectable()
 export class ProposerService {
@@ -13,13 +14,25 @@ export class ProposerService {
   ) {}
 
   async findAll(query: MongooseQuery): Promise<RaList> {
+    const { keyword } = query.filter;
+    if (keyword) {
+      query.filter = fullTextSearchTransform(
+        query.filter,
+        ['fullName', 'email', 'walletAddress', 'telegram'],
+        keyword,
+      );
+    }
+
+    const isPagination = query.limit > 0;
     const count = await this.model.find(query.filter).count().exec();
-    const data = await this.model
-      .find(query.filter)
-      .sort(query.sort)
-      .skip(query.skip)
-      .limit(query.limit)
-      .exec();
+    const data = isPagination
+      ? await this.model
+          .find(query.filter)
+          .sort(query.sort)
+          .skip(query.skip)
+          .limit(query.limit)
+          .exec()
+      : await this.model.find(query.filter).sort(query.sort).exec();
     const result = { count: count, data: data };
     return result;
   }
@@ -57,5 +70,21 @@ export class ProposerService {
 
   async delete(id: string): Promise<Proposer> {
     return await this.model.findByIdAndDelete(id).exec();
+  }
+
+  /**
+   * Search on page
+   * @param keyword search keyword
+   * @param searchFields search fields
+   */
+  async pageFullTextSearch(
+    searchFields: string[],
+    keyword: string,
+  ): Promise<string[]> {
+    let filters = {};
+    filters = fullTextSearchTransform(filters, searchFields, keyword);
+    const proposers = await this.model.find(filters);
+    if (!proposers || proposers.length === 0) return [];
+    return proposers.map((fund) => fund._id.toString());
   }
 }
