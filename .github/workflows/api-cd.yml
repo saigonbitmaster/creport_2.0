@@ -87,7 +87,7 @@ jobs:
             SOURCE: "api/dist"
             REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
             REMOTE_USER: ${{ secrets.REMOTE_USER }}
-            TARGET: /home/${{ secrets.REMOTE_USER }}/bworks_2.0/bworks_2.0/api
+            TARGET: /home/${{ secrets.REMOTE_USER }}/chuong/creport_2.0/api
       - name: Rsync node_modules folder to Server
         uses: easingthemes/ssh-deploy@v2
         env:
@@ -96,7 +96,7 @@ jobs:
             SOURCE: "./node_modules"
             REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
             REMOTE_USER: ${{ secrets.REMOTE_USER }}
-            TARGET: /home/${{ secrets.REMOTE_USER }}/bworks_2.0/bworks_2.0
+            TARGET: /home/${{ secrets.REMOTE_USER }}/chuong/creport_2.0
       - name: Rsync .env file to Server docker-config/.env
         uses: easingthemes/ssh-deploy@v2
         env:
@@ -105,19 +105,19 @@ jobs:
             SOURCE: ".env"
             REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
             REMOTE_USER: ${{ secrets.REMOTE_USER }}
-            TARGET: /home/${{ secrets.REMOTE_USER }}/bworks_2.0/bworks_2.0/docker-config
+            TARGET: /home/${{ secrets.REMOTE_USER }}/chuong/creport_2.0/docker-config
 
-#  run-api-service:
-#    needs: rsync-code
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: Run api service
-#        uses: appleboy/ssh-action@v0.1.6
-#        with:
-#          host: ${{ secrets.REMOTE_HOST }}
-#          username: ${{ secrets.REMOTE_USER }}
-#          key: ${{ secrets.SSH_PRIVATE_KEY }}
-#          script: |
-#            cd /home/${{ secrets.REMOTE_USER }}/bworks_2.0/bworks_2.0/docker-config
-#            docker-compose -f compose.yaml restart apiservice
+  run-api-service:
+    needs: rsync-code
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run api service
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.REMOTE_HOST }}
+          username: ${{ secrets.REMOTE_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /home/${{ secrets.REMOTE_USER }}/chuong/creport_2.0/docker-config
+            docker-compose -f compose.yaml restart apiservice
       - run: echo "<U+1F34F> This job's status is ${{ job.status }}."
