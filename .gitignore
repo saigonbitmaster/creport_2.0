@@ -10,20 +10,14 @@ test.ts
 test.js
 api/src/flatworks/utils/credentials.json
 api/src/flatworks/utils/token.json
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-=======
-docker-compose.yml
-mongo
->>>>>>> api
-=======
-mongo
-docker-compose.yml
 .DS_Store
->>>>>>> api
 #cms/src/components
 #cms/src/kpi
 #cms/src/commit
 #api/src/proposal
 #api/src/flatworks
+
+# ignore database and certificates
+docker-config/certbot
+docker-config/dbdata
+docker-config/mongobackups
