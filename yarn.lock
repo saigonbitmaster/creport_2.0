@@ -8514,14 +8514,11 @@ jws@^4.0.0:
     jwa "^2.0.0"
     safe-buffer "^5.0.1"
 
-<<<<<<< HEAD
-=======
 jwt-decode@^3.1.2:
   version "3.1.2"
   resolved "https://registry.yarnpkg.com/jwt-decode/-/jwt-decode-3.1.2.tgz#3fb319f3675a2df0c2895c8f5e9fa4b67b04ed59"
   integrity sha512-UfpWE/VZn0iP50d8cz9NrZLM9lSWhcJ+0Gt/nm4by88UL+J1SiKN8/5dkjMmbEzwL2CAe+67GsegCbIKtbp75A==
 
->>>>>>> api
 kareem@2.4.1:
   version "2.4.1"
   resolved "https://registry.yarnpkg.com/kareem/-/kareem-2.4.1.tgz#7d81ec518204a48c1cb16554af126806c3cd82b0"
@@ -10587,23 +10584,6 @@ ra-i18n-polyglot@^4.0.0, ra-i18n-polyglot@^4.3.1:
   dependencies:
     node-polyglot "^2.2.2"
     ra-core "^4.3.1"
-
-ra-input-rich-text@^4.0.0:
-  version "4.3.1"
-  resolved "https://registry.yarnpkg.com/ra-input-rich-text/-/ra-input-rich-text-4.3.1.tgz#56c13e25e9852a1590811fa99c9617d385987926"
-  integrity sha512-PrUzbyHdJNwSilRcpIFDlWzN0qRiuyOtSEFLvwXI/UM9pWJSAqDxzefCiV7dk2akL2z6/lAnr4oJKcq9al0eIQ==
-  dependencies:
-    "@tiptap/extension-color" "^2.0.0-beta.9"
-    "@tiptap/extension-highlight" "^2.0.0-beta.33"
-    "@tiptap/extension-image" "^2.0.0-beta.27"
-    "@tiptap/extension-link" "^2.0.0-beta.20"
-    "@tiptap/extension-placeholder" "^2.0.0-beta.30"
-    "@tiptap/extension-text-align" "^2.0.0-beta.23"
-    "@tiptap/extension-text-style" "^2.0.0-beta.23"
-    "@tiptap/extension-underline" "^2.0.0-beta.16"
-    "@tiptap/react" "^2.0.0-beta.63"
-    "@tiptap/starter-kit" "^2.0.0-beta.101"
-    clsx "^1.1.1"
 
 ra-input-rich-text@^4.4.1:
   version "4.4.1"

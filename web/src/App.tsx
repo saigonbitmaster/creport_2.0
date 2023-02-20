@@ -2,10 +2,13 @@ import * as React from "react";
 import { Admin, CustomRoutes, Resource } from "react-admin";
 import polyglotI18nProvider from "ra-i18n-polyglot";
 import { Route } from "react-router";
+
+import { authProvider } from "ra-nest-rest";
 import { Login, Layout } from "./layout";
 import { Dashboard } from "./dashboard";
 import englishMessages from "./i18n/en";
 import { lightTheme } from "./layout/themes";
+
 import Configuration from "./configuration/Configuration";
 import dataProvider from "ra-nest-rest";
 import proposers from "./proposer";
@@ -17,14 +20,9 @@ import FetchCardano from "./tools/fetchCardano";
 import proposals from "./proposal";
 import commits from "./commit";
 
-const apiUrl = process.env.REACT_APP_API_URL;
 const refreshTokenUrl = process.env.REACT_APP_REFRESH_TOKEN_URL;
-const isSkipCheckAccessToken = true;
-const restProvider = dataProvider(
-  apiUrl,
-  refreshTokenUrl,
-  isSkipCheckAccessToken
-);
+const apiUrl = process.env.REACT_APP_API_URL;
+const restProvider = dataProvider(apiUrl, refreshTokenUrl);
 
 const i18nProvider = polyglotI18nProvider((locale) => {
   if (locale === "fr") {
