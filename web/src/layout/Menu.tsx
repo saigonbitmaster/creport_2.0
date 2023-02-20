@@ -117,15 +117,7 @@ const Menu = ({ dense = false }: MenuProps) => {
           leftIcon={<FormatListBulletedIcon />}
           dense={dense}
         />
-        <MenuItemLink
-          to="/importexcels"
-          state={{ _scrollToTop: true }}
-          primaryText={translate(`resources.reports.import`, {
-            smart_count: 2,
-          })}
-          leftIcon={<LibraryBooksOutlinedIcon />}
-          dense={dense}
-        />
+       
       </SubMenu>
       <SubMenu
         handleToggle={() => handleToggle("menuProposals")}

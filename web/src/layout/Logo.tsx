@@ -20,7 +20,7 @@ const Logo = (props: SVGProps<SVGSVGElement>) => {
         fill="#ff6d00"
       >
         <text y="5" fontSize="1em">
-        CREPORT CMS
+        CREPORTs
         </text>
       </g>
     </svg>

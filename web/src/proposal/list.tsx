@@ -46,8 +46,8 @@ const ListScreen = () => {
     <List
       perPage={25}
       sort={{ field: "date", order: "desc" }}
-      hasCreate
       filters={Filters}
+      hasCreate={false}
     >
       <Datagrid>
         <TextField source="name" />
@@ -63,8 +63,6 @@ const ListScreen = () => {
         </ReferenceField>
         <ColoredNumberField source="requestedBudget" threshold={50000} />
         <SelectField source="projectStatus" choices={choices} />
-
-        <EditButton />
       </Datagrid>
     </List>
   );

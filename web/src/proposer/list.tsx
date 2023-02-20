@@ -24,7 +24,7 @@ const PayoutList = (title = "List of posts") => {
       <List
         perPage={25}
         sort={{ field: "date", order: "desc" }}
-        hasCreate
+        hasCreate={false}
         filters={Filters}
         sx={{
           flexGrow: 1,
@@ -40,8 +40,6 @@ const PayoutList = (title = "List of posts") => {
           <TextField source="email" />
           <UrlField source="telegram" />
           <TextField source="walletAddress" />
-
-          <EditButton />
         </Datagrid>
       </List>
       <Drawer

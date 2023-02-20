@@ -33,7 +33,7 @@ const ListScreen = () => {
       perPage={25}
       sort={{ field: "date", order: "desc" }}
       filters={Filters}
-      hasCreate
+      hasCreate={false}
     >
       <Datagrid>
         <TextField source="name" />
@@ -45,7 +45,6 @@ const ListScreen = () => {
         <ReferenceField source="fundId" reference="funds" label="Currency">
           <TextField source="currency" />
         </ReferenceField>
-        <EditButton />
       </Datagrid>
     </List>
   );
