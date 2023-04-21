@@ -20,9 +20,8 @@ import FetchCardano from "./tools/fetchCardano";
 import proposals from "./proposal";
 import commits from "./commit";
 
-const refreshTokenUrl = process.env.REACT_APP_REFRESH_TOKEN_URL;
 const apiUrl = process.env.REACT_APP_API_URL;
-const restProvider = dataProvider(apiUrl, refreshTokenUrl);
+const restProvider = dataProvider(apiUrl);
 
 const i18nProvider = polyglotI18nProvider((locale) => {
   if (locale === "fr") {
