@@ -1,9 +1,19 @@
-import { Post, UseGuards, Request, Controller, Get } from '@nestjs/common';
+import {
+  Post,
+  UseGuards,
+  Request,
+  Controller,
+  Get,
+  Response,
+  ForbiddenException,
+  Body,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
+import { AuthGuard } from '@nestjs/passport';
 import { LocalAuthGuard } from './local-auth.guard';
 import { JwtAuthGuard } from './jwt-auth.guard';
+import { RefreshTokenGuard } from './refresh-auth.guard';
 import { Public } from '../decorators/public.api.decorator';
-import { JwtRefreshTokenGuard } from './jwt-refresh-token.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -18,15 +28,23 @@ export class AuthController {
 
   @UseGuards(JwtAuthGuard)
   @Get('profile')
-  @Public()
   getProfile(@Request() req) {
     return req.user;
   }
 
-  @UseGuards(JwtRefreshTokenGuard)
-  @Post('refresh-token')
+  @UseGuards(RefreshTokenGuard)
+  @Get('refresh')
   @Public()
-  async refreshToken(@Request() req) {
-    return await this.authService.refreshToken(req.user.refreshToken);
+  refreshTokens(@Request() req) {
+    const userId = req.user['sub'];
+    const refreshToken = req.user['refreshToken'];
+    return this.authService.refreshTokens(userId, refreshToken);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Public()
+  @Get('logout')
+  logout(@Request() req) {
+    this.authService.logout(req.user.userId);
   }
 }

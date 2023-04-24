@@ -19,20 +19,28 @@ export class UserService {
     return await this.model.findById(id).exec();
   } */
 
+  async findAllRaw(filter = {}): Promise<any[]> {
+    return this.model.find(filter).exec();
+  }
+
+  async findById(id: string): Promise<any> {
+    return await this.model.findById(id).exec();
+  }
+
   async findOne(username: string): Promise<User> {
     const [user] = await this.model.find({ username: username }).exec();
     return user;
   }
   async create(createUserDto: CreateUserDto): Promise<User> {
+    console.log(createUserDto);
     const username = createUserDto.username.toLowerCase();
-    const fullName = createUserDto.fullName;
     const saltOrRounds = 10;
     const password = await bcrypt.hash(createUserDto.password, saltOrRounds);
 
     return await new this.model({
+      ...createUserDto,
       username,
       password,
-      fullName,
       createdAt: new Date(),
     }).save();
   }

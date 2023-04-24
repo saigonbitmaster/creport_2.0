@@ -90,7 +90,6 @@ const ProjectStatus = (props) => {
       let record = r.find((item) => item.fundId === a.fundId) || {};
       record.fundId = a.fundId;
       let fundName = funds.find((item) => item.id === a.fundId)?.name || null;
-      console.log(funds);
       record.name = fundName;
       record[a.projectStatus] = record[a.projectStatus]
         ? record[a.projectStatus] + 1

@@ -3,7 +3,7 @@ import { fetchUtils, AuthProvider } from "ra-core";
 import jwt_decode from "jwt-decode";
 import { localStorageManager } from "./utils";
 
-const authProvider = (loginUrl, renewTokenUrl): AuthProvider => ({
+const authProvider = (loginUrl, renewTokenUrl, logoutUrl): AuthProvider => ({
   login: ({ username, password }) => {
     return fetchUtils
       .fetchJson(loginUrl, {
@@ -20,9 +20,23 @@ const authProvider = (loginUrl, renewTokenUrl): AuthProvider => ({
       })
       .catch((err) => err);
   },
-  logout: () => {
-    localStorageManager.removeItems();
-    return Promise.resolve();
+  logout: async () => {
+    const accessToken = localStorageManager.getItem("accessToken");
+    console.log(accessToken);
+    const options = {
+      headers: new Headers({
+        Authorization: `Bearer ${accessToken}`,
+      }),
+    };
+
+    try {
+      const data = await fetchUtils.fetchJson(logoutUrl, options);
+      if (!data) return Promise.reject();
+      localStorageManager.removeItems();
+      return Promise.resolve();
+    } catch (error) {
+      return Promise.reject();
+    }
   },
   checkError: (error) => {
     //access token expire after standBy then require login

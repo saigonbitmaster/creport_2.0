@@ -55,7 +55,7 @@ const ListScreen = () => {
         <ReferenceField source="fundId" reference="funds">
           <TextField source="name" />
         </ReferenceField>
-        <ReferenceField source="challengeId" reference="challenges">
+        <ReferenceField source="challengeId" reference="challenges" >
           <TextField source="name" />
         </ReferenceField>
         <ReferenceField source="proposerId" reference="proposers">

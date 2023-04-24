@@ -15,6 +15,9 @@ export class User {
   @Prop({ required: true })
   fullName: string;
 
+  @Prop()
+  refreshToken: string;
+
   @Prop({
     type: String,
     required: false,

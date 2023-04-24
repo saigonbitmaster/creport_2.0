@@ -22,11 +22,15 @@ import commits from "./commit";
 import ImportSheets from "./tools/importSheets";
 
 const loginUrl = process.env.REACT_APP_LOGIN_URL;
-const refreshTokenUrl = process.env.REACT_APP_REFRESH_TOKEN_URL;
 const apiUrl = process.env.REACT_APP_API_URL;
-const restProvider = dataProvider(apiUrl, refreshTokenUrl);
-const _authProvider = authProvider(loginUrl, refreshTokenUrl);
+const renewTokenUrl = process.env.REACT_APP_RENEW_ACCESS_TOKEN_URL;
+const logoutUrl = process.env.REACT_APP_LOGOUT_URL;
 
+const _authProvider = authProvider(loginUrl, renewTokenUrl, logoutUrl);
+const restProvider = dataProvider(apiUrl);
+
+
+console.log(loginUrl)
 const i18nProvider = polyglotI18nProvider((locale) => {
   if (locale === "fr") {
     return import("./i18n/fr").then((messages) => messages.default);
