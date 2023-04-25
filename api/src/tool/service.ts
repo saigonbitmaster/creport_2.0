@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
-import { addressUtxo } from '../types';
+import { AddressUtxoType } from '../flatworks/types/types';
 import { RepoCodeScan, RepoCommits } from '../flatworks/utils/github';
 import { AddressUtxo, TxsUtxo } from '../flatworks/utils/cardano';
 
 @Injectable()
 export class ToolService {
   constructor(private readonly httpService: HttpService) {}
-  getAddressUtxo(address: string): Promise<addressUtxo[]> {
+  getAddressUtxo(address: string): Promise<AddressUtxoType[]> {
     return AddressUtxo(address, this.httpService);
   }
 

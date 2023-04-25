@@ -19,9 +19,9 @@ import {
   challengeTransform,
 } from '../flatworks/utils/googleSheet';
 import { FundService } from '../fund/service';
-import { Public } from '../decorators/public.api.decorator';
-import { Roles } from '../decorators/roles.decorator';
-import { Role } from '../types';
+import { Public } from '../flatworks/roles/public.api.decorator';
+import { Roles } from '../flatworks/roles/roles.decorator';
+import { Role } from '../flatworks/types/types';
 
 @Controller('challenges')
 export class ChallengeController {

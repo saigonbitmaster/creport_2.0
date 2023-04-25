@@ -1,4 +1,8 @@
-import { gitCommit, fundTransaction, projectStatus } from '../../types';
+import {
+  GitCommit,
+  FundTransaction,
+  ProjectStatus,
+} from '../../flatworks/types/types';
 
 export class BaseProposalDto {
   name: string;
@@ -10,11 +14,11 @@ export class BaseProposalDto {
   // gitLink: string;
   gitLinks: string;
   smartContract: string;
-  projectStatus: projectStatus;
+  projectStatus: ProjectStatus;
   startDate: Date;
   completeDate: Date;
-  gitCommits: gitCommit[];
-  fundTransactions: fundTransaction[];
+  gitCommits: GitCommit[];
+  fundTransactions: FundTransaction[];
   fundId: string;
   challengeId: string;
   proposerId: string;

@@ -22,7 +22,14 @@ const authProvider = (loginUrl, renewTokenUrl, logoutUrl): AuthProvider => ({
   },
   logout: async () => {
     const accessToken = localStorageManager.getItem("accessToken");
-    console.log(accessToken);
+    localStorageManager.removeItems();
+    const decodedAccessToken = jwt_decode(accessToken) as any;
+    const isExpiredAccessToken = Date.now() >= decodedAccessToken.exp * 1000;
+
+    if (!accessToken || isExpiredAccessToken) {
+      return Promise.resolve();
+    }
+
     const options = {
       headers: new Headers({
         Authorization: `Bearer ${accessToken}`,
@@ -30,13 +37,12 @@ const authProvider = (loginUrl, renewTokenUrl, logoutUrl): AuthProvider => ({
     };
 
     try {
+      //remove API refresh token
       const data = await fetchUtils.fetchJson(logoutUrl, options);
-      if (!data) return Promise.reject();
-      localStorageManager.removeItems();
-      return Promise.resolve();
     } catch (error) {
-      return Promise.reject();
+      console.log(error);
     }
+    return Promise.resolve();
   },
   checkError: (error) => {
     //access token expire after standBy then require login

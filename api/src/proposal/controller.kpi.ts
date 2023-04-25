@@ -1,7 +1,7 @@
 import { Controller, Get, Param, Response, Query } from '@nestjs/common';
 import { ProposalService } from './service';
 import { queryTransform, formatRaList } from '../flatworks/utils/getlist';
-import { Public } from '../decorators/public.api.decorator';
+import { Public } from '../flatworks/roles/public.api.decorator';
 
 @Controller('kpis')
 export class ProposalKpiController {

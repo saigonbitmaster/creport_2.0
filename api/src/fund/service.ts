@@ -33,6 +33,28 @@ export class FundService {
     return result;
   }
 
+  //global fulltext search
+  async findAllSearch(query: MongooseQuery): Promise<RaList> {
+    const count = await this.model.find(query.filter).count().exec();
+
+    //fix return all when limit = 0 for global search
+    if (query.limit <= 0) {
+      return {
+        data: [],
+        count: count,
+      };
+    }
+    const data = await this.model
+      .find(query.filter)
+      .sort(query.sort)
+      .skip(query.skip)
+      .limit(query.limit)
+      .exec();
+
+    const result = { count: count, data: data };
+    return result;
+  }
+
   async findById(id: string): Promise<Fund> {
     return await this.model.findById(id).exec();
   }

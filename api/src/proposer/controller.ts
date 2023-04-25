@@ -18,9 +18,9 @@ import {
   getSheetData,
   proposerTransform,
 } from '../flatworks/utils/googleSheet';
-import { Role } from '../types';
-import { Roles } from '../decorators/roles.decorator';
-import { Public } from '../decorators/public.api.decorator';
+import { Role } from '../flatworks/types/types';
+import { Public } from '../flatworks/roles/public.api.decorator';
+import { Roles } from '../flatworks/roles/roles.decorator';
 
 @Controller('proposers')
 export class ProposerController {

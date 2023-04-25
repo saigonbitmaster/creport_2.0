@@ -12,9 +12,10 @@ import { ToolService } from './service';
 import { queryTransform, formatRaList } from '../flatworks/utils/getlist';
 import { ImportBody } from '../flatworks/types/types';
 import { getSheetData } from '../flatworks/utils/googleSheet';
-import { Public } from '../decorators/public.api.decorator';
-import { Roles } from '../decorators/roles.decorator';
-import { Role } from '../types';
+import { Public } from '../flatworks/roles/public.api.decorator';
+import { Roles } from '../flatworks/roles/roles.decorator';
+import { Role } from '../flatworks/types/types';
+
 @Controller('tools')
 export class ToolController {
   constructor(private readonly service: ToolService) {}

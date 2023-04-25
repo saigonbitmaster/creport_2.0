@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Admin, CustomRoutes, Resource } from "react-admin";
+import { Admin, CustomRoutes, Resource, useAuthenticated } from "react-admin";
 import polyglotI18nProvider from "ra-i18n-polyglot";
 import { Route } from "react-router";
 
@@ -29,8 +29,6 @@ const logoutUrl = process.env.REACT_APP_LOGOUT_URL;
 const _authProvider = authProvider(loginUrl, renewTokenUrl, logoutUrl);
 const restProvider = dataProvider(apiUrl);
 
-
-console.log(loginUrl)
 const i18nProvider = polyglotI18nProvider((locale) => {
   if (locale === "fr") {
     return import("./i18n/fr").then((messages) => messages.default);
@@ -39,6 +37,7 @@ const i18nProvider = polyglotI18nProvider((locale) => {
 }, "en");
 
 const App = () => {
+  
   return (
     <Admin
       title="cReport"

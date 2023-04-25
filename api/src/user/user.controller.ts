@@ -8,9 +8,9 @@ import {
   Put,
   Response,
 } from '@nestjs/common';
-import { Public } from '../decorators/public.api.decorator';
-import { Roles } from '../decorators/roles.decorator';
-import { Role } from '../types';
+import { Public } from '../flatworks/roles/public.api.decorator';
+import { Roles } from '../flatworks/roles/roles.decorator';
+import { Role } from '../flatworks/types/types';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserService } from './user.service';

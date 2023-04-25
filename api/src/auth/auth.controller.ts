@@ -13,7 +13,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { LocalAuthGuard } from './local-auth.guard';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { RefreshTokenGuard } from './refresh-auth.guard';
-import { Public } from '../decorators/public.api.decorator';
+import { Public } from '../flatworks/roles/public.api.decorator';
 
 @Controller('auth')
 export class AuthController {
