@@ -23,8 +23,14 @@ const authProvider = (loginUrl, renewTokenUrl, logoutUrl): AuthProvider => ({
   logout: async () => {
     const accessToken = localStorageManager.getItem("accessToken");
     localStorageManager.removeItems();
-    const decodedAccessToken = jwt_decode(accessToken) as any;
-    const isExpiredAccessToken = Date.now() >= decodedAccessToken.exp * 1000;
+
+    let decodedAccessToken, isExpiredAccessToken;
+    try {
+      decodedAccessToken = jwt_decode(accessToken) as any;
+      isExpiredAccessToken = Date.now() >= decodedAccessToken.exp * 1000;
+    } catch (err) {
+      return Promise.resolve();
+    }
 
     if (!accessToken || isExpiredAccessToken) {
       return Promise.resolve();
@@ -37,7 +43,7 @@ const authProvider = (loginUrl, renewTokenUrl, logoutUrl): AuthProvider => ({
     };
 
     try {
-      //remove API refresh token
+      //remove user refreshToken
       const data = await fetchUtils.fetchJson(logoutUrl, options);
     } catch (error) {
       console.log(error);
