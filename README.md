@@ -58,8 +58,8 @@ https://docs.google.com/spreadsheets/d/1WJi1odv0vGT3ylz01flNpqErmCr-G6Kb37yxaVZO
 ## googleSheets url to show data e.g catalyst report
 
 ```
-Make o copy of googleSheets to your drive, where you have right to publish the sheet to web
-File -> Share -> Public to the web 
-Get published url then add to cms setting with key "catalystReport"
+Make o copy of catalyst report googleSheets https://docs.google.com/spreadsheets/d/1bfnWFa94Y7Zj0G7dtpo9W1nAYGovJbswipxiHT4UE3g/edit#gid=495459176 to your drive, where you have right to publish the sheet to web.
+From copied sheet: File -> Share -> Public to the web
+Get published url then add to cms settings with key "catalystReport"
 
 ```

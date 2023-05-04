@@ -7,12 +7,15 @@ import {
   Post,
   Put,
   Response,
+  Request,
 } from '@nestjs/common';
 import { Public } from '../flatworks/roles/public.api.decorator';
 import { Roles } from '../flatworks/roles/roles.decorator';
 import { Role } from '../flatworks/types/types';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { ChangePasswordDto } from './dto/change-password.dto';
+
 import { UserService } from './user.service';
 
 @Controller('users')
@@ -41,6 +44,17 @@ export class UserController {
   @Roles(Role.Admin)
   async create(@Body() createUserDto: CreateUserDto) {
     return await this.service.create(createUserDto);
+  }
+
+  //post {password: abc}
+  @Post('changepassword')
+  @Roles(Role.Admin)
+  async changePassword(
+    @Body() changePasswordDto: ChangePasswordDto,
+    @Request() req,
+  ) {
+    const id = req.user.userId;
+    return await this.service.update(id, changePasswordDto);
   }
 
   @Put(':id')

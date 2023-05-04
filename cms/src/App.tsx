@@ -21,8 +21,8 @@ import proposals from "./proposal";
 import commits from "./commit";
 import settings from "./setting";
 import ImportSheets from "./tools/importSheets";
-import FundDeliveries from './catalyst/fundDeliveries'
-
+import FundDeliveries from "./catalyst/fundDeliveries";
+import ChangePassword from "./custompages/changePassword";
 
 const loginUrl = process.env.REACT_APP_LOGIN_URL;
 const apiUrl = process.env.REACT_APP_API_URL;
@@ -40,7 +40,6 @@ const i18nProvider = polyglotI18nProvider((locale) => {
 }, "en");
 
 const App = () => {
-  
   return (
     <Admin
       title="cReport"
@@ -59,6 +58,7 @@ const App = () => {
         <Route path="/fetchGithub" element={<FetchGithub />} />
         <Route path="/importExcels" element={<ImportSheets />} />
         <Route path="/funddeliveries" element={<FundDeliveries />} />
+        <Route path="/changepassword" element={<ChangePassword />} />
       </CustomRoutes>
       <Resource name="proposers" {...proposers} />
       <Resource name="settings" {...settings} />

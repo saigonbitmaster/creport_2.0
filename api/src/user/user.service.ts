@@ -45,7 +45,13 @@ export class UserService {
   }
 
   async update(id: string, updateUserDto: UpdateUserDto): Promise<User> {
-    return await this.model.findByIdAndUpdate(id, updateUserDto).exec();
+    let _updateUserDto = updateUserDto;
+    if (updateUserDto.password) {
+      const saltOrRounds = 10;
+      const password = await bcrypt.hash(updateUserDto.password, saltOrRounds);
+      _updateUserDto = { ...updateUserDto, password };
+    }
+    return await this.model.findByIdAndUpdate(id, _updateUserDto).exec();
   }
 
   async delete(id: string): Promise<User> {
