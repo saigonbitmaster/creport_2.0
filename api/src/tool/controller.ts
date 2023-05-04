@@ -30,7 +30,6 @@ export class ToolController {
       'funds',
       'A2:E',
     );
-    console.log(result);
   }
 
   @Get('utxos')

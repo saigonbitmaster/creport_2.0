@@ -13,6 +13,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from './flatworks/roles/roles.guard';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { CustomModule } from './customapi/module';
+import { SettingModule } from './setting/module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { CustomModule } from './customapi/module';
     ToolModule,
     GitCommitModule,
     CustomModule,
+    SettingModule,
   ],
   providers: [
     {

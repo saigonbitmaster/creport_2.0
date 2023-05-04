@@ -105,7 +105,6 @@ export default function CustomPaginationActionsTable(props) {
     handleChangeRowsPerPage,
     rows,
   } = props;
-  console.log(10, props);
   return (
     <TableContainer>
       <Table

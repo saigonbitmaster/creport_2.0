@@ -53,3 +53,13 @@ GITHUB_TOKEN=***
 https://docs.google.com/spreadsheets/d/1WJi1odv0vGT3ylz01flNpqErmCr-G6Kb37yxaVZOzVM/edit#gid=165710495
 
 ```
+
+
+## googleSheets url to show data e.g catalyst report
+
+```
+Make o copy of googleSheets to your drive, where you have right to publish the sheet to web
+File -> Share -> Public to the web 
+Get published url then add to cms setting with key "catalystReport"
+
+```

@@ -38,11 +38,18 @@ const customEnglishMessages: TranslationMessages = {
       proposals: "Proposals",
       tools: "Tools",
       reports: "Reports",
+      settings: "Settings",
     },
   },
   resources: {
     reports: {
       import: "Import excels",
+    },
+    settings: {
+      name: "Setting |||| Settings",
+    },
+    changePassword: {
+      name: "Change password",
     },
     proposals: {
       name: "Proposal |||| Proposals",

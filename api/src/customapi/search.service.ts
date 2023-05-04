@@ -53,7 +53,6 @@ export class SearchService {
       return item;
     });
 
-    console.log(searchCols);
     const results = await Promise.all(
       searchCols.map(async (item, index) => {
         let result;
