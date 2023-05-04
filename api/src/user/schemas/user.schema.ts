@@ -19,12 +19,10 @@ export class User {
   refreshToken: string;
 
   @Prop({
-    type: String,
     required: false,
-    enum: [Role.Admin, Role.User],
-    default: Role.User,
+    default: [Role.User],
   })
-  role: string;
+  roles: Role[];
 
   @Prop()
   completedAt?: Date;

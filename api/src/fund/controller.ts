@@ -59,6 +59,7 @@ export class FundController {
   @Delete(':id')
   @Roles(Role.Admin)
   async delete(@Param('id') id: string) {
+    console.log(id);
     return await this.service.delete(id);
   }
 }

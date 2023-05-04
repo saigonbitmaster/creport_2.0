@@ -17,7 +17,6 @@ export class SearchService {
 
   async findAllWeb(filter): Promise<any> {
     const config = webSearchConfig;
-    console.log(filter);
     const text = filter.text;
     let _limit = filter.limit;
     let _skip = filter.skip;
