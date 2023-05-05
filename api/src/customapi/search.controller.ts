@@ -33,4 +33,12 @@ export class SearchController {
     const result: any = await this.service.findAllWeb(mongooseQuery.filter);
     return res.json(result);
   }
+
+  @Get('proposalsbyproposer')
+  @Public()
+  async getProposals(@Response() res: any, @Query() query) {
+    const mongooseQuery = queryTransform(query);
+    const result: any = await this.service.getProposals(mongooseQuery);
+    return res.json(result);
+  }
 }

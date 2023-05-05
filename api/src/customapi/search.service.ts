@@ -2,7 +2,6 @@ import { FundService } from './../fund/service';
 import { ChallengeService } from './../challenge/service';
 import { ProposerService } from './../proposer/service';
 import { ProposalService } from './../proposal/service';
-
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { webSearchConfig, cmsSearchConfig } from '../flatworks/config/search';
 
@@ -186,5 +185,25 @@ export class SearchService {
       data,
       count,
     };
+  }
+
+  async getProposals(filter) {
+    const _proposals = await this.proposalService.findAll(filter);
+    if (_proposals.count === 0) return [];
+    const fundIds = _proposals.data.map((item) => item.fundId);
+    const challengeIds = _proposals.data.map((item) => item.challengeId);
+    const challenges = await this.challengeService.findMany(challengeIds);
+    const funds = await this.fundService.findMany(fundIds);
+    const proposals = _proposals.data.map((item) => {
+      const fundName = funds.find(
+        (fund) => item.fundId === fund._id.toString(),
+      )?.name;
+      const challengeName = challenges.find(
+        (challenge) => item.challengeId === challenge._id.toString(),
+      )?.name;
+      return { ...item._doc, fundName: fundName, challengeName: challengeName };
+    });
+
+    return proposals;
   }
 }

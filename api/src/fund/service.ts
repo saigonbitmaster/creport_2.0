@@ -59,6 +59,10 @@ export class FundService {
     return await this.model.findById(id).exec();
   }
 
+  async findMany(ids: string[]): Promise<any> {
+    return await this.model.find({ _id: { $in: ids } });
+  }
+
   async findByName(name: string): Promise<Fund> {
     return await this.model.findOne({ name: name }).exec();
   }

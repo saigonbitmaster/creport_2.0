@@ -36,6 +36,10 @@ export class ChallengeService {
     return result;
   }
 
+  async findMany(ids: string[]): Promise<any> {
+    return await this.model.find({ _id: { $in: ids } });
+  }
+
   //global fulltext search
   async findAllSearch(query: MongooseQuery): Promise<RaList> {
     const count = await this.model.find(query.filter).count().exec();

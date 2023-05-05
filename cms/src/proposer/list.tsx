@@ -11,7 +11,7 @@ import {
 import { Box, Drawer } from "@mui/material";
 import Steps from "../components/proposalSteps";
 
-const PayoutList = (title = "List of posts") => {
+const ListScreen = (title = "List of posts") => {
   const [record, setRecord] = React.useState(null);
   const Filters = [<SearchInput source="keyword" alwaysOn />];
   const rowClick = (id, resource, record) => {
@@ -56,4 +56,4 @@ const PayoutList = (title = "List of posts") => {
   );
 };
 
-export default PayoutList;
+export default ListScreen;
