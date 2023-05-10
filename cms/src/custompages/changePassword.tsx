@@ -31,8 +31,13 @@ export default function FormPropsTextFields() {
         { data: { password: state.password } },
         "POST"
       )
-      .then((result) => setMessage("updated password"))
-      .catch((error) => setMessage("update failed"));
+      .then((result) => {
+        setMessage("updated password");
+        setState({ password: "", repeatPassword: "" });
+      })
+      .catch((error) => {
+        setMessage("update failed");
+      }, setState({ password: "", repeatPassword: "" }));
   };
 
   return (
