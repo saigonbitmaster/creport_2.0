@@ -63,7 +63,7 @@ const App = () => {
         <Route path="/importExcels" element={<ImportSheets />} />
         <Route path="/funddeliveries" element={<FundDeliveries />} />
         <Route path="/changepassword" element={<ChangePassword />} />
-                  <Route path="/reviews" element={<Donate />} />
+                  <Route path="/donate" element={<Donate />} />
 
       </CustomRoutes>
       <Resource name="proposers" {...proposers} />

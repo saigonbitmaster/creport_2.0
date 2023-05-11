@@ -206,12 +206,12 @@ const Menu = ({ dense = false }: MenuProps) => {
       </SubMenu>
 
       <MenuItemLink
-        to="/reviews"
+        to="/donate"
         state={{ _scrollToTop: true }}
-        primaryText={translate(`resources.reviews.name`, {
+        primaryText={translate(`resources.donate.name`, {
           smart_count: 2,
         })}
-        leftIcon={<RateReviewOutlinedIcon />}
+        leftIcon={<AttachMoneyIcon />}
         dense={dense}
       />
     </Box>

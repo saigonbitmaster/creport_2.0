@@ -34,6 +34,17 @@ export class SearchController {
     return res.json(result);
   }
 
+  @Get('addressbalance')
+  @Public()
+  async getBalance(@Response() res: any, @Query() query) {
+    const mongooseQuery = queryTransform(query);
+    const result: any = await this.service.getBalance(
+      mongooseQuery.filter.address,
+    );
+
+    return res.json(result);
+  }
+
   @Get('proposalsbyproposer')
   @Public()
   async getProposals(@Response() res: any, @Query() query) {

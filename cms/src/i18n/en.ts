@@ -238,7 +238,9 @@ const customEnglishMessages: TranslationMessages = {
           "The password confirmation is not the same as the password.",
       },
     },
-
+    donate: {
+      name: "Donate",
+    },
     reviews: {
       name: "Review |||| Reviews",
       amount: "1 review |||| %{smart_count} reviews",

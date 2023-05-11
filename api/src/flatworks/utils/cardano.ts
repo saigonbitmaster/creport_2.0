@@ -60,5 +60,31 @@ const CheckWallet = (
     .catch((err) => err);
 };
 
+//ada only
+const WalletBalance = (
+  address: string,
+  httpService: HttpService,
+): Promise<CheckWalletType> => {
+  const projectId = process.env.BLOCKFROST_PROJECT_ID;
+  const blockfrostUrl = process.env.BLOCKFROST_URL;
+
+  return httpService
+    .get(`${blockfrostUrl}/addresses/${address}`, {
+      headers: {
+        project_id: projectId,
+      },
+    })
+    .pipe(map((resp) => resp.data))
+    .toPromise()
+    .then((data) => {
+      const amount =
+        data.amount.map((item) => (item.unit == 'lovelace' ? item : null))[0]
+          .quantity / 1000000;
+
+      return amount;
+    })
+    .catch((err) => err);
+};
+
 const CreateWallet = (userId: string) => {};
-export { AddressUtxo, TxsUtxo, CheckWallet, CreateWallet };
+export { AddressUtxo, TxsUtxo, CheckWallet, CreateWallet, WalletBalance };

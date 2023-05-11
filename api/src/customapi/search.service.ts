@@ -4,6 +4,8 @@ import { ProposerService } from './../proposer/service';
 import { ProposalService } from './../proposal/service';
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { webSearchConfig, cmsSearchConfig } from '../flatworks/config/search';
+import { WalletBalance } from '../flatworks/utils/cardano';
+import { HttpService } from '@nestjs/axios';
 
 @Injectable()
 export class SearchService {
@@ -12,6 +14,7 @@ export class SearchService {
     private readonly challengeService: ChallengeService,
     private readonly proposerService: ProposerService,
     private readonly proposalService: ProposalService,
+    private readonly httpService: HttpService,
   ) {}
 
   async findAllWeb(filter): Promise<any> {
@@ -205,5 +208,9 @@ export class SearchService {
     });
 
     return proposals;
+  }
+
+  async getBalance(address) {
+    return WalletBalance(address, this.httpService);
   }
 }
