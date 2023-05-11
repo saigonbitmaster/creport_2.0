@@ -8,6 +8,8 @@ import Link from "@mui/material/Link";
 import { Transaction } from "@meshsdk/core";
 import { BlockfrostProvider } from "@meshsdk/core";
 import { useDataProvider } from "react-admin";
+import QRCode from "react-qr-code";
+
 
 const Donate = () => {
   const [state, setState] = React.useState({
@@ -96,9 +98,11 @@ const Donate = () => {
               cReports Cardano donate wallet:
             </Link>
           </Typography>
+          <QRCode value={donateAddress}  style={{width: 100, height: 100}} />
           <Typography variant="subtitle1" gutterBottom>
-            addr_test1qzlcpu7u67uvvku7742ph64x6psqml0k5dtp2559e505wht2ag2h7kcg7rdttnwa5dt5yjtqqksghrr4z3cq9krlwxwqspw54v
+            {donateAddress}
           </Typography>
+         
           <Typography variant="subtitle2" gutterBottom>
             Current balance: {state.balance} (ADA)
           </Typography>
