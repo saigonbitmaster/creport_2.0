@@ -65,3 +65,11 @@ From copied sheet: File -> Share -> Public to the web
 Get published url then add to cms settings with key "catalystReport"
 
 ```
+
+
+## updated documents
+
+```
+https://docs.google.com/document/d/e/2PACX-1vRwkXj9E0jY0AZUaI7XfYbupl6sZWEmWoggVDMW1VwzG16DU4xL0a-wVwVxJzFM2P2rxOZrBlOh0nkY/pub
+
+```

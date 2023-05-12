@@ -22,6 +22,7 @@ import commits from "./commit";
 
 import Donate from './components/donate';
 import { MeshProvider } from "@meshsdk/react";
+import FundDeliveries from "./catalyst/fundDeliveries";
 
 
 const apiUrl = process.env.REACT_APP_API_URL;
@@ -52,6 +53,8 @@ const App = () => {
         <Route path="/fetchCardano" element={<FetchCardano />} />
         <Route path="/fetchGithub" element={<FetchGithub />} />
         <Route path="/donate" element={<Donate />} />
+        <Route path="/funddeliveries" element={<FundDeliveries />} />
+
       </CustomRoutes>
       <Resource name="proposers" {...proposers} />
       <Resource name="funds" {...funds} />
