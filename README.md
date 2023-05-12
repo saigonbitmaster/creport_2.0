@@ -32,6 +32,16 @@ backend app after build can be run by: node main.js or pm2
 ```
 REACT_APP_LOGIN_URL=http://localhost:3000/auth/login
 REACT_APP_API_URL=http://localhost:3000
+REACT_APP_RENEW_ACCESS_TOKEN_URL=http://localhost:3000/auth/refresh
+REACT_APP_LOGOUT_URL=http://localhost:3000/auth/logout
+REACT_APP_DONATE_ADDRESS=addr_***
+```
+
+## frontend .env files: web/.env: change below api urls to reflect the production domains.
+
+```
+REACT_APP_API_URL=http://localhost:3000
+REACT_APP_DONATE_ADDRESS=addr_***
 ```
 
 ## api .env api/.env
@@ -41,9 +51,17 @@ REACT_APP_API_URL=http://localhost:3000
 CONNECTION_STRING=mongodb://admin:***@localhost:27017/creport2?authSource=admin&readPreference=primary
 #Blockfrost
 BLOCKFROST_PROJECT_ID=***
-BLOCKFROST_URL=https://cardano-testnet.blockfrost.io/api/v0
+BLOCKFROST_URL=https://cardano-preprod.blockfrost.io/api/v0
 #GitHub
 GITHUB_TOKEN=***
+
+#jwt settings
+JWT_TOKEN_EXPIRE=60m
+JWT_RENEW_TOKEN_EXPIRE=7d
+JWT_TOKEN_SECRET=secret
+JWT_REFRESH_TOKEN_SECRET=***
+JWT_VERIFY_TOKEN_SECRET=***
+
 
 ```
 
