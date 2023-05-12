@@ -45,8 +45,8 @@
   },
   "scripts": {
     "start": "PORT=3001 craco start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "build": "craco build",
+    "test": "craco test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -69,6 +69,7 @@
   },
   "devDependencies": {
     "@craco/craco": "^7.1.0",
+    "@craco/types": "^7.1.0",
     "@types/fetch-mock": "^7.3.2",
     "@types/jest": "^26.0.19",
     "@types/node": "^12.12.14",

@@ -1,12 +1,32 @@
 const webpack = require("webpack");
 const buffer = require.resolve("buffer/");
 
-const buffers = ["buffer", "Buffer"];
-const wasmRegExp = /\.wasm$/;
+
+/*
+origin:
 const wasmExps = {
   layers: true,
   asyncWebAssembly: false,
   lazyCompilation: true,
+  syncWebAssembly: true,
+  topLevelAwait: true,
+}
+change for build:
+const wasmExps = {
+  layers: true,
+  asyncWebAssembly: true,
+  lazyCompilation: false,
+  syncWebAssembly: true,
+  topLevelAwait: true,
+}
+*/
+
+const buffers = ["buffer", "Buffer"];
+const wasmRegExp = /\.wasm$/;
+const wasmExps = {
+  layers: true,
+  asyncWebAssembly: true,
+  lazyCompilation: false,
   syncWebAssembly: true,
   topLevelAwait: true,
 };

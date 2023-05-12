@@ -15,6 +15,7 @@
     "web": "cd web && yarn start",
     "build-lib": "cd packages/ra-nest-rest && yarn build",
     "build-cms": "cd cms && yarn build",
+    "test-cms": "cd cms && yarn test",
     "build-web": "cd web && yarn build",
     "build-api": "cd api && yarn build"
   },
