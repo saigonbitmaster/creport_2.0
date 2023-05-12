@@ -7,8 +7,25 @@ import StepContent from "@mui/material/StepContent";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import Check from "@mui/icons-material/Check";
+import { useDataProvider } from "react-admin";
 
 export default function VerticalLinearStepper(props) {
+  const [data, setData] = React.useState([]);
+
+  const dataProvider = useDataProvider();
+
+  React.useEffect(() => {
+    dataProvider
+      .customMethod(
+        "customapis/proposalsbyproposer",
+        { filter: { proposerId: props?.record.id } },
+        "GET"
+      )
+      .then((result) => setData(result.data))
+      .catch((error) => console.error(error));
+  }, [props.record.id]);
+
+  console.log(data);
   //{label: "label", steps: [{name: string, fundId: string, projectStatus: string}]}
   let steps = props.steps || [];
   steps = [
@@ -32,16 +49,20 @@ export default function VerticalLinearStepper(props) {
     >
       <Paper elevation={0} sx={{ padding: "1em" }}>
         <Typography variant="h6" gutterBottom>
-          {label}
+          {props.record.fullName}
         </Typography>
         <Stepper orientation="vertical">
-          {steps.length > 0 &&
-            steps.map((step, index) => (
+          {data.length > 0 &&
+            data.map((step, index) => (
               <Step key={step.name} active={true}>
-                <StepLabel StepIconComponent={Check}>{step.fundId}</StepLabel>
+                <StepLabel StepIconComponent={Check}>{step.fundName}</StepLabel>
+                <StepLabel>{step.challengeName}</StepLabel>
                 <StepContent>
                   <Typography variant="body2" gutterBottom>
                     {step.name}
+                  </Typography>
+                  <Typography variant="body2" gutterBottom>
+                    ${step.requestedBudget}
                   </Typography>
                   <Typography
                     variant="body2"
