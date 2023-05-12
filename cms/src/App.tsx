@@ -23,9 +23,8 @@ import settings from "./setting";
 import ImportSheets from "./tools/importSheets";
 import FundDeliveries from "./catalyst/fundDeliveries";
 import ChangePassword from "./custompages/changePassword";
-import Donate from './components/donate';
+import Donate from "./components/donate";
 import { MeshProvider } from "@meshsdk/react";
-
 
 const loginUrl = process.env.REACT_APP_LOGIN_URL;
 const apiUrl = process.env.REACT_APP_API_URL;
@@ -45,35 +44,34 @@ const i18nProvider = polyglotI18nProvider((locale) => {
 const App = () => {
   return (
     <MeshProvider>
-    <Admin
-      title="cReport"
-      dataProvider={restProvider}
-      authProvider={_authProvider}
-      dashboard={Dashboard}
-      loginPage={Login}
-      layout={Layout}
-      i18nProvider={i18nProvider}
-      disableTelemetry
-      theme={lightTheme}
-    >
-      <CustomRoutes>
-        <Route path="/configuration" element={<Configuration />} />
-        <Route path="/fetchCardano" element={<FetchCardano />} />
-        <Route path="/fetchGithub" element={<FetchGithub />} />
-        <Route path="/importExcels" element={<ImportSheets />} />
-        <Route path="/funddeliveries" element={<FundDeliveries />} />
-        <Route path="/changepassword" element={<ChangePassword />} />
-                  <Route path="/donate" element={<Donate />} />
-
-      </CustomRoutes>
-      <Resource name="proposers" {...proposers} />
-      <Resource name="settings" {...settings} />
-      <Resource name="funds" {...funds} />
-      <Resource name="challenges" {...challenges} />
-      <Resource name="proposals" {...proposals} />
-      <Resource name="kpis" {...kpis} />
-      <Resource name="commits" {...commits} />
-    </Admin>
+      <Admin
+        title="cReport"
+        dataProvider={restProvider}
+        authProvider={_authProvider}
+        dashboard={Dashboard}
+        loginPage={Login}
+        layout={Layout}
+        i18nProvider={i18nProvider}
+        disableTelemetry
+        theme={lightTheme}
+      >
+        <CustomRoutes>
+          <Route path="/configuration" element={<Configuration />} />
+          <Route path="/fetchCardano" element={<FetchCardano />} />
+          <Route path="/fetchGithub" element={<FetchGithub />} />
+          <Route path="/importExcels" element={<ImportSheets />} />
+          <Route path="/funddeliveries" element={<FundDeliveries />} />
+          <Route path="/changepassword" element={<ChangePassword />} />
+          <Route path="/donate" element={<Donate />} />
+        </CustomRoutes>
+        <Resource name="proposers" {...proposers} />
+        <Resource name="settings" {...settings} />
+        <Resource name="funds" {...funds} />
+        <Resource name="challenges" {...challenges} />
+        <Resource name="proposals" {...proposals} />
+        <Resource name="kpis" {...kpis} />
+        <Resource name="commits" {...commits} />
+      </Admin>
     </MeshProvider>
   );
 };

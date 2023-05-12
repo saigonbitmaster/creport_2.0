@@ -9,6 +9,7 @@ import {
   ReferenceInput,
   SelectInput,
   SelectField,
+  ShowButton
 } from "react-admin";
 import { Link } from "react-router-dom";
 import ColoredNumberField from "../components/currencyNumberField";
@@ -77,6 +78,7 @@ const ListScreen = () => {
           <TextField source="fullName" />
         </ReferenceField>
         <ColoredNumberField source="requestedBudget" threshold={50000} />
+        <ShowButton />
       </Datagrid>
     </List>
   );

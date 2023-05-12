@@ -72,7 +72,12 @@ const NewMembers = () => {
       <Button
         sx={{ borderRadius: 0 }}
         component={Link}
-        to="/proposals"
+        to={{
+          pathname: "/proposals",
+          search: stringify({
+            filter: JSON.stringify({ projectStatus: "complete" }),
+          }),
+        }}
         size="small"
         color="primary"
       >

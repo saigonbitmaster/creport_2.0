@@ -6,6 +6,7 @@ import {
   EditButton,
   UrlField,
   SearchInput,
+  ShowButton
 } from "react-admin";
 
 import { Box, Drawer } from "@mui/material";
@@ -40,7 +41,7 @@ const ListScreen = (title = "List of posts") => {
           <TextField source="email" />
           <UrlField source="telegram" />
           <TextField source="walletAddress" />
-
+          <ShowButton />
           <EditButton />
         </Datagrid>
       </List>

@@ -1,57 +1,25 @@
 import * as React from "react";
 import {
-  List,
-  Datagrid,
+  Show,
+  SimpleShowLayout,
   TextField,
-  FunctionField,
+  DateField,
+  RichTextField,
   ReferenceField,
-  SearchInput,
-  ReferenceInput,
-  SelectInput,
+  NumberField,
   SelectField,
-  ShowButton
+  FunctionField,
+  Link
 } from "react-admin";
-import { Link } from "react-router-dom";
+
 import ColoredNumberField from "../components/currencyNumberField";
 import ProposalRateField from "../components/rateProposal";
 import { choices } from "../data/data";
 
-const ListScreen = () => {
-  const Filters = [
-    <SearchInput source="keyword" alwaysOn />,
-    <ReferenceInput
-      source="fundId"
-      reference="funds"
-      required
-      alwaysOn
-      // mean no pagination
-      perPage={-1}
-      sort={{ field: "name", order: "ASC" }}
-    >
-      <SelectInput optionText="name" fullWidth />
-    </ReferenceInput>,
-    <ReferenceInput
-      source="proposerId"
-      reference="proposers"
-      required
-      alwaysOn
-      // mean no pagination
-      perPage={-1}
-      sort={{ field: "fullName", order: "ASC" }}
-    >
-      <SelectInput optionText="fullName" fullWidth />
-    </ReferenceInput>,
-  ];
-
-  return (
-    <List
-      perPage={25}
-      sort={{ field: "date", order: "desc" }}
-      hasCreate={false}
-      filters={Filters}
-    >
-      <Datagrid bulkActionButtons={false}>
-        <TextField source="name" />
+const ShowScreen = () => (
+  <Show>
+    <SimpleShowLayout>
+    <TextField source="name" />
         <ProposalRateField label="Rate" />
         <TextField source="projectId" />
         <SelectField source="projectStatus" choices={choices} />
@@ -78,10 +46,8 @@ const ListScreen = () => {
           <TextField source="fullName" />
         </ReferenceField>
         <ColoredNumberField source="requestedBudget" threshold={50000} />
-        <ShowButton />
-      </Datagrid>
-    </List>
-  );
-};
+    </SimpleShowLayout>
+  </Show>
+);
 
-export default ListScreen;
+export default ShowScreen;

@@ -9,6 +9,7 @@ import {
   ReferenceInput,
   SearchInput,
   SelectInput,
+  ShowButton
 } from "react-admin";
 
 const ListScreen = () => {
@@ -45,7 +46,9 @@ const ListScreen = () => {
         <ReferenceField source="fundId" reference="funds" label="Currency">
           <TextField source="currency" />
         </ReferenceField>
+        <ShowButton />
         <EditButton />
+        
       </Datagrid>
     </List>
   );

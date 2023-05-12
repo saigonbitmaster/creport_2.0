@@ -6,6 +6,7 @@ import {
   EditButton,
   DateField,
   NumberField,
+  ShowButton
 } from "react-admin";
 
 const ListScreen = () => {
@@ -16,6 +17,7 @@ const ListScreen = () => {
         <NumberField source="budget" />
         <TextField source="currency" />
         <DateField source="date" />
+        <ShowButton />
         <EditButton />
       </Datagrid>
     </List>

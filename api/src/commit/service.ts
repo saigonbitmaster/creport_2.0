@@ -19,7 +19,8 @@ export class GitCommitService {
 
   // Test run every 1 minute: */1 * * * *
   // Run at 12:00 every day: 00 12 * * *
-  @Cron('00 12 * * *')
+  //0 10 * * * *	every hour, at the start of the 10th minute
+  @Cron('0 16 * * * *')
   async autoQueryGitCommit() {
     try {
       const allGithubRepos = await this.proposalService.getAllGithubRepos();

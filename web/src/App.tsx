@@ -20,6 +20,10 @@ import FetchCardano from "./tools/fetchCardano";
 import proposals from "./proposal";
 import commits from "./commit";
 
+import Donate from './components/donate';
+import { MeshProvider } from "@meshsdk/react";
+
+
 const apiUrl = process.env.REACT_APP_API_URL;
 const restProvider = dataProvider(apiUrl);
 
@@ -32,6 +36,7 @@ const i18nProvider = polyglotI18nProvider((locale) => {
 
 const App = () => {
   return (
+    <MeshProvider>
     <Admin
       title="cReport"
       dataProvider={restProvider}
@@ -46,6 +51,7 @@ const App = () => {
         <Route path="/configuration" element={<Configuration />} />
         <Route path="/fetchCardano" element={<FetchCardano />} />
         <Route path="/fetchGithub" element={<FetchGithub />} />
+        <Route path="/donate" element={<Donate />} />
       </CustomRoutes>
       <Resource name="proposers" {...proposers} />
       <Resource name="funds" {...funds} />
@@ -54,6 +60,7 @@ const App = () => {
       <Resource name="kpis" {...kpis} />
       <Resource name="commits" {...commits} />
     </Admin>
+    </MeshProvider>
   );
 };
 

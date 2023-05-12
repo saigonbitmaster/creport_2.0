@@ -52,6 +52,8 @@ GITHUB_TOKEN=***
 ```
 https://docs.google.com/spreadsheets/d/1WJi1odv0vGT3ylz01flNpqErmCr-G6Kb37yxaVZOzVM/edit#gid=165710495
 
+if token is expired, delete token.json then restart api, google will request access via web then recreate new token.json 
+
 ```
 
 
