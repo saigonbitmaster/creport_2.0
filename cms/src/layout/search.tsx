@@ -123,9 +123,10 @@ export default function SearchAppBar() {
   };
 
   React.useEffect(() => {
+    console.log(page, rowsPerPage);
     dataProvider
       .customMethod(
-        "customapis/searchcms",
+        "customapis/cmssearch",
         {
           filter: {
             text: value,

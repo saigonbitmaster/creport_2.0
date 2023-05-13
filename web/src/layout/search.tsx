@@ -125,7 +125,7 @@ export default function SearchAppBar() {
   React.useEffect(() => {
     dataProvider
       .customMethod(
-        "customapis/searchcms",
+        "customapis/websearch",
         {
           filter: {
             text: value,
