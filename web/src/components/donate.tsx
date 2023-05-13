@@ -139,7 +139,7 @@ const Donate = () => {
             target="_blank"
             variant="subtitle2"
             underline="hover"
-            href={"https://t.me/+5BmlM7jnI-9hMWM9"}
+            href={"https://t.me/catalystcreports"}
           >
         Contact cReports Telegram 
           </Link>
