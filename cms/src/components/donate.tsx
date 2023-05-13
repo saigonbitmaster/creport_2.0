@@ -10,7 +10,6 @@ import { BlockfrostProvider } from "@meshsdk/core";
 import { useDataProvider } from "react-admin";
 import QRCode from "react-qr-code";
 
-
 const Donate = () => {
   const [state, setState] = React.useState({
     amount: 0,
@@ -87,7 +86,7 @@ const Donate = () => {
       <Box sx={{ m: 3, display: "flex", flex: 1, flexDirection: "row" }}>
         <Box sx={{ width: "100%", typography: "body1" }}>
           <Typography variant="subtitle1" gutterBottom>
-           Donate to help maintain and extend cReports,
+            Donate to help maintain and extend cReports,
             <Link
               sx={{ ml: 1 }}
               target="_blank"
@@ -98,11 +97,11 @@ const Donate = () => {
               cReports Cardano donate wallet:
             </Link>
           </Typography>
-          <QRCode value={donateAddress}  style={{width: 100, height: 100}} />
+          <QRCode value={donateAddress} style={{ width: 100, height: 100 }} />
           <Typography variant="subtitle1" gutterBottom>
             {donateAddress}
           </Typography>
-         
+
           <Typography variant="subtitle2" gutterBottom>
             Current balance: {state.balance} (ADA)
           </Typography>
@@ -127,6 +126,16 @@ const Donate = () => {
           </Button>
           <Typography variant="subtitle2" gutterBottom sx={{ color: "orange" }}>
             {state.notification}
+          </Typography>
+          <Typography variant="subtitle2" gutterBottom>
+            <Link
+              target="_blank"
+              variant="subtitle2"
+              underline="hover"
+              href={"https://t.me/+5BmlM7jnI-9hMWM9"}
+            >
+              Contact cReports Telegram
+            </Link>
           </Typography>
         </Box>
 

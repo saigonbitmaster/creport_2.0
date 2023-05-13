@@ -123,15 +123,7 @@ const Menu = ({ dense = false }: MenuProps) => {
           leftIcon={<FormatListBulletedIcon />}
           dense={dense}
         />
-        <MenuItemLink
-          to="/importexcels"
-          state={{ _scrollToTop: true }}
-          primaryText={translate(`resources.reports.import`, {
-            smart_count: 2,
-          })}
-          leftIcon={<LibraryBooksOutlinedIcon />}
-          dense={dense}
-        />
+      
       </SubMenu>
       <SubMenu
         handleToggle={() => handleToggle("menuProposals")}
@@ -178,32 +170,7 @@ const Menu = ({ dense = false }: MenuProps) => {
         />
       </SubMenu>
 
-      <SubMenu
-        handleToggle={() => handleToggle("menuSettings")}
-        isOpen={state.menuProposals}
-        name="pos.menu.settings"
-        icon={<FileCopyOutlinedIcon />}
-        dense={dense}
-      >
-        <MenuItemLink
-          to="/settings"
-          state={{ _scrollToTop: true }}
-          primaryText={translate(`resources.settings.name`, {
-            smart_count: 2,
-          })}
-          leftIcon={<AttachMoneyIcon />}
-          dense={dense}
-        />
-        <MenuItemLink
-          to="/changePassword"
-          state={{ _scrollToTop: true }}
-          primaryText={translate(`resources.changePassword.name`, {
-            smart_count: 2,
-          })}
-          leftIcon={<PeopleOutlinedIcon />}
-          dense={dense}
-        />
-      </SubMenu>
+    
 
       <MenuItemLink
         to="/donate"

@@ -128,9 +128,22 @@ const Donate = () => {
           <Typography variant="subtitle2" gutterBottom sx={{ color: "orange" }}>
             {state.notification}
           </Typography>
+          <Typography variant="subtitle2" gutterBottom >
+          
+          <Link
+         
+            target="_blank"
+            variant="subtitle2"
+            underline="hover"
+            href={"https://t.me/+5BmlM7jnI-9hMWM9"}
+          >
+        Contact cReports Telegram 
+          </Link>
+        </Typography>
         </Box>
 
         <CardanoWallet />
+       
       </Box>
     </Box>
   );

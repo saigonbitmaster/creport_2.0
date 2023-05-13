@@ -18,7 +18,7 @@ export class SearchService {
   ) {}
 
   async findAllWeb(filter): Promise<any> {
-    const config = webSearchConfig;
+    const config = webSearchConfig();
     const text = filter.text;
     let _limit = filter.limit;
     let _skip = filter.skip;
@@ -104,7 +104,7 @@ export class SearchService {
   }
 
   async findAllCms(filter): Promise<any> {
-    const config = cmsSearchConfig;
+    const config = cmsSearchConfig();
 
     const text = filter.text;
     let _limit = filter.limit;

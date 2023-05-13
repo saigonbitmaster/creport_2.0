@@ -76,7 +76,7 @@ export default function SearchAppBar() {
     if (event.code === "Enter") {
       dataProvider
         .customMethod(
-          "customapis/cmssearch",
+          "customapis/websearch",
           {
             filter: {
               text: value,
