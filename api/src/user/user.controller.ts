@@ -23,7 +23,7 @@ export class UserController {
   constructor(private readonly service: UserService) {}
 
   @Get()
-  @Public()
+  @Roles(Role.Admin)
   async index(@Response() res: any) {
     const result: any[] = await this.service.findAll();
     return res
