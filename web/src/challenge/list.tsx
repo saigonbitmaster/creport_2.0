@@ -35,15 +35,16 @@ const ListScreen = () => {
       sort={{ field: "date", order: "desc" }}
       filters={Filters}
       hasCreate={false}
+      
     >
-      <Datagrid>
+      <Datagrid bulkActionButtons={false}>
         <TextField source="name" />
-        <ReferenceField source="fundId" reference="funds">
+        <ReferenceField source="fundId" reference="funds" link="show">
           <TextField source="name" />
         </ReferenceField>
         <NumberField source="budget" />
 
-        <ReferenceField source="fundId" reference="funds" label="Currency">
+        <ReferenceField source="fundId" reference="funds" label="Currency"  link="show">
           <TextField source="currency" />
         </ReferenceField>
         <ShowButton />

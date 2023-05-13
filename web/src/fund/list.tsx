@@ -13,7 +13,7 @@ const ListScreen = () => {
   return (
     <List perPage={25} sort={{ field: "date", order: "desc" }}       hasCreate={false}
     >
-      <Datagrid>
+         <Datagrid bulkActionButtons={false}>
         <TextField source="name" />
         <NumberField source="budget" />
         <TextField source="currency" />

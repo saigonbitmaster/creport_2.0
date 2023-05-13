@@ -50,16 +50,16 @@ const ListScreen = () => {
       filters={Filters}
       hasCreate={false}
     >
-      <Datagrid>
+        <Datagrid bulkActionButtons={false}>
         <TextField source="name" />
         <TextField source="projectId" />
-        <ReferenceField source="fundId" reference="funds">
+        <ReferenceField source="fundId" reference="funds"  link="show">
           <TextField source="name" />
         </ReferenceField>
-        <ReferenceField source="challengeId" reference="challenges" >
+        <ReferenceField source="challengeId" reference="challenges"  link="show" >
           <TextField source="name" />
         </ReferenceField>
-        <ReferenceField source="proposerId" reference="proposers">
+        <ReferenceField source="proposerId" reference="proposers"  link="show">
           <TextField source="fullName" />
         </ReferenceField>
         <ColoredNumberField source="requestedBudget" threshold={50000} />

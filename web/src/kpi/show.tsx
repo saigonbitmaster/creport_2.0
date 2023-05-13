@@ -17,7 +17,7 @@ import ProposalRateField from "../components/rateProposal";
 import { choices } from "../data/data";
 
 const ShowScreen = () => (
-  <Show>
+  <Show actions={false}>
     <SimpleShowLayout>
     <TextField source="name" />
         <ProposalRateField label="Rate" />

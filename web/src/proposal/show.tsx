@@ -13,7 +13,7 @@ import ColoredNumberField from "../components/currencyNumberField";
 import { choices } from "../data/data";
 
 const ShowScreen = () => (
-  <Show>
+  <Show actions={false}>
     <SimpleShowLayout>
     <TextField source="name" />
         <TextField source="projectId" />

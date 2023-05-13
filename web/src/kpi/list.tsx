@@ -55,7 +55,7 @@ const ListScreen = () => {
         <ProposalRateField label="Rate" />
         <TextField source="projectId" />
         <SelectField source="projectStatus" choices={choices} />
-        <ReferenceField source="fundId" reference="funds">
+        <ReferenceField source="fundId" reference="funds"  link="show">
           <TextField source="name" />
         </ReferenceField>
 
@@ -71,10 +71,10 @@ const ListScreen = () => {
             </Link>
           )}
         />
-        <ReferenceField source="challengeId" reference="challenges">
+        <ReferenceField source="challengeId" reference="challenges"  link="show">
           <TextField source="name" />
         </ReferenceField>
-        <ReferenceField source="proposerId" reference="proposers">
+        <ReferenceField source="proposerId" reference="proposers"  link="show">
           <TextField source="fullName" />
         </ReferenceField>
         <ColoredNumberField source="requestedBudget" threshold={50000} />

@@ -10,7 +10,7 @@ import {
 } from "react-admin";
 
 const ShowScreen = () => (
-  <Show>
+  <Show actions={false}>
     <SimpleShowLayout>
     <TextField source="name" />
         <NumberField source="budget" />

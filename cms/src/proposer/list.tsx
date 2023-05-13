@@ -11,6 +11,8 @@ import {
 
 import { Box, Drawer } from "@mui/material";
 import Steps from "../components/proposalSteps";
+import Button from '@mui/material/Button';
+
 
 const ListScreen = (title = "List of posts") => {
   const [record, setRecord] = React.useState(null);
@@ -41,6 +43,7 @@ const ListScreen = (title = "List of posts") => {
           <TextField source="email" />
           <UrlField source="telegram" />
           <TextField source="walletAddress" />
+          <Button variant="text">View proposals</Button>
           <ShowButton />
           <EditButton />
         </Datagrid>

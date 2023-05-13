@@ -8,6 +8,8 @@ import {
   SearchInput,
   ShowButton
 } from "react-admin";
+import Button from '@mui/material/Button';
+
 
 import { Box, Drawer } from "@mui/material";
 import Steps from "../components/proposalSteps";
@@ -37,11 +39,12 @@ const ListScreen = (title = "List of posts") => {
           marginRight: record ? "300px" : 0,
         }}
       >
-        <Datagrid rowClick={rowClick}>
+        <Datagrid rowClick={rowClick}   bulkActionButtons={false}>
           <TextField source="fullName" label="Name" />
           <TextField source="email" />
           <UrlField source="telegram" />
           <TextField source="walletAddress" />
+          <Button variant="text">View proposals</Button>
           <ShowButton />
         </Datagrid>
       </List>

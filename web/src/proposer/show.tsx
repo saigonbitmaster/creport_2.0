@@ -11,7 +11,7 @@ import {
 } from "react-admin";
 
 const ShowScreen = () => (
-  <Show>
+  <Show actions={false}>
     <SimpleShowLayout>
     <TextField source="fullName" label="Name" />
           <TextField source="email" />

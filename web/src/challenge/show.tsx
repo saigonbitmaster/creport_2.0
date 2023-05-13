@@ -10,8 +10,8 @@ import {
 } from "react-admin";
 
 const ShowScreen = () => (
-  <Show>
-    <SimpleShowLayout>
+  <Show actions={false}>
+    <SimpleShowLayout >
       <TextField source="name" />
       <ReferenceField source="fundId" reference="funds">
         <TextField source="name" />

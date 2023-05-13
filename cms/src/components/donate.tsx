@@ -10,11 +10,12 @@ import { BlockfrostProvider } from "@meshsdk/core";
 import { useDataProvider } from "react-admin";
 import QRCode from "react-qr-code";
 
+
 const Donate = () => {
   const [state, setState] = React.useState({
     amount: 0,
     message: "",
-    notification: "No connected wallet",
+    notification: "No connected wallet. Work best with Nami & Typhon chrome wallet",
     balance: null,
   });
 
@@ -43,7 +44,7 @@ const Donate = () => {
   };
   const { wallet, connected, connecting } = useWallet();
   React.useEffect(() => {
-    let message = connected ? "" : "No connected wallet";
+    let message = connected ? "" :  "No connected wallet. Work best with Nami & Typhon chrome wallet";
     setState({
       ...state,
       notification: message,
@@ -56,7 +57,7 @@ const Donate = () => {
       setState({
         ...state,
         notification: !connected
-          ? "No connected wallet"
+          ?  "No connected wallet. Work best with Nami & Typhon chrome wallet"
           : "Please select an amount to donate",
       });
       return;
@@ -86,9 +87,13 @@ const Donate = () => {
       <Box sx={{ m: 3, display: "flex", flex: 1, flexDirection: "row" }}>
         <Box sx={{ width: "100%", typography: "body1" }}>
           <Typography variant="subtitle1" gutterBottom>
-            Donate to help maintain and extend cReports,
+           Donate by sending ADA to below address or use donate function to help maintain and extend cReports
+          
+          </Typography>
+          <Typography variant="subtitle1" gutterBottom>
+         
             <Link
-              sx={{ ml: 1 }}
+              sx={{ ml: 0 }}
               target="_blank"
               variant="subtitle1"
               underline="hover"
@@ -97,11 +102,11 @@ const Donate = () => {
               cReports Cardano donate wallet:
             </Link>
           </Typography>
-          <QRCode value={donateAddress} style={{ width: 100, height: 100 }} />
+          <QRCode value={donateAddress}  style={{width: 100, height: 100}} />
           <Typography variant="subtitle1" gutterBottom>
             {donateAddress}
           </Typography>
-
+         
           <Typography variant="subtitle2" gutterBottom>
             Current balance: {state.balance} (ADA)
           </Typography>
@@ -127,19 +132,22 @@ const Donate = () => {
           <Typography variant="subtitle2" gutterBottom sx={{ color: "orange" }}>
             {state.notification}
           </Typography>
-          <Typography variant="subtitle2" gutterBottom>
-            <Link
-              target="_blank"
-              variant="subtitle2"
-              underline="hover"
-              href={"https://t.me/+5BmlM7jnI-9hMWM9"}
-            >
-              Contact cReports Telegram
-            </Link>
-          </Typography>
+          <Typography variant="subtitle2" gutterBottom >
+          
+          <Link
+         
+            target="_blank"
+            variant="subtitle2"
+            underline="hover"
+            href={"https://t.me/+5BmlM7jnI-9hMWM9"}
+          >
+        Contact cReports Telegram 
+          </Link>
+        </Typography>
         </Box>
 
         <CardanoWallet />
+       
       </Box>
     </Box>
   );
