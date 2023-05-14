@@ -2,6 +2,7 @@ Step by step to run/deploy creport_2.0 on AWS VM instance or any Linux self host
 
 - git clone https://github.com/saigonbitmaster/creport_2.0
 - cd creport_2.0/deploy
+- mkdir -p certbot dbdata
 - create .env with below content
 ```
 #Mongo
