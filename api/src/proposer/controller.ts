@@ -31,6 +31,7 @@ export class ProposerController {
   async index(@Response() res: any, @Query() query) {
     const mongooseQuery = queryTransform(query);
     const result = await this.service.findAll(mongooseQuery);
+    console.log(1, query, 2, mongooseQuery, 3, result);
     return formatRaList(res, result);
   }
 
