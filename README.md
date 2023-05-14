@@ -30,18 +30,15 @@ backend app after build can be run by: node main.js or pm2
 ## frontend .env files: cms/.env, web/.env: change below api urls to reflect the production domains.
 
 ```
-REACT_APP_LOGIN_URL=http://localhost:3000/auth/login
-REACT_APP_API_URL=http://localhost:3000
-REACT_APP_RENEW_ACCESS_TOKEN_URL=http://localhost:3000/auth/refresh
-REACT_APP_LOGOUT_URL=http://localhost:3000/auth/logout
-REACT_APP_DONATE_ADDRESS=addr_***
-```
+REACT_APP_LOGIN_URL="https://creport.bworks.app/api/auth/login"
+REACT_APP_API_URL="https://creport.bworks.app/api"
+REACT_APP_RENEW_ACCESS_TOKEN_URL="https://creport.bworks.app/api/auth/refresh"
+REACT_APP_LOGOUT_URL="https://creport.bworks.app/api/auth/logout"
 
-## frontend .env files: web/.env: change below api urls to reflect the production domains.
+REACT_APP_DONATE_ADDRESS=***
 
-```
-REACT_APP_API_URL=http://localhost:3000
-REACT_APP_DONATE_ADDRESS=addr_***
+WEB_SEARCH_BASE_URL="https://creport.bworks.app/web#"
+CMS_SEARCH_BASE_URL="https://creport.bworks.app/cms#"
 ```
 
 ## api .env api/.env
@@ -58,7 +55,7 @@ GITHUB_TOKEN=***
 #jwt settings
 JWT_TOKEN_EXPIRE=60m
 JWT_RENEW_TOKEN_EXPIRE=7d
-JWT_TOKEN_SECRET=secret
+JWT_TOKEN_SECRET=***
 JWT_REFRESH_TOKEN_SECRET=***
 JWT_VERIFY_TOKEN_SECRET=***
 

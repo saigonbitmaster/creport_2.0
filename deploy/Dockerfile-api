@@ -1,0 +1,10 @@
+From node:16.15.1-slim
+ENV NODE_OPTIONS=--max_old_space_size=8192
+WORKDIR /app
+COPY ./ ./
+
+RUN yarn install --prefer-offline
+RUN yarn build-lib
+
+RUN yarn build-api
+
