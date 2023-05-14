@@ -57,7 +57,7 @@ export class ToolController {
     const response = await this.service.getAddressUtxo(filter.value);
     const data = response.slice(rangeStart, rangeEnd);
 
-    result = { count: data.length, data: data };
+    result = { count: response.length, data: data };
     return formatRaList(res, result);
   }
 
@@ -78,14 +78,14 @@ export class ToolController {
     if (filter.queryType === 'commit') {
       const response = await this.service.getRepoCommits(filter.value);
       const data = response.slice(rangeStart, rangeEnd);
-      result = { count: data.length, data: data };
+      result = { count: response.length, data: data };
       return formatRaList(res, result);
     }
 
     if (filter.queryType === 'codescan') {
       const response = await this.service.repoCodeScan(filter.value);
       const data = response.slice(rangeStart, rangeEnd);
-      result = { count: data.length, data: data };
+      result = { count: response.length, data: data };
       return formatRaList(res, result);
     }
   }
