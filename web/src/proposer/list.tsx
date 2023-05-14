@@ -41,7 +41,6 @@ const ListScreen = (title = "List of posts") => {
       >
         <Datagrid rowClick={rowClick}   bulkActionButtons={false}>
           <TextField source="fullName" label="Name" />
-          <TextField source="email" />
           <UrlField source="telegram" />
           <TextField source="walletAddress" />
           <Button variant="text">View proposals</Button>
