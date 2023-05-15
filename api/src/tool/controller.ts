@@ -12,9 +12,10 @@ import { ToolService } from './service';
 import { queryTransform, formatRaList } from '../flatworks/utils/getlist';
 import { ImportBody } from '../flatworks/types/types';
 import { getSheetData } from '../flatworks/utils/googleSheet';
-import { Public } from '../decorators/public.api.decorator';
-import { Roles } from '../decorators/roles.decorator';
-import { Role } from '../types';
+import { Public } from '../flatworks/roles/public.api.decorator';
+import { Roles } from '../flatworks/roles/roles.decorator';
+import { Role } from '../flatworks/types/types';
+
 @Controller('tools')
 export class ToolController {
   constructor(private readonly service: ToolService) {}
@@ -29,7 +30,6 @@ export class ToolController {
       'funds',
       'A2:E',
     );
-    console.log(result);
   }
 
   @Get('utxos')
@@ -57,7 +57,7 @@ export class ToolController {
     const response = await this.service.getAddressUtxo(filter.value);
     const data = response.slice(rangeStart, rangeEnd);
 
-    result = { count: data.length, data: data };
+    result = { count: response.length, data: data };
     return formatRaList(res, result);
   }
 
@@ -78,14 +78,14 @@ export class ToolController {
     if (filter.queryType === 'commit') {
       const response = await this.service.getRepoCommits(filter.value);
       const data = response.slice(rangeStart, rangeEnd);
-      result = { count: data.length, data: data };
+      result = { count: response.length, data: data };
       return formatRaList(res, result);
     }
 
     if (filter.queryType === 'codescan') {
       const response = await this.service.repoCodeScan(filter.value);
       const data = response.slice(rangeStart, rangeEnd);
-      result = { count: data.length, data: data };
+      result = { count: response.length, data: data };
       return formatRaList(res, result);
     }
   }

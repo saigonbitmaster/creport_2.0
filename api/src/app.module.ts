@@ -10,8 +10,10 @@ import { ConfigModule } from '@nestjs/config';
 import { ToolModule } from './tool/module';
 import { GitCommitModule } from './commit/module';
 import { APP_GUARD } from '@nestjs/core';
-import { RolesGuard } from './guards/roles.guard';
+import { RolesGuard } from './flatworks/roles/roles.guard';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
+import { CustomModule } from './customapi/module';
+import { SettingModule } from './setting/module';
 
 @Module({
   imports: [
@@ -31,6 +33,8 @@ import { JwtAuthGuard } from './auth/jwt-auth.guard';
     ProposalModule,
     ToolModule,
     GitCommitModule,
+    CustomModule,
+    SettingModule,
   ],
   providers: [
     {

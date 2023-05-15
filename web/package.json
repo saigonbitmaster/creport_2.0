@@ -23,26 +23,26 @@
     "prop-types": "^15.6.1",
     "proxy-polyfill": "^0.3.0",
     "query-string": "^7.1.1",
-    "ra-nest-rest": "4.2.7",
     "ra-i18n-polyglot": "^4.0.0",
-    "ra-input-rich-text": "^4.0.0",
+    "ra-input-rich-text": "^4.4.1",
     "ra-language-english": "^4.0.0",
     "ra-language-french": "^4.0.0",
-    "recharts": "^2.1.5",
-    "typescript": "^4.4.2",
-    "web-vitals": "^2.1.0",
+    "ra-nest-rest": "4.2.7",
     "react": "^17.0.0",
     "react-admin": "^4.3.0",
     "react-app-polyfill": "^2.0.0",
     "react-dom": "^17.0.0",
     "react-router": "^6.1.0",
     "react-router-dom": "^6.1.0",
-    "react-scripts": "^5.0.0"
+    "react-scripts": "^5.0.0",
+    "recharts": "^2.1.5",
+    "typescript": "^4.4.2",
+    "web-vitals": "^2.1.0"
   },
   "scripts": {
-    "start": "PORT=3002 react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "start": "PORT=3002 craco start",
+    "build": "craco build",
+    "test": "craco test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -68,8 +68,8 @@
     "@types/jest": "^26.0.19",
     "@types/node": "^12.12.14",
     "@types/prop-types": "^15.6.0",
+    "cross-env": "^5.2.0",
     "rewire": "^5.0.0",
-    "source-map-explorer": "^2.0.0",
-    "cross-env": "^5.2.0"
+    "source-map-explorer": "^2.0.0"
   }
 }

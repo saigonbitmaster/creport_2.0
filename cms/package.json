@@ -4,6 +4,8 @@
   "private": true,
   "dependencies": {
     "@apollo/client": "^3.3.19",
+    "@meshsdk/core": "^1.5.3",
+    "@meshsdk/react": "^1.1.7",
     "@mui/icons-material": "^5.0.1",
     "@mui/material": "^5.0.2",
     "@nestjsx/crud-request": "^5.0.0-alpha.3",
@@ -32,17 +34,19 @@
     "react-admin": "^4.3.0",
     "react-app-polyfill": "^2.0.0",
     "react-dom": "^17.0.0",
+    "react-qr-code": "^2.0.11",
     "react-router": "^6.1.0",
     "react-router-dom": "^6.1.0",
     "react-scripts": "^5.0.0",
     "recharts": "^2.1.5",
+    "stream": "^0.0.2",
     "typescript": "^4.4.2",
     "web-vitals": "^2.1.0"
   },
   "scripts": {
-    "start": "PORT=3001 react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "start": "PORT=3001 craco start",
+    "build": "craco build",
+    "test": "craco test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -64,6 +68,8 @@
     ]
   },
   "devDependencies": {
+    "@craco/craco": "^7.1.0",
+    "@craco/types": "^7.1.0",
     "@types/fetch-mock": "^7.3.2",
     "@types/jest": "^26.0.19",
     "@types/node": "^12.12.14",

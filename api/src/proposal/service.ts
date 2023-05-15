@@ -5,7 +5,7 @@ import { CreateProposalDto } from './dto/create.dto';
 import { UpdateProposalDto } from './dto/update.dto';
 import { Proposal, ProposalDocument } from './schemas/schema';
 import { RaList, MongooseQuery } from '../flatworks/types/types';
-import { kpiQuery } from '../flatworks/scripts/kpi';
+import { kpiQuery, kpiQueryCount } from '../flatworks/scripts/kpi';
 import { fullTextSearchTransform } from '../flatworks/utils/getlist';
 import { FundService } from '../fund/service';
 import { ChallengeService } from '../challenge/service';
@@ -39,12 +39,36 @@ export class ProposalService {
     return { count: count, data: data };
   }
 
+  //global fulltext search
+  async findAllSearch(query: MongooseQuery): Promise<RaList> {
+    const count = await this.model.find(query.filter).count().exec();
+
+    //fix return all when limit = 0 for global search
+    if (query.limit <= 0) {
+      return {
+        data: [],
+        count: count,
+      };
+    }
+    const data = await this.model
+      .find(query.filter)
+      .sort(query.sort)
+      .skip(query.skip)
+      .limit(query.limit)
+      .exec();
+
+    const result = { count: count, data: data };
+    return result;
+  }
+
   async findAllKpi(query: MongooseQuery): Promise<RaList> {
     const { keyword } = query.filter;
     if (keyword) {
       query = await this._pageFullTextSearchTransform(query);
     }
     const aggregateQuery = kpiQuery(query);
+    const aggregateQueryCount = kpiQueryCount(query);
+    const count = await this.model.aggregate(aggregateQueryCount).exec();
 
     const _data = await this.model.aggregate(aggregateQuery).exec();
     const data = _data.map((item) => {
@@ -57,7 +81,7 @@ export class ProposalService {
       return item;
     });
 
-    return { count: 10, data: data };
+    return { count: count[0]?.count, data: data };
   }
 
   async findOne(id: string): Promise<Proposal> {

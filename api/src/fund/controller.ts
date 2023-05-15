@@ -15,9 +15,9 @@ import { FundService } from './service';
 import { queryTransform, formatRaList } from '../flatworks/utils/getlist';
 import { ImportBody } from '../flatworks/types/types';
 import { getSheetData, fundTransform } from '../flatworks/utils/googleSheet';
-import { Public } from '../decorators/public.api.decorator';
-import { Roles } from '../decorators/roles.decorator';
-import { Role } from '../types';
+import { Public } from '../flatworks/roles/public.api.decorator';
+import { Roles } from '../flatworks/roles/roles.decorator';
+import { Role } from '../flatworks/types/types';
 
 @Controller('funds')
 export class FundController {
@@ -59,6 +59,7 @@ export class FundController {
   @Delete(':id')
   @Roles(Role.Admin)
   async delete(@Param('id') id: string) {
+    console.log(id);
     return await this.service.delete(id);
   }
 }

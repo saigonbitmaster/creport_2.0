@@ -171,7 +171,7 @@ const proposalTransform = async (
         record.projectStatus,
         record.proposalUrl,
         // record.gitLink,
-        record.gitLinks,
+       // record.gitLinks,
         record.walletAddress,
         record.smartContract,
         record.previousProposals,

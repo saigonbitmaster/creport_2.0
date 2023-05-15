@@ -13,9 +13,9 @@ import { CreateGitCommitDto } from './dto/create.dto';
 import { UpdateGitCommitDto } from './dto/update.dto';
 import { GitCommitService } from './service';
 import { queryTransform, formatRaList } from '../flatworks/utils/getlist';
-import { Public } from '../decorators/public.api.decorator';
-import { Roles } from '../decorators/roles.decorator';
-import { Role } from '../types';
+import { Public } from '../flatworks/roles/public.api.decorator';
+import { Roles } from '../flatworks/roles/roles.decorator';
+import { Role } from '../flatworks/types/types';
 
 @Controller('commits')
 export class GitCommitController {

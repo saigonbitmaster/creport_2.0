@@ -1,18 +1,18 @@
 import {
-  BadRequestException,
   Injectable,
-  NotFoundException,
+  Inject,
+  forwardRef,
+  ForbiddenException,
+  BadRequestException,
 } from '@nestjs/common';
 import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { jwtConstants } from './constants';
-import JwtDecode from 'jwt-decode';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private userService: UserService,
+    @Inject(forwardRef(() => UserService)) private userService: UserService,
     private jwtService: JwtService,
   ) {}
 
@@ -27,56 +27,76 @@ export class AuthService {
     return null;
   }
 
+  //generate token for register user
+  async createToken(payload: any) {
+    return this.jwtService.signAsync(payload, {
+      secret: process.env.JWT_TOKEN_SECRET,
+      expiresIn: process.env.JWT_TOKEN_EXPIRE,
+    });
+  }
+
+  async logout(userId: string) {
+    return this.userService.update(userId, { refreshToken: null });
+  }
+
   async login(user: any) {
-    const payload = {
-      username: user._doc.username,
-      sub: user._doc._id,
-      role: user._doc.role,
-    };
-    const token = this._generateToken(payload);
+    const tokens = await this.getTokens(user);
+    await this.updateRefreshToken(user._doc._id, tokens.refreshToken);
     return {
-      ...token,
+      ...tokens,
       fullName: user._doc.fullName,
       username: user._doc.username,
     };
   }
 
-  async refreshToken(refreshToken: string) {
-    try {
-      const tokenDecoded = JwtDecode(refreshToken);
-      if (!tokenDecoded || !tokenDecoded['username'])
-        throw new BadRequestException('Refresh token is invalid');
+  async getTokens(user) {
+    const payload = {
+      username: user._doc.username,
+      sub: user._doc._id,
+      roles: user._doc.roles,
+      fullName: user._doc.fullName,
+    };
 
-      const user = await this.userService.findOne(tokenDecoded['username']);
-      if (!user) throw new NotFoundException('User not found');
+    const refreshPayload = {
+      sub: user._doc._id,
+    };
 
-      const payload = {
-        username: user.username,
-        sub: user['_id'],
-        role: user.role,
-      };
-      const token = this._generateToken(payload);
-      return {
-        ...token,
-        fullName: user.fullName,
-        username: user.username,
-      };
-    } catch (error) {
-      console.log('refreshTokenError:::', error);
-      throw new BadRequestException('Refresh token is invalid');
-    }
+    const [accessToken, refreshToken] = await Promise.all([
+      this.jwtService.signAsync(payload, {
+        secret: process.env.JWT_TOKEN_SECRET,
+        expiresIn: process.env.JWT_TOKEN_EXPIRE,
+      }),
+      this.jwtService.signAsync(refreshPayload, {
+        secret: process.env.JWT_REFRESH_TOKEN_SECRET,
+        expiresIn: process.env.JWT_RENEW_TOKEN_EXPIRE,
+      }),
+    ]);
+
+    return {
+      accessToken,
+      refreshToken,
+    };
   }
 
-  _generateToken(payload: any) {
-    return {
-      access_token: this.jwtService.sign(payload, {
-        secret: jwtConstants.secret,
-        expiresIn: jwtConstants.expiresIn,
-      }),
-      refresh_token: this.jwtService.sign(payload, {
-        secret: jwtConstants.refreshTokenSecretKey,
-        expiresIn: jwtConstants.refreshTokenExpiresIn,
-      }),
-    };
+  async updateRefreshToken(userId: string, refreshToken: string) {
+    const saltOrRounds = 10;
+    const hashedRefreshToken = await bcrypt.hash(refreshToken, saltOrRounds);
+    await this.userService.update(userId, {
+      refreshToken: hashedRefreshToken,
+    });
+  }
+
+  async refreshTokens(userId: string, refreshToken: string) {
+    const user = await this.userService.findById(userId);
+    if (!user || !user.refreshToken)
+      throw new ForbiddenException('Access Denied');
+    const refreshTokenMatches = await bcrypt.compare(
+      refreshToken,
+      user.refreshToken,
+    );
+    if (!refreshTokenMatches) throw new ForbiddenException('Access Denied');
+    const tokens = await this.getTokens(user);
+    await this.updateRefreshToken(user.id, tokens.refreshToken);
+    return tokens;
   }
 }

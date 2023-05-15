@@ -32,6 +32,16 @@ backend app after build can be run by: node main.js or pm2
 ```
 REACT_APP_LOGIN_URL=http://localhost:3000/auth/login
 REACT_APP_API_URL=http://localhost:3000
+REACT_APP_RENEW_ACCESS_TOKEN_URL=http://localhost:3000/auth/refresh
+REACT_APP_LOGOUT_URL=http://localhost:3000/auth/logout
+REACT_APP_DONATE_ADDRESS=addr_***
+```
+
+## frontend .env files: web/.env: change below api urls to reflect the production domains.
+
+```
+REACT_APP_API_URL=http://localhost:3000
+REACT_APP_DONATE_ADDRESS=addr_***
 ```
 
 ## api .env api/.env
@@ -41,9 +51,17 @@ REACT_APP_API_URL=http://localhost:3000
 CONNECTION_STRING=mongodb://admin:***@localhost:27017/creport2?authSource=admin&readPreference=primary
 #Blockfrost
 BLOCKFROST_PROJECT_ID=***
-BLOCKFROST_URL=https://cardano-testnet.blockfrost.io/api/v0
+BLOCKFROST_URL=https://cardano-preprod.blockfrost.io/api/v0
 #GitHub
 GITHUB_TOKEN=***
+
+#jwt settings
+JWT_TOKEN_EXPIRE=60m
+JWT_RENEW_TOKEN_EXPIRE=7d
+JWT_TOKEN_SECRET=secret
+JWT_REFRESH_TOKEN_SECRET=***
+JWT_VERIFY_TOKEN_SECRET=***
+
 
 ```
 
@@ -51,5 +69,25 @@ GITHUB_TOKEN=***
 
 ```
 https://docs.google.com/spreadsheets/d/1WJi1odv0vGT3ylz01flNpqErmCr-G6Kb37yxaVZOzVM/edit#gid=165710495
+
+if token is expired, delete token.json then restart api, google will request access via web then recreate new token.json 
+
+```
+
+
+## googleSheets url to show data e.g catalyst report
+
+```
+Make o copy of catalyst report googleSheets https://docs.google.com/spreadsheets/d/1bfnWFa94Y7Zj0G7dtpo9W1nAYGovJbswipxiHT4UE3g/edit#gid=495459176 to your drive, where you have right to publish the sheet to web.
+From copied sheet: File -> Share -> Public to the web
+Get published url then add to cms settings with key "catalystReport"
+
+```
+
+
+## updated documents
+
+```
+https://docs.google.com/document/d/e/2PACX-1vRwkXj9E0jY0AZUaI7XfYbupl6sZWEmWoggVDMW1VwzG16DU4xL0a-wVwVxJzFM2P2rxOZrBlOh0nkY/pub
 
 ```

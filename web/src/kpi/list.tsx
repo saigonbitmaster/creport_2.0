@@ -9,6 +9,7 @@ import {
   ReferenceInput,
   SelectInput,
   SelectField,
+  ShowButton
 } from "react-admin";
 import { Link } from "react-router-dom";
 import ColoredNumberField from "../components/currencyNumberField";
@@ -17,11 +18,27 @@ import { choices } from "../data/data";
 
 const ListScreen = () => {
   const Filters = [
-    <SearchInput source="name" alwaysOn />,
-    <ReferenceInput source="fundId" reference="funds" required alwaysOn>
+    <SearchInput source="keyword" alwaysOn />,
+    <ReferenceInput
+      source="fundId"
+      reference="funds"
+      required
+      alwaysOn
+      // mean no pagination
+      perPage={-1}
+      sort={{ field: "name", order: "ASC" }}
+    >
       <SelectInput optionText="name" fullWidth />
     </ReferenceInput>,
-    <ReferenceInput source="proposerId" reference="proposers" required alwaysOn>
+    <ReferenceInput
+      source="proposerId"
+      reference="proposers"
+      required
+      alwaysOn
+      // mean no pagination
+      perPage={-1}
+      sort={{ field: "fullName", order: "ASC" }}
+    >
       <SelectInput optionText="fullName" fullWidth />
     </ReferenceInput>,
   ];
@@ -38,7 +55,7 @@ const ListScreen = () => {
         <ProposalRateField label="Rate" />
         <TextField source="projectId" />
         <SelectField source="projectStatus" choices={choices} />
-        <ReferenceField source="fundId" reference="funds">
+        <ReferenceField source="fundId" reference="funds"  link="show">
           <TextField source="name" />
         </ReferenceField>
 
@@ -54,13 +71,14 @@ const ListScreen = () => {
             </Link>
           )}
         />
-        <ReferenceField source="challengeId" reference="challenges">
+        <ReferenceField source="challengeId" reference="challenges"  link="show">
           <TextField source="name" />
         </ReferenceField>
-        <ReferenceField source="proposerId" reference="proposers">
+        <ReferenceField source="proposerId" reference="proposers"  link="show">
           <TextField source="fullName" />
         </ReferenceField>
         <ColoredNumberField source="requestedBudget" threshold={50000} />
+        <ShowButton />
       </Datagrid>
     </List>
   );

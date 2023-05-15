@@ -7,7 +7,7 @@ const Logo = (props: SVGProps<SVGSVGElement>) => {
   return (
     <svg width={234.532} height={30} viewBox="0 0 62.053 5.417" {...props}>
       <g
-        aria-label="cReport web"
+        aria-label="App demo"
         style={{
           lineHeight: 1.25,
         }}
@@ -20,7 +20,7 @@ const Logo = (props: SVGProps<SVGSVGElement>) => {
         fill="#ff6d00"
       >
         <text y="5" fontSize="1em">
-        CREPORTS
+        CREPORTs
         </text>
       </g>
     </svg>

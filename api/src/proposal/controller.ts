@@ -21,9 +21,9 @@ import {
 import { FundService } from '../fund/service';
 import { ChallengeService } from '../challenge/service';
 import { ProposerService } from '../proposer/service';
-import { Public } from '../decorators/public.api.decorator';
-import { Roles } from '../decorators/roles.decorator';
-import { Role } from '../types';
+import { Public } from '../flatworks/roles/public.api.decorator';
+import { Roles } from '../flatworks/roles/roles.decorator';
+import { Role } from '../flatworks/types/types';
 
 @Controller('proposals')
 export class ProposalController {

@@ -26,13 +26,19 @@ import {
 
 import SubMenu from "./SubMenu";
 
-type MenuName = "menuProposals" | "menuReports" | "menuTools" | "menuAccounts";
+type MenuName =
+  | "menuProposals"
+  | "menuReports"
+  | "menuTools"
+  | "menuAccounts"
+  | "menuSettings";
 
 const Menu = ({ dense = false }: MenuProps) => {
   const [state, setState] = useState({
     menuProposals: true,
     menuReports: true,
     menuTools: true,
+    menuSettings: true,
   });
   const translate = useTranslate();
   const [open] = useSidebarState();
@@ -171,13 +177,41 @@ const Menu = ({ dense = false }: MenuProps) => {
           dense={dense}
         />
       </SubMenu>
+
+      <SubMenu
+        handleToggle={() => handleToggle("menuSettings")}
+        isOpen={state.menuProposals}
+        name="pos.menu.settings"
+        icon={<FileCopyOutlinedIcon />}
+        dense={dense}
+      >
+        <MenuItemLink
+          to="/settings"
+          state={{ _scrollToTop: true }}
+          primaryText={translate(`resources.settings.name`, {
+            smart_count: 2,
+          })}
+          leftIcon={<AttachMoneyIcon />}
+          dense={dense}
+        />
+        <MenuItemLink
+          to="/changePassword"
+          state={{ _scrollToTop: true }}
+          primaryText={translate(`resources.changePassword.name`, {
+            smart_count: 2,
+          })}
+          leftIcon={<PeopleOutlinedIcon />}
+          dense={dense}
+        />
+      </SubMenu>
+
       <MenuItemLink
-        to="/reviews"
+        to="/donate"
         state={{ _scrollToTop: true }}
-        primaryText={translate(`resources.reviews.name`, {
+        primaryText={translate(`resources.donate.name`, {
           smart_count: 2,
         })}
-        leftIcon={<RateReviewOutlinedIcon />}
+        leftIcon={<AttachMoneyIcon />}
         dense={dense}
       />
     </Box>

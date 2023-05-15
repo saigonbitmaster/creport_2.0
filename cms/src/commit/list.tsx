@@ -7,6 +7,7 @@ import {
   ReferenceInput,
   SelectInput,
   UrlField,
+  AutocompleteInput,
 } from "react-admin";
 
 const ListScreen = () => {
@@ -19,7 +20,7 @@ const ListScreen = () => {
       perPage={-1}
       sort={{ field: "name", order: "ASC" }}
     >
-      <SelectInput optionText="name" fullWidth />
+      <AutocompleteInput  optionText="name" optionValue="id"/>
     </ReferenceInput>,
   ];
 

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Admin, CustomRoutes, Resource } from "react-admin";
+import { Admin, CustomRoutes, Resource, useAuthenticated } from "react-admin";
 import polyglotI18nProvider from "ra-i18n-polyglot";
 import { Route } from "react-router";
 
@@ -19,13 +19,20 @@ import FetchGithub from "./tools/fetchGithub";
 import FetchCardano from "./tools/fetchCardano";
 import proposals from "./proposal";
 import commits from "./commit";
+import settings from "./setting";
 import ImportSheets from "./tools/importSheets";
+import FundDeliveries from "./catalyst/fundDeliveries";
+import ChangePassword from "./custompages/changePassword";
+import Donate from "./components/donate";
+import { MeshProvider } from "@meshsdk/react";
 
 const loginUrl = process.env.REACT_APP_LOGIN_URL;
-const refreshTokenUrl = process.env.REACT_APP_REFRESH_TOKEN_URL;
 const apiUrl = process.env.REACT_APP_API_URL;
-const restProvider = dataProvider(apiUrl, refreshTokenUrl);
-const _authProvider = authProvider(loginUrl, refreshTokenUrl);
+const renewTokenUrl = process.env.REACT_APP_RENEW_ACCESS_TOKEN_URL;
+const logoutUrl = process.env.REACT_APP_LOGOUT_URL;
+
+const _authProvider = authProvider(loginUrl, renewTokenUrl, logoutUrl);
+const restProvider = dataProvider(apiUrl);
 
 const i18nProvider = polyglotI18nProvider((locale) => {
   if (locale === "fr") {
@@ -36,30 +43,36 @@ const i18nProvider = polyglotI18nProvider((locale) => {
 
 const App = () => {
   return (
-    <Admin
-      title="cReport"
-      dataProvider={restProvider}
-      authProvider={_authProvider}
-      dashboard={Dashboard}
-      loginPage={Login}
-      layout={Layout}
-      i18nProvider={i18nProvider}
-      disableTelemetry
-      theme={lightTheme}
-    >
-      <CustomRoutes>
-        <Route path="/configuration" element={<Configuration />} />
-        <Route path="/fetchCardano" element={<FetchCardano />} />
-        <Route path="/fetchGithub" element={<FetchGithub />} />
-        <Route path="/importExcels" element={<ImportSheets />} />
-      </CustomRoutes>
-      <Resource name="proposers" {...proposers} />
-      <Resource name="funds" {...funds} />
-      <Resource name="challenges" {...challenges} />
-      <Resource name="proposals" {...proposals} />
-      <Resource name="kpis" {...kpis} />
-      <Resource name="commits" {...commits} />
-    </Admin>
+    <MeshProvider>
+      <Admin
+        title="cReport"
+        dataProvider={restProvider}
+        authProvider={_authProvider}
+        dashboard={Dashboard}
+        loginPage={Login}
+        layout={Layout}
+        i18nProvider={i18nProvider}
+        disableTelemetry
+        theme={lightTheme}
+      >
+        <CustomRoutes>
+          <Route path="/configuration" element={<Configuration />} />
+          <Route path="/fetchCardano" element={<FetchCardano />} />
+          <Route path="/fetchGithub" element={<FetchGithub />} />
+          <Route path="/importExcels" element={<ImportSheets />} />
+          <Route path="/funddeliveries" element={<FundDeliveries />} />
+          <Route path="/changepassword" element={<ChangePassword />} />
+          <Route path="/donate" element={<Donate />} />
+        </CustomRoutes>
+        <Resource name="proposers" {...proposers} />
+        <Resource name="settings" {...settings} />
+        <Resource name="funds" {...funds} />
+        <Resource name="challenges" {...challenges} />
+        <Resource name="proposals" {...proposals} />
+        <Resource name="kpis" {...kpis} />
+        <Resource name="commits" {...commits} />
+      </Admin>
+    </MeshProvider>
   );
 };
 

@@ -48,3 +48,8 @@ export interface ImportBody {
   id: string;
   forceReplace: boolean;
 }
+
+export enum Role {
+  Admin = 'Admin',
+  User = 'User',
+}

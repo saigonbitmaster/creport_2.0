@@ -38,11 +38,18 @@ const customEnglishMessages: TranslationMessages = {
       proposals: "Proposals",
       tools: "Tools",
       reports: "Reports",
+      settings: "Settings",
     },
   },
   resources: {
     reports: {
       import: "Import excels",
+    },
+    settings: {
+      name: "Setting |||| Settings",
+    },
+    changePassword: {
+      name: "Change password",
     },
     proposals: {
       name: "Proposal |||| Proposals",
@@ -231,7 +238,9 @@ const customEnglishMessages: TranslationMessages = {
           "The password confirmation is not the same as the password.",
       },
     },
-
+    donate: {
+      name: "Donate",
+    },
     reviews: {
       name: "Review |||| Reviews",
       amount: "1 review |||| %{smart_count} reviews",

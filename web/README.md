@@ -1,3 +1,3 @@
 # Description
 
-cReport web for public internet users, no login required.
+cReport CMS for admin users.
