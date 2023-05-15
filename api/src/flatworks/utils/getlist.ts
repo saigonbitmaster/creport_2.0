@@ -22,7 +22,7 @@ const queryTransform = (query): MongooseQuery => {
     ? (sort[JSON.parse(query.sort)[0]] =
         JSON.parse(query.sort)[1] === 'ASC' ? 1 : -1)
     : null;
-  const range = query.range ? JSON.parse(query.range) : [0, 20];
+  const range = query.range ? JSON.parse(query.range) : [0, 24];
   const [rangeStart, rangeEnd] = [...range];
   const limit = rangeEnd - rangeStart + 1;
   const skip = rangeStart;

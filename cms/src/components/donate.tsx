@@ -20,7 +20,11 @@ const Donate = () => {
   });
 
   const donateAddress = process.env.REACT_APP_DONATE_ADDRESS;
-  const donateAssets = `https://preprod.cardanoscan.io/address/${donateAddress}`;
+
+  const cardanoScanUrl = process.env.REACT_APP_CARDANO_SCAN_URL;
+  //const donateAssets = `https://preprod.cardanoscan.io/address/${donateAddress}`;
+  const donateAssets = `${cardanoScanUrl}/${donateAddress}`;
+
   const dataProvider = useDataProvider();
 
   React.useEffect(() => {

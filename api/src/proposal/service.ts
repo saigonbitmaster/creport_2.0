@@ -5,7 +5,7 @@ import { CreateProposalDto } from './dto/create.dto';
 import { UpdateProposalDto } from './dto/update.dto';
 import { Proposal, ProposalDocument } from './schemas/schema';
 import { RaList, MongooseQuery } from '../flatworks/types/types';
-import { kpiQuery } from '../flatworks/scripts/kpi';
+import { kpiQuery, kpiQueryCount } from '../flatworks/scripts/kpi';
 import { fullTextSearchTransform } from '../flatworks/utils/getlist';
 import { FundService } from '../fund/service';
 import { ChallengeService } from '../challenge/service';
@@ -67,6 +67,8 @@ export class ProposalService {
       query = await this._pageFullTextSearchTransform(query);
     }
     const aggregateQuery = kpiQuery(query);
+    const aggregateQueryCount = kpiQueryCount(query);
+    const count = await this.model.aggregate(aggregateQueryCount).exec();
 
     const _data = await this.model.aggregate(aggregateQuery).exec();
     const data = _data.map((item) => {
@@ -79,7 +81,7 @@ export class ProposalService {
       return item;
     });
 
-    return { count: 10, data: data };
+    return { count: count[0]?.count, data: data };
   }
 
   async findOne(id: string): Promise<Proposal> {

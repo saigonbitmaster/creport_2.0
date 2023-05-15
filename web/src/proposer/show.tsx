@@ -14,7 +14,6 @@ const ShowScreen = () => (
   <Show actions={false}>
     <SimpleShowLayout>
     <TextField source="fullName" label="Name" />
-          <TextField source="email" />
           <UrlField source="telegram" />
           <TextField source="walletAddress" />
 
