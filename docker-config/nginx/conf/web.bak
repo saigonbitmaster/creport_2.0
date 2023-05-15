@@ -1,0 +1,30 @@
+server {
+    listen 80;
+
+    server_name web.bworks.app;
+    server_tokens off;
+
+    location /.well-known/acme-challenge/ {
+        root /var/www/certbot;
+    }
+
+    location / {
+        return 301 https://web.bworks.app$request_uri;
+    }
+}
+
+server {
+    listen 443 ssl http2;
+#    listen 443 http2;
+
+    server_name web.bworks.app;
+
+    ssl_certificate /etc/nginx/ssl/live/web.bworks.app/fullchain.pem;
+    ssl_certificate_key /etc/nginx/ssl/live/web.bworks.app/privkey.pem;
+    
+    location / {
+        root /var/www/web; #run web app
+        index index.html index.htm;
+        try_files $uri $uri/ /index.html =404;
+    }
+}

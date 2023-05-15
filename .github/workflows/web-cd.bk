@@ -1,0 +1,86 @@
+name: build web
+run-name: ${{ github.actor }} is building web <U+1F680>
+on:
+ pull_request:
+    branches:
+      - staging
+    types:
+      - closed
+    paths:
+      - 'cms/**'
+ workflow_dispatch:
+# Some objects are defined but never used lead to warnings when build
+# Treating warnings as errors because process.env.CI = true ==> step build web exit code 1 and fail
+# temporary fix by set process.env.CI = false
+env:
+  CI: false
+jobs:
+  build-web:
+    runs-on: ubuntu-latest
+    if: github.event.action == 'closed' && github.event.pull_request.merged == true || github.event_name == 'workflow_dispatch'
+    steps:
+      - run: echo "<U+1F389> The job was automatically triggered by a ${{ github.event_name }} event."
+      - run: echo "<U+1F427> This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+      - run: echo "<U+1F50E> The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+      - name: Check out repository code
+        uses: actions/checkout@v3
+      - run: echo "<U+1F4A1> The ${{ github.repository }} repository has been cloned to the runner."
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          cache: 'yarn'
+      - name: Cache node_modules
+        uses: actions/cache@v3.0.1
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+      - name: Install dependencies
+        run: yarn install --prefer-offline
+      - name: Run yarn build-lib
+        run: yarn build-lib
+      - name: Build web
+        env:
+            REACT_APP_LOGIN_URL: ${{ secrets.REACT_APP_LOGIN_URL }}
+            REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
+        run: yarn build-web
+      - name: Save web/build folder
+        uses: actions/upload-artifact@v3
+        with:
+          name: web-build-folder
+          path: web/build
+          retention-days: 1
+
+  deploy-web:
+    runs-on: ubuntu-latest
+    needs: build-web
+    steps:
+      - name: Download web/build folder
+        uses: actions/download-artifact@v3
+        with:
+          name: web-build-folder
+          path: web/build
+      - name: Rsync web/build folder to Server
+        uses: easingthemes/ssh-deploy@v2
+        env:
+            SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+            ARGS: ""
+            SOURCE: "web/build"
+            REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+            REMOTE_USER: ${{ secrets.REMOTE_USER }}
+            TARGET: /home/${{ secrets.REMOTE_USER }}/chuong/creport_2.0/web
+
+  restart-nginx-service:
+    needs: deploy-web
+    runs-on: ubuntu-latest
+    steps:
+      - name: Restart nginx service
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.REMOTE_HOST }}
+          username: ${{ secrets.REMOTE_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /home/${{ secrets.REMOTE_USER }}/chuong/creport_2.0/docker-config
+            docker-compose -f compose.yaml restart nginx
+      - run: echo "<U+1F34F> This job's status is ${{ job.status }}."

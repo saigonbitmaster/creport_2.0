@@ -12,3 +12,7 @@ api/src/flatworks/utils/token.json
 #cms/src/commit
 #api/src/proposal
 #api/src/flatworks
+
+**/certbot
+**/dbdata
+**/mongobackups
