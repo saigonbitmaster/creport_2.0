@@ -56,7 +56,7 @@ const NewMembers = () => {
           ? proposals.map((record: Customer) => (
               <ListItem
                 button
-                to={`/proposals/${record.id}`}
+                to={`/proposals/${record.id}/show`}
                 component={Link}
                 key={record.id}
               >

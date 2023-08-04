@@ -91,3 +91,12 @@ Get published url then add to cms settings with key "catalystReport"
 https://docs.google.com/document/d/e/2PACX-1vRwkXj9E0jY0AZUaI7XfYbupl6sZWEmWoggVDMW1VwzG16DU4xL0a-wVwVxJzFM2P2rxOZrBlOh0nkY/pub
 
 ```
+
+
+## tool to manual update proposal status
+
+```
+copy ID and status columns from https://docs.google.com/spreadsheets/d/1bfnWFa94Y7Zj0G7dtpo9W1nAYGovJbswipxiHT4UE3g/edit#gid=661694288 to tools/proposals.txt 
+node createData.ts
+copy log data then paste to mongo script to update data
+```
