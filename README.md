@@ -98,5 +98,19 @@ https://docs.google.com/document/d/e/2PACX-1vRwkXj9E0jY0AZUaI7XfYbupl6sZWEmWoggV
 ```
 copy ID and status columns from https://docs.google.com/spreadsheets/d/1bfnWFa94Y7Zj0G7dtpo9W1nAYGovJbswipxiHT4UE3g/edit#gid=661694288 to tools/proposals.txt 
 node createData.ts
-copy log data then paste to mongo script to update data
+copy log data then paste to mongo script to update data:
+let data = [{ "projectId": "200003", "projectStatus": "complete" }, { "projectId": "200010", "projectStatus": "complete" }]
+
+data.forEach(i => {
+    let projectId = i.projectId
+    let projectStatus = i.projectStatus
+
+    db.proposals.updateOne({ projectId: projectId }, {
+        $set: {
+            projectStatus: projectStatus
+        }
+    })
+})
+
+
 ```
